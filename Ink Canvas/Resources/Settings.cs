@@ -83,9 +83,6 @@ namespace Ink_Canvas
         [JsonProperty("animationMode")]
         public string AnimationMode { get; set; } = "Standard";
 
-        [JsonProperty("updateDurationSeconds")]
-        public int UpdateDurationSeconds { get; set; } = 3;
-
         [JsonProperty("urgentDurationSeconds")]
         public int UrgentDurationSeconds { get; set; } = 10;
 
@@ -344,23 +341,6 @@ namespace Ink_Canvas
         public bool IsEnableTwoFingerRotationBoard { get; set; }
     }
 
-    // 更新通道枚举
-    public enum UpdateChannel
-    {
-        Release,
-        Preview,
-        Beta
-    }
-
-    /// <summary>自动更新要下载的安装包架构。默认跟随当前软件进程架构；64 位包对应发布物 ZIP 文件名在 .zip 前增加 -x64。</summary>
-    public enum UpdatePackageArchitecture
-    {
-        /// <summary>32 位包，例如 InkCanvasForClass.CE.1.7.0.0.zip</summary>
-        X86 = 0,
-        /// <summary>64 位包，例如 InkCanvasForClass.CE.1.7.0.0-x64.zip</summary>
-        X64 = 1
-    }
-
     public enum StartupMode
     {
         Default = 0,
@@ -377,24 +357,6 @@ namespace Ink_Canvas
         private StartupMode _startupMode = StartupMode.Default;
         private bool _hasExplicitStartupMode;
 
-        [JsonProperty("isAutoUpdate")]
-        public bool IsAutoUpdate { get; set; } = true;
-        [JsonProperty("isAutoUpdateWithSilence")]
-        public bool IsAutoUpdateWithSilence { get; set; }
-        [JsonProperty("isAutoUpdateWithSilenceStartTime")]
-        public string AutoUpdateWithSilenceStartTime { get; set; } = "06:00";
-        [JsonProperty("isAutoUpdateWithSilenceEndTime")]
-        public string AutoUpdateWithSilenceEndTime { get; set; } = "22:00";
-        [JsonProperty("updateChannel")]
-        public UpdateChannel UpdateChannel { get; set; } = UpdateChannel.Release;
-        [JsonProperty("updatePackageArchitecture")]
-        public UpdatePackageArchitecture UpdatePackageArchitecture { get; set; } = Environment.Is64BitProcess ? UpdatePackageArchitecture.X64 : UpdatePackageArchitecture.X86;
-        [JsonProperty("isSmartUpdate")]
-        public bool IsSmartUpdate { get; set; } = true;
-        [JsonProperty("skippedVersion")]
-        public string SkippedVersion { get; set; } = "";
-        [JsonProperty("autoUpdatePauseUntilDate")]
-        public string AutoUpdatePauseUntilDate { get; set; } = "";
         [JsonProperty("isEnableNibMode")]
         public bool IsEnableNibMode { get; set; }
         [JsonProperty("isFoldAtStartup")]
@@ -1152,6 +1114,10 @@ namespace Ink_Canvas
 
     public class Advanced
     {
+        // 旧配置仅作为不参与运行的原始数据保留，保存其他设置时不清除用户数据。
+        [JsonExtensionData]
+        private IDictionary<string, JToken> LegacySettings { get; set; }
+
         [JsonProperty("isSpecialScreen")]
         public bool IsSpecialScreen { get; set; }
 
@@ -1220,9 +1186,6 @@ namespace Ink_Canvas
 
         [JsonProperty("isEnableAvoidFullScreenHelper")]
         public bool IsEnableAvoidFullScreenHelper { get; set; } = OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows11;
-
-        [JsonProperty("isAutoBackupBeforeUpdate")]
-        public bool IsAutoBackupBeforeUpdate { get; set; } = true;
 
         [JsonProperty("isAutoBackupEnabled")]
         public bool IsAutoBackupEnabled { get; set; } = true;

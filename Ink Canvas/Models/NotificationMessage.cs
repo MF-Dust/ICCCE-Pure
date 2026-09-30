@@ -5,8 +5,8 @@ namespace Ink_Canvas.Models
 {
     public enum NotificationMessageType
     {
-        Update,
-        Urgent,
+        // 保留既有序号，避免旧自动化工作流中的通知类型错位。
+        Urgent = 1,
         Important,
         Reminder,
         Other

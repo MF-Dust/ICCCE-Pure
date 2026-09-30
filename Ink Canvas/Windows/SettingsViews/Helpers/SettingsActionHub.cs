@@ -706,55 +706,13 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
 
         #endregion
 
-        #region Update
-
-        public static void OnSmartUpdateChanged()
-        {
-            if (!SettingsManager.Settings.Startup.IsAutoUpdate) return;
-            var mw = GetMainWindow();
-            if (mw != null)
-            {
-                mw.ResetUpdateCheckRetry();
-                System.Windows.Application.Current.Dispatcher.InvokeAsync(() => mw.AutoUpdate());
-            }
-        }
-
-        public static void OnUpdateChannelChanged()
-        {
-            if (!SettingsManager.Settings.Startup.IsAutoUpdate) return;
-            var mw = GetMainWindow();
-            if (mw != null)
-            {
-                mw.ResetUpdateCheckRetry();
-                System.Threading.Tasks.Task.Run(() =>
-                {
-                    try
-                    {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() => mw.AutoUpdate());
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLogToFile($"AutoUpdate | Error during channel switch update check: {ex.Message}", LogHelper.LogType.Error);
-                    }
-                });
-            }
-        }
-
-        public static void OnStartSilentUpdateTimer()
-        {
-            var mw = GetMainWindow();
-            if (mw != null) mw.StartSilentUpdateTimer();
-        }
+        #region Home
 
         public static void OnReloadSettingsFromFile()
         {
             var mw = GetMainWindow();
             if (mw != null) mw.ReloadSettingsFromFile();
         }
-
-        #endregion
-
-        #region Home
 
         public static void OnRestartApplication(object sender, RoutedEventArgs e)
         {

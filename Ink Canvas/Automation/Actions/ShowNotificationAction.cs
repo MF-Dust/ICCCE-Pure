@@ -89,7 +89,6 @@ namespace Ink_Canvas.WorkflowAutomation.Actions
             {
                 NotificationMessageType.Urgent => 300,
                 NotificationMessageType.Important => 200,
-                NotificationMessageType.Update => 100,
                 NotificationMessageType.Reminder => 80,
                 _ => 0
             };
@@ -101,7 +100,6 @@ namespace Ink_Canvas.WorkflowAutomation.Actions
             {
                 NotificationMessageType.Urgent => "Warning",
                 NotificationMessageType.Important => "Important",
-                NotificationMessageType.Update => "Update",
                 NotificationMessageType.Reminder => "Info",
                 _ => "Info"
             };
@@ -111,7 +109,6 @@ namespace Ink_Canvas.WorkflowAutomation.Actions
         {
             return type switch
             {
-                NotificationMessageType.Update => NotificationStrings.Type_Update,
                 NotificationMessageType.Urgent => NotificationStrings.Type_Urgent,
                 NotificationMessageType.Important => NotificationStrings.Type_Important,
                 NotificationMessageType.Reminder => NotificationStrings.Type_Reminder,

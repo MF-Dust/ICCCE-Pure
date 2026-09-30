@@ -9,7 +9,7 @@
                                    },
     "Msg_RestartLimitTitle":  {
                                   "NewKey":  "Msg_RestartLimitTitle",
-                                  "Group":  "UpdateStrings"
+                                  "Group":  "CrashStrings"
                               },
     "Theme_Label":  {
                         "NewKey":  "Theme_Label",
@@ -19,10 +19,6 @@
                                      "NewKey":  "CanvasAndInkPanel_Hint_3",
                                      "Group":  "CanvasStrings"
                                  },
-    "Header_AutoUpdate":  {
-                              "NewKey":  "Header_AutoUpdate",
-                              "Group":  "UpdateStrings"
-                          },
     "PPT_RememberLastPageHint":  {
                                      "NewKey":  "RememberLastPageHint",
                                      "Group":  "PPTStrings"
@@ -75,18 +71,10 @@
                                     "NewKey":  "Theme_CustomSplashImage",
                                     "Group":  "ThemeStrings"
                                 },
-    "Update_Channel":  {
-                           "NewKey":  "Update_Channel",
-                           "Group":  "UpdateStrings"
-                       },
     "Notification_GroupTitle":  {
                                     "NewKey":  "GroupTitle",
                                     "Group":  "NotificationStrings"
                                 },
-    "Startup_UpdatePackageArchitectureHint":  {
-                                                  "NewKey":  "UpdatePackageArchitectureHint",
-                                                  "Group":  "StartupStrings"
-                                              },
     "Random_CustomBackgroundLabel":  {
                                          "NewKey":  "Random_CustomBackgroundLabel",
                                          "Group":  "RandomStrings"
@@ -139,10 +127,6 @@
                        "NewKey":  "Tools_Save",
                        "Group":  "FloatingBarStrings"
                    },
-    "Msg_UnexpectedError":  {
-                                "NewKey":  "Msg_UnexpectedError",
-                                "Group":  "UpdateStrings"
-                            },
     "FloatingInterceptor_Title":  {
                                       "NewKey":  "FloatingInterceptor_Title",
                                       "Group":  "AutomationStrings"
@@ -159,10 +143,6 @@
                                   "NewKey":  "Storage_SaveAsXmlHint",
                                   "Group":  "StorageStrings"
                               },
-    "UpdateCenterPanel_Hint_AutoCheckUpdate":  {
-                                     "NewKey":  "UpdateCenterPanel_Hint_AutoCheckUpdate",
-                                     "Group":  "UpdateCenterPanelStrings"
-                                 },
     "Settings_Plugins":  {
                              "NewKey":  "Settings_Plugins",
                              "Group":  "NavStrings"
@@ -207,10 +187,6 @@
                                                       "NewKey":  "Tray_ClickAction_ResetFloatingBarPosition",
                                                       "Group":  "WindowStrings"
                                                   },
-    "Startup_SilentUpdateHint":  {
-                                     "NewKey":  "SilentUpdateHint",
-                                     "Group":  "StartupStrings"
-                                 },
     "Size_Small":  {
                        "NewKey":  "Size_Small",
                        "Group":  "CommonStrings"
@@ -403,10 +379,6 @@
                                           "NewKey":  "FoldMode_ExitToAnnotationHint",
                                           "Group":  "AutomationStrings"
                                       },
-    "UpdateCenterPanel_Hint_RollbackVersion":  {
-                                     "NewKey":  "UpdateCenterPanel_Hint_RollbackVersion",
-                                     "Group":  "UpdateCenterPanelStrings"
-                                 },
     "ThemePanel_Hint_15":  {
                                "NewKey":  "ThemePanel_Hint_15",
                                "Group":  "ThemeStrings"
@@ -523,10 +495,6 @@
                               "NewKey":  "Canvas_EraserSize",
                               "Group":  "CanvasStrings"
                           },
-    "Backup_AutoBeforeUpdate":  {
-                                    "NewKey":  "Backup_AutoBeforeUpdate",
-                                    "Group":  "StorageStrings"
-                                },
     "Canvas_ShowCircleCenter":  {
                                     "NewKey":  "Canvas_ShowCircleCenter",
                                     "Group":  "CanvasStrings"
@@ -827,10 +795,6 @@
                                        "NewKey":  "InkRecog_ShapeEngineIACore",
                                        "Group":  "CanvasStrings"
                                    },
-    "Startup_SmartUpdate":  {
-                                "NewKey":  "SmartUpdate",
-                                "Group":  "StartupStrings"
-                            },
     "FileAssoc_Check":  {
                             "NewKey":  "FileAssoc_Check",
                             "Group":  "SecurityStrings"
@@ -859,10 +823,6 @@
                                            "NewKey":  "DrawParabolaWithFocal",
                                            "Group":  "GeometryStrings"
                                        },
-    "Notification_UpdateDuration":  {
-                                        "NewKey":  "UpdateDuration",
-                                        "Group":  "NotificationStrings"
-                                    },
     "Theme_BlackboardScale80":  {
                                     "NewKey":  "Theme_BlackboardScale80",
                                     "Group":  "ThemeStrings"
@@ -935,10 +895,6 @@
                          "NewKey":  "Mode_PPTOnly",
                          "Group":  "CommonStrings"
                      },
-    "Startup_FixVersionHint":  {
-                                   "NewKey":  "FixVersionHint",
-                                   "Group":  "StartupStrings"
-                               },
     "Board_Undo":  {
                        "NewKey":  "Board_Undo",
                        "Group":  "FloatingBarStrings"
@@ -963,10 +919,6 @@
                                "NewKey":  "Storage_Legend_Ink",
                                "Group":  "StorageStrings"
                            },
-    "Msg_DownloadFailedTitle":  {
-                                    "NewKey":  "Msg_DownloadFailedTitle",
-                                    "Group":  "UpdateStrings"
-                                },
     "Tray_LeftClickAction":  {
                                  "NewKey":  "Tray_LeftClickAction",
                                  "Group":  "WindowStrings"
@@ -983,10 +935,6 @@
                                  "NewKey":  "Theme_ShowUndoButton",
                                  "Group":  "ThemeStrings"
                              },
-    "Startup_SilentUpdateFullHint":  {
-                                         "NewKey":  "SilentUpdateFullHint",
-                                         "Group":  "StartupStrings"
-                                     },
     "PPT_HalfOpacity":  {
                             "NewKey":  "HalfOpacity",
                             "Group":  "PPTStrings"
@@ -1113,7 +1061,7 @@
                                  },
     "Msg_RestartLimit":  {
                              "NewKey":  "Msg_RestartLimit",
-                             "Group":  "UpdateStrings"
+                             "Group":  "CrashStrings"
                          },
     "Canvas_Color_Green":  {
                                "NewKey":  "Canvas_Color_Green",
@@ -1195,10 +1143,6 @@
                               "NewKey":  "TimerPanel_Hint_ShowRedOnTimeout",
                               "Group":  "TimerStrings"
                           },
-    "Storage_Update_Desc":  {
-                                "NewKey":  "Storage_Update_Desc",
-                                "Group":  "StorageStrings"
-                            },
     "Common_Close":  {
                          "NewKey":  "Common_Close",
                          "Group":  "CommonStrings"
@@ -1227,10 +1171,6 @@
                                  "NewKey":  "Backup_Interval_1Day",
                                  "Group":  "StorageStrings"
                              },
-    "Notification_Type_Update":  {
-                                     "NewKey":  "Type_Update",
-                                     "Group":  "NotificationStrings"
-                                 },
     "GesturesPanel_Hint":  {
                                "NewKey":  "GesturesPanel_Hint",
                                "Group":  "GestureStrings"
@@ -1331,10 +1271,6 @@
                                   "NewKey":  "Delete",
                                   "Group":  "ConfigStrings"
                               },
-    "Header_SilentUpdate":  {
-                                "NewKey":  "Header_SilentUpdate",
-                                "Group":  "UpdateStrings"
-                            },
     "AppearancePanel_Hint_15":  {
                                     "NewKey":  "AppearancePanel_Hint_15",
                                     "Group":  "ThemeStrings"
@@ -1603,14 +1539,6 @@
                                             "NewKey":  "DrawHyperbolaWithFocal",
                                             "Group":  "GeometryStrings"
                                         },
-    "SilentUpdate_TimeRange":  {
-                                   "NewKey":  "SilentUpdate_TimeRange",
-                                   "Group":  "StartupStrings"
-                               },
-    "Update_PackageArch_X64":  {
-                                   "NewKey":  "Update_PackageArch_X64",
-                                   "Group":  "UpdateStrings"
-                               },
     "FloatingInterceptor_App_SeewoBoard5C":  {
                                                  "NewKey":  "FloatingInterceptor_App_SeewoBoard5C",
                                                  "Group":  "AutomationStrings"
@@ -1827,10 +1755,6 @@
                                      "NewKey":  "Canvas_ClearImageOnClear",
                                      "Group":  "CanvasStrings"
                                  },
-    "UpdateCenterPanel_Hint":  {
-                                   "NewKey":  "UpdateCenterPanel_Hint",
-                                   "Group":  "UpdateCenterPanelStrings"
-                               },
     "Theme_WindowBackdrop_Description":  {
                                              "NewKey":  "Theme_WindowBackdrop_Description",
                                              "Group":  "ThemeStrings"
@@ -1843,10 +1767,6 @@
                                           "NewKey":  "PlacementTopLeft",
                                           "Group":  "NotificationStrings"
                                       },
-    "Update_Preview":  {
-                           "NewKey":  "Update_Preview",
-                           "Group":  "UpdateStrings"
-                       },
     "About_Dev_ICC":  {
                           "NewKey":  "Dev_ICC",
                           "Group":  "AboutStrings"
@@ -2003,10 +1923,6 @@
                                "NewKey":  "ThemePanel_Hint_21",
                                "Group":  "ThemeStrings"
                            },
-    "Storage_Legend_Update":  {
-                                  "NewKey":  "Storage_Legend_Update",
-                                  "Group":  "StorageStrings"
-                              },
     "AutoFold_App_HiteBoard":  {
                                    "NewKey":  "AutoFold_App_HiteBoard",
                                    "Group":  "AutomationStrings"
@@ -2047,10 +1963,6 @@
                                                    "NewKey":  "Provider_WindowsToastDesc",
                                                    "Group":  "NotificationStrings"
                                                },
-    "Notification_UpdateTitle":  {
-                                     "NewKey":  "UpdateTitle",
-                                     "Group":  "NotificationStrings"
-                                 },
     "About_PrivacyCheckboxSuffix":  {
                                         "NewKey":  "PrivacyCheckboxSuffix",
                                         "Group":  "AboutStrings"
@@ -2211,10 +2123,6 @@
                                      "NewKey":  "AutoFold_App_SeewoBoard5",
                                      "Group":  "AutomationStrings"
                                  },
-    "Msg_UpdateReady":  {
-                            "NewKey":  "Msg_UpdateReady",
-                            "Group":  "UpdateStrings"
-                        },
     "Crash_SilentRestart":  {
                                 "NewKey":  "Crash_SilentRestart",
                                 "Group":  "CrashStrings"
@@ -2227,10 +2135,6 @@
                                    "NewKey":  "FloatingBar_ExitButton",
                                    "Group":  "FloatingBarStrings"
                                },
-    "Update_Beta":  {
-                        "NewKey":  "Update_Beta",
-                        "Group":  "UpdateStrings"
-                    },
     "Canvas_AsymptoteHint":  {
                                  "NewKey":  "Canvas_AsymptoteHint",
                                  "Group":  "CanvasStrings"
@@ -2487,10 +2391,6 @@
                                   "NewKey":  "QuickPanel_RandomDraw",
                                   "Group":  "FloatingBarStrings"
                               },
-    "UpdateCenterPanel_Hint_AutoInstallUpdate":  {
-                                     "NewKey":  "UpdateCenterPanel_Hint_AutoInstallUpdate",
-                                     "Group":  "UpdateCenterPanelStrings"
-                                 },
     "Booth_Correction":  {
                              "NewKey":  "Correction",
                              "Group":  "BoothStrings"
@@ -2502,10 +2402,6 @@
     "AdvancedPanel_Hint_9":  {
                                  "NewKey":  "AdvancedPanel_Hint_9",
                                  "Group":  "AdvancedStrings"
-                             },
-    "Msg_UpdateReadyTitle":  {
-                                 "NewKey":  "Msg_UpdateReadyTitle",
-                                 "Group":  "UpdateStrings"
                              },
     "Canvas_ShowCoordinateUnitMarksHint":  {
                                                "NewKey":  "Canvas_ShowCoordinateUnitMarksHint",
@@ -2659,10 +2555,6 @@
                                         "NewKey":  "Storage_SaveFullPageStrokes",
                                         "Group":  "StorageStrings"
                                     },
-    "Msg_UpdateDownloadFailed":  {
-                                     "NewKey":  "Msg_UpdateDownloadFailed",
-                                     "Group":  "UpdateStrings"
-                                 },
     "PPT_Enhancement":  {
                             "NewKey":  "Enhancement",
                             "Group":  "PPTStrings"
@@ -2699,10 +2591,6 @@
                                             "NewKey":  "Canvas_ClearInkAlsoClearHistory",
                                             "Group":  "CanvasStrings"
                                         },
-    "Msg_SkipVersion":  {
-                            "NewKey":  "Msg_SkipVersion",
-                            "Group":  "UpdateStrings"
-                        },
     "AutoKill_SeewoDesktop2Anno":  {
                                        "NewKey":  "AutoKill_SeewoDesktop2Anno",
                                        "Group":  "AutomationStrings"
@@ -2791,10 +2679,6 @@
                               "NewKey":  "Test",
                               "Group":  "NotificationStrings"
                           },
-    "UpdateCenterPanel_Hint_ReinstallLatest":  {
-                                     "NewKey":  "UpdateCenterPanel_Hint_ReinstallLatest",
-                                     "Group":  "UpdateCenterPanelStrings"
-                                 },
     "Random_Background_Default":  {
                                       "NewKey":  "Random_Background_Default",
                                       "Group":  "RandomStrings"
@@ -2907,18 +2791,10 @@
                                      "NewKey":  "CanvasAndInkPanel_Hint_8",
                                      "Group":  "CanvasStrings"
                                  },
-    "Startup_EndTime":  {
-                            "NewKey":  "EndTime",
-                            "Group":  "StartupStrings"
-                        },
     "Board_EraserShape_Circle":  {
                                      "NewKey":  "Board_EraserShape_Circle",
                                      "Group":  "FloatingBarStrings"
                                  },
-    "Msg_SkipVersionTitle":  {
-                                 "NewKey":  "Msg_SkipVersionTitle",
-                                 "Group":  "UpdateStrings"
-                             },
     "Automation_SaveFileNameFormat":  {
                                           "NewKey":  "Automation_SaveFileNameFormat",
                                           "Group":  "AutomationStrings"
@@ -3127,10 +3003,6 @@
                                      "NewKey":  "Gesture_AllowRotateScale",
                                      "Group":  "GestureStrings"
                                  },
-    "Startup_UpdateChannelHint":  {
-                                      "NewKey":  "UpdateChannelHint",
-                                      "Group":  "StartupStrings"
-                                  },
     "AppearancePanel_Hint_20":  {
                                     "NewKey":  "AppearancePanel_Hint_20",
                                     "Group":  "ThemeStrings"
@@ -3243,10 +3115,6 @@
                                    "NewKey":  "AppearancePanel_Hint_8",
                                    "Group":  "ThemeStrings"
                                },
-    "Notification_NewVersion":  {
-                                    "NewKey":  "NewVersion",
-                                    "Group":  "NotificationStrings"
-                                },
     "Storage_ScreenshotsByDateFolder":  {
                                             "NewKey":  "Storage_ScreenshotsByDateFolder",
                                             "Group":  "StorageStrings"
@@ -3367,10 +3235,6 @@
                                        "NewKey":  "InkRecog_HighPrecisionHint",
                                        "Group":  "CanvasStrings"
                                    },
-    "Notification_UpdateDurationHint":  {
-                                            "NewKey":  "UpdateDurationHint",
-                                            "Group":  "NotificationStrings"
-                                        },
     "Canvas_LaunchSeewoVideoShowcaseForWhiteboardBoothHint":  {
                                                                   "NewKey":  "Canvas_LaunchSeewoVideoShowcaseForWhiteboardBoothHint",
                                                                   "Group":  "CanvasStrings"
@@ -3490,10 +3354,6 @@
     "QuickPanel_Whiteboard":  {
                                   "NewKey":  "QuickPanel_Whiteboard",
                                   "Group":  "FloatingBarStrings"
-                              },
-    "Startup_UpdateChannel":  {
-                                  "NewKey":  "UpdateChannel",
-                                  "Group":  "StartupStrings"
                               },
     "Theme_FloatingIcon_IccNoShadow":  {
                                            "NewKey":  "Theme_FloatingIcon_IccNoShadow",
@@ -3679,10 +3539,6 @@
                                            "NewKey":  "Canvas_ShowCoordinateUnitMarks",
                                            "Group":  "CanvasStrings"
                                        },
-    "Startup_AutoUpdateHint":  {
-                                   "NewKey":  "AutoUpdateHint",
-                                   "Group":  "StartupStrings"
-                               },
     "Board_StrokeEraser":  {
                                "NewKey":  "Board_StrokeEraser",
                                "Group":  "FloatingBarStrings"
@@ -3711,10 +3567,6 @@
                                                          "NewKey":  "DictationDoNotDisturbWhiteboard",
                                                          "Group":  "NotificationStrings"
                                                      },
-    "Update_PackageArch_X86":  {
-                                   "NewKey":  "Update_PackageArch_X86",
-                                   "Group":  "UpdateStrings"
-                               },
     "Theme_QuoteSource_Mottos":  {
                                      "NewKey":  "Theme_QuoteSource_Mottos",
                                      "Group":  "ThemeStrings"
@@ -3755,10 +3607,6 @@
                           "NewKey":  "Storage_Title",
                           "Group":  "StorageStrings"
                       },
-    "Startup_StartTime":  {
-                              "NewKey":  "StartTime",
-                              "Group":  "StartupStrings"
-                          },
     "Theme_WindowBackdrop_Acrylic11":  {
                                            "NewKey":  "Theme_WindowBackdrop_Acrylic11",
                                            "Group":  "ThemeStrings"
@@ -3815,10 +3663,6 @@
                                        "NewKey":  "InkRecognitionPanel_Hint_4",
                                        "Group":  "CanvasStrings"
                                    },
-    "Startup_SmartUpdateHint":  {
-                                    "NewKey":  "SmartUpdateHint",
-                                    "Group":  "StartupStrings"
-                                },
     "Tray_ClickAction_TempShowMainWindow":  {
                                                 "NewKey":  "Tray_ClickAction_TempShowMainWindow",
                                                 "Group":  "WindowStrings"
@@ -3875,10 +3719,6 @@
                               "NewKey":  "Storage_Logs_Desc",
                               "Group":  "StorageStrings"
                           },
-    "Startup_UpdatePackageArchitecture":  {
-                                              "NewKey":  "UpdatePackageArchitecture",
-                                              "Group":  "StartupStrings"
-                                          },
     "Window_WindowChromeRendering":  {
                                          "NewKey":  "Window_WindowChromeRendering",
                                          "Group":  "WindowStrings"
@@ -4003,10 +3843,6 @@
                                  "NewKey":  "Canvas_PressureTouch",
                                  "Group":  "CanvasStrings"
                              },
-    "Update_Release":  {
-                           "NewKey":  "Update_Release",
-                           "Group":  "UpdateStrings"
-                       },
     "Booth_Rotate":  {
                          "NewKey":  "Rotate",
                          "Group":  "BoothStrings"
@@ -4103,10 +3939,6 @@
                                            "NewKey":  "Random_CustomBackground_Manage",
                                            "Group":  "RandomStrings"
                                        },
-    "Startup_TimePeriodHint":  {
-                                   "NewKey":  "TimePeriodHint",
-                                   "Group":  "StartupStrings"
-                               },
     "Advanced_ResolutionChangeDetection":  {
                                                "NewKey":  "ResolutionChangeDetection",
                                                "Group":  "AdvancedStrings"
@@ -4147,10 +3979,6 @@
                              "NewKey":  "Timer_SelectFile",
                              "Group":  "TimerStrings"
                          },
-    "Storage_Update_Header":  {
-                                  "NewKey":  "Storage_Update_Header",
-                                  "Group":  "StorageStrings"
-                              },
     "Tray_ClickAction_CloseApp":  {
                                       "NewKey":  "Tray_ClickAction_CloseApp",
                                       "Group":  "WindowStrings"

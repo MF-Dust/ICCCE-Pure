@@ -858,10 +858,6 @@ namespace Ink_Canvas
             Settings.InkToShape.HandwritingBeautifyDebounceMs = 2000;
 
             Settings.Startup.IsEnableNibMode = false;
-            Settings.Startup.IsAutoUpdate = true;
-            Settings.Startup.IsAutoUpdateWithSilence = true;
-            Settings.Startup.AutoUpdateWithSilenceStartTime = "06:00";
-            Settings.Startup.AutoUpdateWithSilenceEndTime = "22:00";
             Settings.Startup.IsFoldAtStartup = false;
             Settings.Startup.StartupMode = StartupMode.Default;
         }
@@ -896,7 +892,7 @@ namespace Ink_Canvas
                 var configName = SettingsManager.Settings?.ToolbarConfigName ?? "default";
                 ToolbarRegistry.SaveConfigFile(configName, ToolbarRegistry.CreateDefaultLayout());
 
-                LoadSettings(isStartup: false, skipAutoUpdateCheck: true);
+                LoadSettings(isStartup: false);
 
                 // 重置后重建工具栏
                 RebuildToolbar();
@@ -924,7 +920,7 @@ namespace Ink_Canvas
                 var configName = SettingsManager.Settings?.ToolbarConfigName ?? "default";
                 ToolbarRegistry.SaveConfigFile(configName, ToolbarRegistry.CreateDefaultLayout());
 
-                LoadSettings(isStartup: false, skipAutoUpdateCheck: true);
+                LoadSettings(isStartup: false);
 
                 // 重置后重建工具栏
                 RebuildToolbar();
@@ -1079,27 +1075,6 @@ namespace Ink_Canvas
             Process.Start("https://github.com/WXRIW/Ink-Canvas");
             HideSubPanels();
         }
-
-        private void UpdatePackageArchitectureSelector_Checked(object sender, RoutedEventArgs e)
-        {
-            if (!isLoaded) return;
-            if (!(sender is RadioButton radioButton) || radioButton.Tag == null) return;
-
-            var newArch = string.Equals(radioButton.Tag.ToString(), "X64", StringComparison.OrdinalIgnoreCase)
-                ? UpdatePackageArchitecture.X64
-                : UpdatePackageArchitecture.X86;
-
-            if (Settings.Startup.UpdatePackageArchitecture == newArch)
-                return;
-
-            Settings.Startup.UpdatePackageArchitecture = newArch;
-            SaveSettingsToFile();
-            LogHelper.WriteLogToFile($"Settings | Update package architecture: {newArch}");
-        }
-
-
-
-
 
         #region 底部按钮水平位置控制
 

@@ -82,7 +82,6 @@ namespace Ink_Canvas.Windows
                 if (_settings.Startup != null)
                 {
                     CardFoldAtStartup.IsOn = _settings.Startup.IsFoldAtStartup;
-                    CardAutoUpdate.IsOn = _settings.Startup.IsAutoUpdate;
                     int crashAction = _settings.Startup.CrashAction;
                     if (crashAction < 0 || crashAction > 2) crashAction = 0;
                     ComboBoxCrashAction.SelectedIndex = crashAction;
@@ -181,7 +180,6 @@ namespace Ink_Canvas.Windows
                 if (_settings.Startup != null)
                 {
                     _settings.Startup.IsFoldAtStartup = CardFoldAtStartup.IsOn;
-                    _settings.Startup.IsAutoUpdate = CardAutoUpdate.IsOn;
                     int crashAction = ComboBoxCrashAction.SelectedIndex;
                     if (crashAction < 0 || crashAction > 2) crashAction = 0;
                     _settings.Startup.CrashAction = crashAction;
@@ -616,7 +614,6 @@ namespace Ink_Canvas.Windows
                 default: themeText = ThemeStrings.Theme_System; break;
             }
 
-            AddSummaryRow(SegoeFluentIcons.Sync, UpdateStrings.Header_AutoUpdate, BoolText(CardAutoUpdate.IsOn));
             AddSummaryRow(SegoeFluentIcons.Personalize, Properties.OobeStrings.Oobe_SummaryAppTheme, themeText);
             AddSummaryRow(SegoeFluentIcons.FullScreen, ThemeStrings.Theme_WindowBackdrop, backdropText);
             AddSummaryRow(SegoeFluentIcons.Slideshow, Properties.OobeStrings.Oobe_SummaryPPTLink, BoolText(CardPPTSupport.IsOn));

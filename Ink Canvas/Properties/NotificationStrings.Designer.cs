@@ -86,7 +86,6 @@ namespace Ink_Canvas.Properties
 
         public static string NavTooltip => ResourceManager.GetString(nameof(NavTooltip), _resourceCulture);
 
-        public static string NewVersion => ResourceManager.GetString(nameof(NewVersion), _resourceCulture);
 
         public static string OtherDuration => ResourceManager.GetString(nameof(OtherDuration), _resourceCulture);
 
@@ -148,15 +147,11 @@ namespace Ink_Canvas.Properties
 
         public static string Type_Reminder => ResourceManager.GetString(nameof(Type_Reminder), _resourceCulture);
 
-        public static string Type_Update => ResourceManager.GetString(nameof(Type_Update), _resourceCulture);
 
         public static string Type_Urgent => ResourceManager.GetString(nameof(Type_Urgent), _resourceCulture);
 
-        public static string UpdateDuration => ResourceManager.GetString(nameof(UpdateDuration), _resourceCulture);
 
-        public static string UpdateDurationHint => ResourceManager.GetString(nameof(UpdateDurationHint), _resourceCulture);
 
-        public static string UpdateTitle => ResourceManager.GetString(nameof(UpdateTitle), _resourceCulture);
 
         public static string UrgentDuration => ResourceManager.GetString(nameof(UrgentDuration), _resourceCulture);
 

@@ -78,4 +78,10 @@
   <data name="CrashWindowNoDetails" xml:space="preserve">
     <value>没有可用的崩溃详情。</value>
   </data>
+  <data name="Msg_RestartLimit" xml:space="preserve">
+    <value>检测到程序已连续重启 5 次，已停止自动重启。请联系开发者或检查系统环境。</value>
+  </data>
+  <data name="Msg_RestartLimitTitle" xml:space="preserve">
+    <value>重启次数过多</value>
+  </data>
 </root>

@@ -781,15 +781,7 @@ namespace Ink_Canvas.Helpers
             _isRunning = false;
             _scanTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
-            // 自动更新重启时由新进程接管拦截，避免旧进程退出瞬间把目标窗口恢复并抢到前台。
-            if (!App.IsUpdateInstalling)
-            {
-                RestoreAllWindows();
-            }
-            else
-            {
-                LogHelper.WriteLogToFile("自动更新期间跳过恢复悬浮窗", LogHelper.LogType.Trace);
-            }
+            RestoreAllWindows();
         }
 
         /// <summary>
@@ -1486,11 +1478,7 @@ namespace Ink_Canvas.Helpers
             Stop();
             _scanTimer?.Dispose();
 
-            // 自动更新时保持隐藏状态交给新进程接管，正常退出才恢复窗口。
-            if (!App.IsUpdateInstalling)
-            {
-                RestoreAllWindows();
-            }
+            RestoreAllWindows();
 
             _disposed = true;
         }

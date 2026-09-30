@@ -69,9 +69,6 @@
   <data name="Page1_AppVersion" xml:space="preserve">
     <value>软件版本</value>
   </data>
-  <data name="Page1_UpdateChannel" xml:space="preserve">
-    <value>更新抽卡池</value>
-  </data>
   <data name="Page1_SystemInfo" xml:space="preserve">
     <value>系统情报</value>
   </data>

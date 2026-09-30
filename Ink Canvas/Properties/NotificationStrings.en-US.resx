@@ -91,13 +91,13 @@
     <value>Enable dynamic notifications</value>
   </data>
   <data name="EnableDynamicHint" xml:space="preserve">
-    <value>Show updates and local messages in a top capsule notification.</value>
+    <value>Show local messages in the top notification capsule.</value>
   </data>
   <data name="EnableWindowsToast" xml:space="preserve">
     <value>Enable Windows system notifications</value>
   </data>
   <data name="EnableWindowsToastHint" xml:space="preserve">
-    <value>Important notices and updates may also appear as system toasts.</value>
+    <value>Local notifications can also appear as Windows toasts.</value>
   </data>
   <data name="GroupTitle" xml:space="preserve">
     <value>Notification management</value>
@@ -110,9 +110,6 @@
   </data>
   <data name="NavTooltip" xml:space="preserve">
     <value>Message reminders and dynamic notification settings</value>
-  </data>
-  <data name="NewVersion" xml:space="preserve">
-    <value>New version available: {0}</value>
   </data>
   <data name="OtherDuration" xml:space="preserve">
     <value>Other notification duration</value>
@@ -204,20 +201,8 @@
   <data name="Type_Reminder" xml:space="preserve">
     <value>Reminder</value>
   </data>
-  <data name="Type_Update" xml:space="preserve">
-    <value>Update</value>
-  </data>
   <data name="Type_Urgent" xml:space="preserve">
     <value>Urgent</value>
-  </data>
-  <data name="UpdateDuration" xml:space="preserve">
-    <value>Update notification duration</value>
-  </data>
-  <data name="UpdateDurationHint" xml:space="preserve">
-    <value>Seconds before update messages close automatically.</value>
-  </data>
-  <data name="UpdateTitle" xml:space="preserve">
-    <value>New version available</value>
   </data>
   <data name="UrgentDuration" xml:space="preserve">
     <value>Urgent notification duration</value>

@@ -55,7 +55,6 @@ namespace Ink_Canvas.Properties
         public static string Oobe_StartupCrashTitle => ResourceManager.GetString(nameof(Oobe_StartupCrashTitle), _resourceCulture);
         public static string Oobe_FoldAtStartup => ResourceManager.GetString(nameof(Oobe_FoldAtStartup), _resourceCulture);
         public static string Oobe_FoldAtStartupDesc => ResourceManager.GetString(nameof(Oobe_FoldAtStartupDesc), _resourceCulture);
-        public static string Oobe_AutoUpdate => ResourceManager.GetString(nameof(Oobe_AutoUpdate), _resourceCulture);
         public static string Oobe_CrashAction => ResourceManager.GetString(nameof(Oobe_CrashAction), _resourceCulture);
         public static string Oobe_CrashActionDesc => ResourceManager.GetString(nameof(Oobe_CrashActionDesc), _resourceCulture);
         public static string Oobe_CrashSilentRestart => ResourceManager.GetString(nameof(Oobe_CrashSilentRestart), _resourceCulture);

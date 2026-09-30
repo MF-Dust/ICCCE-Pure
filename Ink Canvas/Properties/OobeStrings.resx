@@ -95,9 +95,6 @@
   <data name="Oobe_FoldAtStartupDesc" xml:space="preserve">
     <value>启动后将浮动工具栏自动隐藏到屏幕边缘。</value>
   </data>
-  <data name="Oobe_AutoUpdate" xml:space="preserve">
-    <value>允许后台检查更新并下载新版本。</value>
-  </data>
   <data name="Oobe_CrashAction" xml:space="preserve">
     <value>发生未处理异常时</value>
   </data>

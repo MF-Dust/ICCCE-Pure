@@ -37,7 +37,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             var settings = SettingsManager.Settings;
             if (settings?.Advanced == null) return;
 
-            ToggleSwitchIsAutoBackupBeforeUpdate.IsOn = settings.Advanced.IsAutoBackupBeforeUpdate;
             ToggleSwitchIsAutoBackupEnabled.IsOn = settings.Advanced.IsAutoBackupEnabled;
 
             foreach (ComboBoxItem item in ComboBoxAutoBackupInterval.Items)
@@ -48,13 +47,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                     break;
                 }
             }
-        }
-
-        private void ToggleSwitchIsAutoBackupBeforeUpdate_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            SettingsManager.Settings.Advanced.IsAutoBackupBeforeUpdate = ToggleSwitchIsAutoBackupBeforeUpdate.IsOn;
-            SettingsManager.SaveSettingsToFile();
         }
 
         private void ToggleSwitchIsAutoBackupEnabled_Toggled(object sender, RoutedEventArgs e)

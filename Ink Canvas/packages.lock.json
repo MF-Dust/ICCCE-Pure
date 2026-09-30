@@ -75,16 +75,6 @@
           "JerryShaw.DirectShowLib": "1.0.1"
         }
       },
-      "MdXaml": {
-        "type": "Direct",
-        "requested": "[1.27.0, )",
-        "resolved": "1.27.0",
-        "contentHash": "VWhqhCeKVkJe8vkPmXuGZlRX01WDrTugOLeUvJn18jH/8DrGGVBvtgIlJoELHD2f1DiEWqF3lxxjV55vnzE7Tg==",
-        "dependencies": {
-          "AvalonEdit": "6.3.0.90",
-          "MdXaml.Plugins": "1.27.0"
-        }
-      },
       "MessagePack": {
         "type": "Direct",
         "requested": "[3.1.8, )",
@@ -208,11 +198,6 @@
         "resolved": "2.2.5",
         "contentHash": "clkumhM9DggqIzEXAHgVLeWO4arG5YfoPr7J4jfjJx35AoeEIJSSm49J25bwp/9mXQYLwi7y1Wunc8qgYJsGxg=="
       },
-      "AvalonEdit": {
-        "type": "Transitive",
-        "resolved": "6.3.0.90",
-        "contentHash": "WVTb5MxwGqKdeasd3nG5udlV4t6OpvkFanziwI133K0/QJ5FvZmfzRQgpAjGTJhQfIA8GP7AzKQ3sTY9JOFk8Q=="
-      },
       "Fody": {
         "type": "Transitive",
         "resolved": "6.9.3",
@@ -235,11 +220,6 @@
         "type": "Transitive",
         "resolved": "1.0.1",
         "contentHash": "NtMCJKHRnYtD2Z8T/ZMWd7AjqzOQvT2mjiJFplOls/dTjojO4gdkEDxRa+ewKhG/3bobQf9ZSTYWtK/gMF/NRg=="
-      },
-      "MdXaml.Plugins": {
-        "type": "Transitive",
-        "resolved": "1.27.0",
-        "contentHash": "We7LtBdoukRg9mqTfa1f5n8z/GQPMKBRj3URk9DiMuqzIHkW1lTgK5njVPSScxsRt4YzW22423tSnLWNm2MJKg=="
       },
       "MessagePack.Annotations": {
         "type": "Transitive",

@@ -11,7 +11,7 @@ using System.Windows.Threading;
 
 internal static class WindowSmoke
 {
-    // 单独进程运行：加载真实 XAML/工具栏和窗口生命周期，但不注册文件关联或启动更新器。
+    // 单独进程运行：加载真实 XAML/工具栏和窗口生命周期，但不注册文件关联。
     public static void Run()
     {
         var originalDirectory = Environment.CurrentDirectory;
@@ -25,7 +25,6 @@ internal static class WindowSmoke
             var settings = new Settings();
             settings.Appearance.IsColorfulViewboxFloatingBar = false;
             settings.Startup.HasShownOobe = true;
-            settings.Startup.IsAutoUpdate = false;
             settings.Startup.CrashAction = 1;
             settings.Advanced.IsAlwaysOnTop = false;
             settings.Advanced.IsNoFocusMode = false;
@@ -82,11 +81,14 @@ internal static class WindowSmoke
                     var pages = (Dictionary<string, Type>)typeof(SettingsWindow)
                         .GetField("_pageTypes", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(settingsWindow);
                     foreach (var removed in new[] { "CloudStoragePage", "PrivacyPage", "PerformancePage",
-                        "AnnouncementCenterPage", "FriendlyLinksPage", "FloatingBarThemePage", "FloatingBarThemeMarketPage" })
+                        "AnnouncementCenterPage", "FriendlyLinksPage", "FloatingBarThemePage", "FloatingBarThemeMarketPage", "UpdatePage" })
                         if (pages.ContainsKey(removed)) throw new Exception("已删除设置页仍被注册：" + removed);
                     foreach (var retained in new[] { "NotificationPage", "StoragePage", "BackupPage", "AutomationWorkflowPage",
-                        "ToolbarPage", "BoardToolbarPage", "PowerPointPage", "UpdatePage", "SecurityPage" })
+                        "ToolbarPage", "BoardToolbarPage", "PowerPointPage", "AboutPage", "SecurityPage" })
                         if (!pages.ContainsKey(retained)) throw new Exception("应保留的设置页丢失：" + retained);
+                    // 直接构造本次涉及的页面，校验 XAML 与资源引用；不触发其他页面的预加载副作用。
+                    foreach (var page in new[] { "HomePage", "NotificationPage", "StoragePage", "BackupPage", "AboutPage" })
+                        Activator.CreateInstance(pages[page]);
                     settingsWindow.Close();
                     checkedWindow = true;
                     // 白板模式的第一次关闭仅退回批注模式；第二次走真实关闭流程。

@@ -58,7 +58,6 @@ namespace Ink_Canvas.Properties
 
         public static string Page1_AppVersion => ResourceManager.GetString(nameof(Page1_AppVersion), _resourceCulture);
 
-        public static string Page1_UpdateChannel => ResourceManager.GetString(nameof(Page1_UpdateChannel), _resourceCulture);
 
         public static string Page1_SystemInfo => ResourceManager.GetString(nameof(Page1_SystemInfo), _resourceCulture);
 

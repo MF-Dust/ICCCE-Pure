@@ -45,14 +45,11 @@
   <data name="AutoSave_Title" xml:space="preserve">
     <value>Auto save</value>
   </data>
-  <data name="Backup_AutoBeforeUpdate" xml:space="preserve">
-    <value>Backup before update</value>
-  </data>
   <data name="Backup_AutoPeriodic" xml:space="preserve">
     <value>Periodic auto-backup</value>
   </data>
   <data name="Backup_Desc" xml:space="preserve">
-    <value>You can manually back up current settings or restore previous backups; backups are also created automatically before updates.</value>
+    <value>Manually back up current settings, restore a previous backup, or enable scheduled backups.</value>
   </data>
   <data name="Backup_Interval" xml:space="preserve">
     <value>Backup interval</value>
@@ -192,9 +189,6 @@
   <data name="Storage_Legend_Other" xml:space="preserve">
     <value>Other</value>
   </data>
-  <data name="Storage_Legend_Update" xml:space="preserve">
-    <value>Update</value>
-  </data>
   <data name="Storage_Legend_Plugins" xml:space="preserve">
     <value>Plugins</value>
   </data>
@@ -275,12 +269,6 @@
   </data>
   <data name="Storage_TotalUsage" xml:space="preserve">
     <value>ICC CE total usage</value>
-  </data>
-  <data name="Storage_Update_Desc" xml:space="preserve">
-    <value>Installer packages and download cache under AutoUpdate. Refreshed each release.</value>
-  </data>
-  <data name="Storage_Update_Header" xml:space="preserve">
-    <value>Auto update</value>
   </data>
   <data name="Backup_SuccessTitle" xml:space="preserve">
     <value>Backup Successful</value>

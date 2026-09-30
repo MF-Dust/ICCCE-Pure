@@ -68,7 +68,6 @@ namespace Ink_Canvas.Properties
 
         public static string Home_ToolbarSettings => ResourceManager.GetString(nameof(Home_ToolbarSettings), _resourceCulture);
 
-        public static string Home_UpdateSettings => ResourceManager.GetString(nameof(Home_UpdateSettings), _resourceCulture);
 
         public static string Home_Window => ResourceManager.GetString(nameof(Home_Window), _resourceCulture);
 

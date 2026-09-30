@@ -22,7 +22,6 @@
 │   ├── 画布 (CanvasPage)
 │   └── 墨迹识别 (InkRecognitionPage)
 ├── PPT联动 (PowerPointPage)
-├── 更新 (UpdatePage)
 ├── 通知 (NotificationStrings.DefaultTitle)
 │   └── 通知设置 (NotificationPage)
 ├── 实验性 (ExperimentalPage)
@@ -66,7 +65,6 @@
 | Canvas_GroupTitle | 画板设置 / 画布 |
 | InkRecog_Title | 墨迹识别 |
 | PPTStrings.GroupTitle | PPT联动 |
-| NotificationStrings.Type_Update | 更新 |
 | NotificationStrings.DefaultTitle | 通知 |
 | NotificationStrings.SettingsTitle | 通知设置 |
 | AdvancedStrings.Experimental | 实验性 |
@@ -112,7 +110,7 @@ _pageTypes = new Dictionary<string, Type>
 - `_pageTypes` — Tag → 页面 Type（字段初始化 + 构造函数重新赋值，两处内容须保持一致）
 - `_pages` — Tag → 页面实例缓存（`NavigateToPage` 时 `Activator.CreateInstance` 创建并缓存，重复导航复用实例）
 
-### 完整映射（28 项）
+### 完整映射（27 项）
 
 ```csharp
 // SettingsWindow.xaml.cs 构造函数内，_pageTypes = new Dictionary<string, Type> { ... }
@@ -130,7 +128,6 @@ _pageTypes = new Dictionary<string, Type>
 { "BoardToolbarPage", typeof(BoardToolbarPage) },
 { "BoardAppearancePage", typeof(BoardAppearancePage) },
 { "BoardMenuPage", typeof(BoardMenuPage) },
-{ "UpdatePage", typeof(UpdatePage) },
 { "NotificationPage", typeof(NotificationPage) },
 { "ExperimentalPage", typeof(ExperimentalPage) },
 { "AdvancedPage", typeof(AdvancedPage) },

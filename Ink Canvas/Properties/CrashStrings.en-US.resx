@@ -78,4 +78,10 @@
   <data name="CrashWindowNoDetails" xml:space="preserve">
     <value>No crash details are available.</value>
   </data>
+  <data name="Msg_RestartLimit" xml:space="preserve">
+    <value>The application has restarted 5 times consecutively and automatic restart has been stopped. Please contact the developer or check the system environment.</value>
+  </data>
+  <data name="Msg_RestartLimitTitle" xml:space="preserve">
+    <value>Too Many Restarts</value>
+  </data>
 </root>

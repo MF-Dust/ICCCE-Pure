@@ -84,9 +84,6 @@
   <data name="Home_ToolbarSettings" xml:space="preserve">
     <value>装备栏按钮排序与显隐</value>
   </data>
-  <data name="Home_UpdateSettings" xml:space="preserve">
-    <value>更新调教</value>
-  </data>
   <data name="Home_Window" xml:space="preserve">
     <value>小窗窗</value>
   </data>

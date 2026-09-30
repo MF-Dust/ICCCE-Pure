@@ -18,7 +18,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
     public partial class FeedbackWindow : Window
     {
         private string _appVersion = "";
-        private string _updateChannel = "";
         private string _osVersion = "";
         private string _netVersion = "";
         private string _pptLinkageSettings = "";
@@ -67,20 +66,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
             {
                 _appVersion = "未知";
                 Debug.WriteLine($"获取软件版本失败: {ex.Message}");
-            }
-
-            try
-            {
-                var settings = SettingsManager.Settings;
-                if (settings?.Startup != null)
-                {
-                    _updateChannel = settings.Startup.UpdateChannel.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                _updateChannel = "未知";
-                Debug.WriteLine($"获取更新通道失败: {ex.Message}");
             }
 
             try
@@ -216,11 +201,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
                 {
                     versionInfo += _appVersion;
                 }
-                if (_page1.CheckUpdateChannel.IsChecked == true)
-                {
-                    if (!string.IsNullOrEmpty(versionInfo)) versionInfo += " ";
-                    versionInfo += $"({_updateChannel})";
-                }
 
                 if (_page1.CheckOSVersion.IsChecked == true)
                 {
@@ -271,10 +251,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
             {
                 template += $"- 软件版本: {_appVersion}\n";
             }
-            if (_page1.CheckUpdateChannel.IsChecked == true)
-            {
-                template += $"- 更新通道: {_updateChannel}\n";
-            }
             if (_page1.CheckOSVersion.IsChecked == true)
             {
                 template += $"- 操作系统: {_osVersion}\n";
@@ -315,11 +291,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
             if (_page1.CheckAppVersion.IsChecked == true)
             {
                 versionInfo += _appVersion;
-            }
-            if (_page1.CheckUpdateChannel.IsChecked == true)
-            {
-                if (!string.IsNullOrEmpty(versionInfo)) versionInfo += " ";
-                versionInfo += $"({_updateChannel})";
             }
 
             if (_page1.CheckOSVersion.IsChecked == true)

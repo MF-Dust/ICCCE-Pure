@@ -1,6 +1,5 @@
 using H.NotifyIcon;
 using Ink_Canvas.Models;
-using Ink_Canvas.Properties;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Windows;
@@ -10,18 +9,6 @@ namespace Ink_Canvas.Helpers
     internal static class WindowsNotificationHelper
     {
         private const string APP_ID = "InkCanvasForClass.CE";
-
-        public static void ShowNewVersionToast(string version)
-        {
-            ShowToast(new NotificationMessage
-            {
-                Type = NotificationMessageType.Update,
-                Level = NotificationMessageLevel.Normal,
-                Title = "InkCanvasForClass CE",
-                Summary = string.Format(NotificationStrings.NewVersion, version),
-                DisplaySeconds = 5
-            });
-        }
 
         public static void ShowToast(NotificationMessage message)
         {

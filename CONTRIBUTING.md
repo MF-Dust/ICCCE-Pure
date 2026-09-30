@@ -13,7 +13,7 @@
   ```bash
   dotnet run --project InkCanvas.Core.Tests -c Release -- --window-smoke
   ```
-  此检查使用临时配置和真实主窗口，跳过应用启动时的文件关联注册与更新检查，不替代触摸笔和 PowerPoint 实机测试。
+  此检查使用临时配置和真实主窗口，跳过应用启动时的文件关联注册，不替代触摸笔和 PowerPoint 实机测试。
 - `InkCanvas.NativeInk.Tests` 对应未启用的实验墨迹管线。现有 `PredictionHorizonStaysWithinAdaptiveBounds` 检查在 .NET 6/10 下均失败；修改该管线时需单独运行并检查结果。
 
 ## 中文版

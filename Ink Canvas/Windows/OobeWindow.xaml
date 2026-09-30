@@ -443,12 +443,6 @@
                                                                   Icon="{x:Static ui:SegoeFluentIcons.ChevronLeft}"
                                                                   SwitchName="ToggleSwitchFoldAtStartup" />
 
-                                    <controls:LabeledSettingsCard x:Name="CardAutoUpdate"
-                                                                  Header="{x:Static props:UpdateStrings.Header_AutoUpdate}"
-                                                                  Description="{x:Static props:OobeStrings.Oobe_AutoUpdate}"
-                                                                  Icon="{x:Static ui:SegoeFluentIcons.Sync}"
-                                                                  SwitchName="ToggleSwitchAutoUpdate" />
-
                                     <ui:SettingsCard Header="{x:Static props:OobeStrings.Oobe_CrashAction}"
                                                      Description="{x:Static props:OobeStrings.Oobe_CrashActionDesc}">
                                         <ui:SettingsCard.HeaderIcon>

@@ -47,7 +47,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             SelectComboBoxItemByTag(ComboBoxPlacement, notification.Placement, "TopCenter");
             SelectComboBoxItemByTag(ComboBoxAnimationMode, notification.AnimationMode, "Standard");
 
-            UpdateDurationSlider.Value = Math.Max(UpdateDurationSlider.Minimum, Math.Min(UpdateDurationSlider.Maximum, notification.UpdateDurationSeconds));
             UrgentDurationSlider.Value = Math.Max(UrgentDurationSlider.Minimum, Math.Min(UrgentDurationSlider.Maximum, notification.UrgentDurationSeconds));
             ImportantDurationSlider.Value = Math.Max(ImportantDurationSlider.Minimum, Math.Min(ImportantDurationSlider.Maximum, notification.ImportantDurationSeconds));
             ReminderDurationSlider.Value = Math.Max(ReminderDurationSlider.Minimum, Math.Min(ReminderDurationSlider.Maximum, notification.ReminderDurationSeconds));
@@ -105,8 +104,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
         private void UpdateDurationTexts()
         {
-            if (UpdateDurationText != null && UpdateDurationSlider != null)
-                UpdateDurationText.Text = $"{UpdateDurationSlider.Value:F0}s";
             if (UrgentDurationText != null && UrgentDurationSlider != null)
                 UrgentDurationText.Text = $"{UrgentDurationSlider.Value:F0}s";
             if (ImportantDurationText != null && ImportantDurationSlider != null)
@@ -158,15 +155,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         {
             if (!_isLoaded || ComboBoxAnimationMode.SelectedItem is not ComboBoxItem item) return;
             SettingsManager.Settings.Notification.AnimationMode = item.Tag?.ToString() ?? "Standard";
-            SaveSettings();
-        }
-
-        private void UpdateDurationSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (UpdateDurationText == null) return;
-            UpdateDurationTexts();
-            if (!_isLoaded) return;
-            SettingsManager.Settings.Notification.UpdateDurationSeconds = (int)Math.Round(UpdateDurationSlider.Value);
             SaveSettings();
         }
 

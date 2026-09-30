@@ -25,12 +25,12 @@ namespace Ink_Canvas
         /// </summary>
         /// <param name="isStartup">指示当前为应用启动阶段；为 true 时按启动流程应用启动相关设置（例如触发启动专用动作和启动时的行为）。</param>
         /// <summary>
-        /// 从当前配置文件重新加载设置并应用到界面（热重载），不触发启动逻辑与自动更新检查。
+        /// 从当前配置文件重新加载设置并应用到界面（热重载），不触发启动逻辑。
         /// 用于配置文件切换后立即生效。
         /// </summary>
         public void ReloadSettingsFromFile()
         {
-            LoadSettings(false, skipAutoUpdateCheck: true);
+            LoadSettings(false);
         }
 
         /// <summary>
@@ -43,8 +43,7 @@ namespace Ink_Canvas
             BtnResetToSuggestion_Click(null, null);
         }
 
-        /// <param name="skipAutoUpdateCheck">指示是否跳过自动更新检查；为 true 时不会在加载设置后执行自动更新检测。</param>
-        private void LoadSettings(bool isStartup = false, bool skipAutoUpdateCheck = false)
+        private void LoadSettings(bool isStartup = false)
         {
             try
             {
@@ -212,19 +211,6 @@ namespace Ink_Canvas
                     BoundsWidth = Settings.Advanced.FingerModeBoundsWidth;
                 }
 
-                // 设置自动更新相关选项
-                if (Settings.Startup.IsAutoUpdate && !skipAutoUpdateCheck)
-                {
-                    if (isStartup)
-                    {
-                        _pendingStartupAutoUpdateCheck = true;
-                    }
-                    else
-                    {
-                        LogHelper.WriteLogToFile("AutoUpdate | Running auto-update check after settings change");
-                        AutoUpdate();
-                    }
-                }
             }
             else
             {

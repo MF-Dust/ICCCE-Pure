@@ -95,9 +95,6 @@
   <data name="Oobe_FoldAtStartupDesc" xml:space="preserve">
     <value>启动后浮动工具栏自动藏到屏幕边缘，社恐式低调</value>
   </data>
-  <data name="Oobe_AutoUpdate" xml:space="preserve">
-    <value>允许后台偷偷摸鱼检查更新并下载新版本</value>
-  </data>
   <data name="Oobe_CrashAction" xml:space="preserve">
     <value>崩了怎么办</value>
   </data>

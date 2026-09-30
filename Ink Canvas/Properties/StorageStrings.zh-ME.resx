@@ -45,14 +45,11 @@
   <data name="AutoSave_Title" xml:space="preserve">
     <value>防手滑神器</value>
   </data>
-  <data name="Backup_AutoBeforeUpdate" xml:space="preserve">
-    <value>更新前留条后路</value>
-  </data>
   <data name="Backup_AutoPeriodic" xml:space="preserve">
     <value>稳如老狗定期备份</value>
   </data>
   <data name="Backup_Desc" xml:space="preserve">
-    <value>手动备份当前设置或回档到之前的状态，更新前也会自动备份，绝不翻车</value>
+    <value>可手動備份當前設置、還原之前的備份，或啟用定期自動備份。</value>
   </data>
   <data name="Backup_Interval" xml:space="preserve">
     <value>备份 CD</value>
@@ -193,9 +190,6 @@
   <data name="Storage_Legend_Other" xml:space="preserve">
     <value>杂鱼</value>
   </data>
-  <data name="Storage_Legend_Update" xml:space="preserve">
-    <value>自动更新</value>
-  </data>
   <data name="Storage_Legend_Plugins" xml:space="preserve">
     <value>插件</value>
   </data>
@@ -276,12 +270,6 @@
   </data>
   <data name="Storage_TotalUsage" xml:space="preserve">
     <value>ICC CE 总吃货量</value>
-  </data>
-  <data name="Storage_Update_Desc" xml:space="preserve">
-    <value>AutoUpdate 目录中的安装包与下载缓存，更新完会自动清理</value>
-  </data>
-  <data name="Storage_Update_Header" xml:space="preserve">
-    <value>自动更新</value>
   </data>
   <data name="Backup_SuccessTitle" xml:space="preserve">
     <value>备份到手稳如老狗</value>

@@ -86,18 +86,21 @@ internal static class Program
               "upload": { "enabledProviders": ["Dlass", "WebDav"] },
               "performance": { "isMonitoringEnabled": true, "deviceScore": 42 },
               "appearance": { "floatingBarThemeId": "custom-skin", "theme": 1 },
-              "startup": { "telemetryUploadLevel": 2, "hasAcceptedTelemetryPrivacy": true, "isAutoUpdate": false },
-              "notification": { "isAnnouncementEnabled": true, "isForcePopupEnabled": true, "isDynamicNotificationEnabled": true },
+              "startup": { "telemetryUploadLevel": 2, "hasAcceptedTelemetryPrivacy": true, "isAutoUpdate": true, "isAutoUpdateWithSilence": true, "isAutoUpdateWithSilenceStartTime": "06:00", "isAutoUpdateWithSilenceEndTime": "22:00", "updateChannel": 2, "updatePackageArchitecture": 1, "isSmartUpdate": true, "skippedVersion": "1.0.0", "autoUpdatePauseUntilDate": "2099-01-01" },
+              "notification": { "isAnnouncementEnabled": true, "isForcePopupEnabled": true, "isDynamicNotificationEnabled": true, "updateDurationSeconds": 5 },
+              "advanced": { "isAutoBackupBeforeUpdate": true, "isAutoBackupEnabled": true, "autoBackupIntervalDays": 3 },
               "automation": { "isEnableAutoSaveStrokes": true, "autoSaveStrokesIntervalMinutes": 3 }
             }
             """;
         var settings = JsonConvert.DeserializeObject<Settings>(legacyJson);
-        Check(settings.Appearance.Theme == 1 && !settings.Startup.IsAutoUpdate, "旧配置的内置主题和更新偏好必须保留");
+        Check(settings.Appearance.Theme == 1, "旧配置的内置主题必须保留");
         Check(settings.Automation.IsEnableAutoSaveStrokes && settings.Automation.AutoSaveStrokesIntervalMinutes == 3,
             "旧配置的本地自动保存必须保留");
         Check(settings.Notification.IsDynamicNotificationEnabled, "本地通知设置必须保留");
+        Check(settings.Advanced.IsAutoBackupEnabled && settings.Advanced.AutoBackupIntervalDays == 3, "定期本地备份必须保留");
         foreach (var pair in new[] { (typeof(Settings), "Dlass"), (typeof(Settings), "Upload"),
             (typeof(Settings), "Performance"), (typeof(Startup), "TelemetryUploadLevel"),
+            (typeof(Advanced), "IsAutoBackupBeforeUpdate"),
             (typeof(Appearance), "FloatingBarThemeId"), (typeof(NotificationSettings), "IsAnnouncementEnabled") })
             Check(pair.Item1.GetProperty(pair.Item2) == null, "已删除功能不能保留运行时设置入口：" + pair.Item2);
 
@@ -105,14 +108,37 @@ internal static class Program
         var roundTrip = JObject.FromObject(settings);
         foreach (var path in new[] { "dlass", "upload", "performance", "appearance.floatingBarThemeId",
             "startup.telemetryUploadLevel", "startup.hasAcceptedTelemetryPrivacy", "notification.isAnnouncementEnabled",
-            "notification.isForcePopupEnabled" })
+            "notification.isForcePopupEnabled", "advanced.isAutoBackupBeforeUpdate" })
             Check(JToken.DeepEquals(original.SelectToken(path), roundTrip.SelectToken(path)), "保存设置不能清理旧用户数据：" + path);
         var feedback = FeedbackSanitizer.BuildSanitizedSettingsJson(settings);
         Check(!feedback.Contains("old-token") && !feedback.Contains("old-password") && !feedback.Contains("deviceId"),
             "主动反馈不得泄漏旧凭据或设备标识");
         var defaults = JObject.FromObject(new Settings());
-        Check(defaults["dlass"] == null && defaults["upload"] == null && defaults["performance"] == null,
+        Check(defaults["dlass"] == null && defaults["upload"] == null && defaults["performance"] == null &&
+            defaults["advanced"]["isAutoBackupBeforeUpdate"] == null,
             "新配置不应生成已删除功能的配置");
+
+        foreach (var pair in new[] { ("IsAutoUpdate", "isAutoUpdate"), ("IsAutoUpdateWithSilence", "isAutoUpdateWithSilence"),
+            ("AutoUpdateWithSilenceStartTime", "isAutoUpdateWithSilenceStartTime"),
+            ("AutoUpdateWithSilenceEndTime", "isAutoUpdateWithSilenceEndTime"), ("UpdateChannel", "updateChannel"),
+            ("UpdatePackageArchitecture", "updatePackageArchitecture"), ("IsSmartUpdate", "isSmartUpdate"),
+            ("SkippedVersion", "skippedVersion"), ("AutoUpdatePauseUntilDate", "autoUpdatePauseUntilDate") })
+        {
+            Check(typeof(Startup).GetProperty(pair.Item1) == null, "更新设置不能参与运行：" + pair.Item1);
+            Check(defaults["startup"][pair.Item2] == null, "新配置不能生成更新设置：" + pair.Item2);
+            Check(JToken.DeepEquals(original["startup"][pair.Item2], roundTrip["startup"][pair.Item2]),
+                "旧更新配置只能作为原始数据保留：" + pair.Item2);
+        }
+        Check(typeof(NotificationSettings).GetProperty("UpdateDurationSeconds") == null &&
+            defaults["notification"]["updateDurationSeconds"] == null &&
+            JToken.DeepEquals(original["notification"]["updateDurationSeconds"], roundTrip["notification"]["updateDurationSeconds"]),
+            "更新通知设置不参与运行，且不删除旧数据");
+        Check(typeof(App).Assembly.GetType("Ink_Canvas.Helpers.AutoUpdateHelper") == null &&
+            typeof(MainWindow).GetMethod("AutoUpdate") == null &&
+            typeof(MainWindow).GetField("timerCheckAutoUpdateWithSilence", BindingFlags.Instance | BindingFlags.NonPublic) == null,
+            "不能保留更新器或静默安装入口");
+        Check((int)Ink_Canvas.Models.NotificationMessageType.Urgent == 1 &&
+            (int)Ink_Canvas.Models.NotificationMessageType.Other == 4, "旧自动化工作流的通知类型序号不能改变");
     }
 
     private static void CheckLegacyToolsLayouts()

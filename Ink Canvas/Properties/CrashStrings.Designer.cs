@@ -40,6 +40,10 @@ namespace Ink_Canvas.Properties
             return ResourceManager.GetString(key, _resourceCulture);
         }
 
+        public static string Msg_RestartLimit => ResourceManager.GetString(nameof(Msg_RestartLimit), _resourceCulture);
+
+        public static string Msg_RestartLimitTitle => ResourceManager.GetString(nameof(Msg_RestartLimitTitle), _resourceCulture);
+
         public static string Crash_Desc => ResourceManager.GetString(nameof(Crash_Desc), _resourceCulture);
 
         public static string Crash_NoAction => ResourceManager.GetString(nameof(Crash_NoAction), _resourceCulture);

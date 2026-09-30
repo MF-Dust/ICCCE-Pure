@@ -95,9 +95,6 @@
   <data name="Oobe_FoldAtStartupDesc" xml:space="preserve">
     <value>Automatically hide the floating toolbar to the screen edge after startup.</value>
   </data>
-  <data name="Oobe_AutoUpdate" xml:space="preserve">
-    <value>Allow background update checks and download new versions.</value>
-  </data>
   <data name="Oobe_CrashAction" xml:space="preserve">
     <value>When an unhandled exception occurs</value>
   </data>

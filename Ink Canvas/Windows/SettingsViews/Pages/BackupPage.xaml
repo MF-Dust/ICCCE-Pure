@@ -28,11 +28,6 @@
                     HorizontalAlignment="Stretch"
                     Spacing="{StaticResource SettingsCardSpacing}">
 
-                    <controls:LabeledSettingsCard x:Name="ToggleSwitchIsAutoBackupBeforeUpdate"
-                        Header="{x:Static props:StorageStrings.Backup_AutoBeforeUpdate}"
-                        IsOn="True"
-                        Toggled="ToggleSwitchIsAutoBackupBeforeUpdate_Toggled"/>
-
                     <ui:SettingsExpander x:Name="ExpanderAutoBackup"
                                          Header="{x:Static props:StorageStrings.Backup_AutoPeriodic}"
                                          IsExpanded="{Binding IsOn, ElementName=ToggleSwitchIsAutoBackupEnabled, Mode=OneWay}">

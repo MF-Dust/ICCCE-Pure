@@ -91,13 +91,13 @@
     <value>启用灵动通知</value>
   </data>
   <data name="EnableDynamicHint" xml:space="preserve">
-    <value>使用頂部膠囊提示顯示更新和本地消息。</value>
+    <value>使用頂部膠囊提示顯示本地消息。</value>
   </data>
   <data name="EnableWindowsToast" xml:space="preserve">
     <value>启用 Windows 系统通知</value>
   </data>
   <data name="EnableWindowsToastHint" xml:space="preserve">
-    <value>重要通知和更新同步显示为系统 Toast，双管齐下~</value>
+    <value>本地通知可同步顯示為系統 Toast。</value>
   </data>
   <data name="GroupTitle" xml:space="preserve">
     <value>通知管理大权</value>
@@ -110,9 +110,6 @@
   </data>
   <data name="NavTooltip" xml:space="preserve">
     <value>消息提醒與靈動通知設置</value>
-  </data>
-  <data name="NewVersion" xml:space="preserve">
-    <value>发现新版本：{0}，快更新冲鸭！</value>
   </data>
   <data name="OtherDuration" xml:space="preserve">
     <value>其他通知停留时长</value>
@@ -204,20 +201,8 @@
   <data name="Type_Reminder" xml:space="preserve">
     <value>提醒</value>
   </data>
-  <data name="Type_Update" xml:space="preserve">
-    <value>更新</value>
-  </data>
   <data name="Type_Urgent" xml:space="preserve">
     <value>急急急</value>
-  </data>
-  <data name="UpdateDuration" xml:space="preserve">
-    <value>更新通知停留时长</value>
-  </data>
-  <data name="UpdateDurationHint" xml:space="preserve">
-    <value>更新类消息自动关闭前停留的秒数。</value>
-  </data>
-  <data name="UpdateTitle" xml:space="preserve">
-    <value>发现新版本</value>
   </data>
   <data name="UrgentDuration" xml:space="preserve">
     <value>紧急通知停留时长</value>

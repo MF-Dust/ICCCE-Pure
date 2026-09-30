@@ -74,8 +74,6 @@ namespace Ink_Canvas.Controls
                     return SegoeFluentIcons.Warning;
                 case NotificationMessageType.Important:
                     return SegoeFluentIcons.Important;
-                case NotificationMessageType.Update:
-                    return SegoeFluentIcons.Sync;
                 case NotificationMessageType.Reminder:
                     return SegoeFluentIcons.Stopwatch;
                 default:
@@ -126,9 +124,6 @@ namespace Ink_Canvas.Controls
             if (message?.Level >= NotificationMessageLevel.High || message?.Type == NotificationMessageType.Important)
                 return (Color.FromArgb(238, 112, 72, 18), Color.FromRgb(255, 183, 77), Colors.White, Color.FromArgb(230, 255, 255, 255), Color.FromArgb(38, 255, 255, 255));
 
-            if (message?.Type == NotificationMessageType.Update)
-                return (Color.FromArgb(238, 20, 68, 116), Color.FromRgb(66, 165, 245), Colors.White, Color.FromArgb(230, 255, 255, 255), Color.FromArgb(38, 255, 255, 255));
-
             if (message?.Type == NotificationMessageType.Reminder)
                 return (Color.FromArgb(238, 31, 82, 47), Color.FromRgb(102, 187, 106), Colors.White, Color.FromArgb(230, 255, 255, 255), Color.FromArgb(38, 255, 255, 255));
 
@@ -142,9 +137,6 @@ namespace Ink_Canvas.Controls
 
             if (message?.Level >= NotificationMessageLevel.High || message?.Type == NotificationMessageType.Important)
                 return (Color.FromArgb(245, 255, 251, 235), Color.FromRgb(217, 153, 43), Color.FromRgb(146, 96, 14), Color.FromArgb(200, 146, 96, 14), Color.FromArgb(30, 217, 153, 43));
-
-            if (message?.Type == NotificationMessageType.Update)
-                return (Color.FromArgb(245, 235, 245, 255), Color.FromRgb(59, 130, 246), Color.FromRgb(30, 64, 175), Color.FromArgb(200, 30, 64, 175), Color.FromArgb(30, 59, 130, 246));
 
             if (message?.Type == NotificationMessageType.Reminder)
                 return (Color.FromArgb(245, 240, 253, 244), Color.FromRgb(72, 160, 82), Color.FromRgb(22, 101, 52), Color.FromArgb(200, 22, 101, 52), Color.FromArgb(30, 72, 160, 82));

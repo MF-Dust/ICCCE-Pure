@@ -47,7 +47,6 @@ namespace Ink_Canvas
         private List<System.Windows.Controls.Canvas> whiteboardPages = new List<System.Windows.Controls.Canvas>();
         private int currentPageIndex;
         private System.Windows.Controls.Canvas currentCanvas;
-        internal AutoUpdateHelper.UpdateLineGroup AvailableLatestLineGroup;
 
         // 全局快捷键管理器
         private GlobalHotkeyManager _globalHotkeyManager;
@@ -844,7 +843,7 @@ namespace Ink_Canvas
                     SaveSettingsToFile();
                 }
 
-                LoadSettings(false, skipAutoUpdateCheck: true);
+                LoadSettings(false);
 
                 if (ViewboxFloatingBar != null && currentMode == 0)
                 {
@@ -1430,7 +1429,6 @@ namespace Ink_Canvas
         public string _lastAppliedProfileName;
         private bool isLoaded;
         private bool forcePointEraser;
-        private bool _pendingStartupAutoUpdateCheck;
         private bool _sliderTouchSupportInitialized;
         private bool _deferredPhaseBCompleted;
 
@@ -1916,237 +1914,10 @@ namespace Ink_Canvas
 
             LogHelper.WriteLogToFile("Ink Canvas closed", LogHelper.LogType.Event);
 
-            // 检查是否有待安装的更新
-            CheckPendingUpdates();
-
             if (_isReloadingForLanguageChange) return;
 
             App.IsAppExitByUser = true;
             Application.Current?.Shutdown();
-        }
-
-        private void CheckPendingUpdates()
-        {
-            try
-            {
-                // 如果有可用的更新版本且启用了自动更新
-                if (AvailableLatestVersion != null && Settings.Startup.IsAutoUpdate)
-                {
-                    // 检查更新文件是否已下载
-                    string statusFilePath = AutoUpdateHelper.GetUpdateDownloadStatusFilePath(AvailableLatestVersion);
-
-                    if (File.Exists(statusFilePath) && File.ReadAllText(statusFilePath).Trim().ToLower() == "true")
-                    {
-                        LogHelper.WriteLogToFile($"AutoUpdate | Installing pending update v{AvailableLatestVersion} on application close");
-
-                        // 设置为用户主动退出，避免被看门狗判定为崩溃
-                        App.IsAppExitByUser = true;
-
-                        // 创建批处理脚本并启动，软件关闭后会执行更新操作
-                        AutoUpdateHelper.InstallNewVersionApp(AvailableLatestVersion, true);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"AutoUpdate | Error checking pending updates: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        // 使用多线路组下载更新
-        internal async Task<bool> DownloadUpdateWithFallback(string version, AutoUpdateHelper.UpdateLineGroup primaryGroup, UpdateChannel channel)
-        {
-            try
-            {
-                // 如果主要线路组可用，直接使用
-                if (primaryGroup != null)
-                {
-                    LogHelper.WriteLogToFile($"AutoUpdate | 使用主要线路组下载: {primaryGroup.GroupName}");
-                    return await AutoUpdateHelper.DownloadSetupFile(version, primaryGroup);
-                }
-
-                // 如果主要线路组不可用，获取所有可用线路组
-                LogHelper.WriteLogToFile("AutoUpdate | 主要线路组不可用，获取所有可用线路组");
-                var availableGroups = await AutoUpdateHelper.GetAvailableLineGroupsOrdered(channel);
-                if (availableGroups.Count == 0)
-                {
-                    LogHelper.WriteLogToFile("AutoUpdate | 没有可用的线路组", LogHelper.LogType.Error);
-                    return false;
-                }
-
-                LogHelper.WriteLogToFile($"AutoUpdate | 使用 {availableGroups.Count} 个可用线路组进行下载");
-                return await AutoUpdateHelper.DownloadSetupFileWithFallback(version, availableGroups);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"AutoUpdate | 下载更新时出错: {ex.Message}", LogHelper.LogType.Error);
-                return false;
-            }
-        }
-
-        public async void AutoUpdate()
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(Settings.Startup.AutoUpdatePauseUntilDate))
-                {
-                    if (DateTime.TryParse(Settings.Startup.AutoUpdatePauseUntilDate, out DateTime pauseUntilDate))
-                    {
-                        if (DateTime.Now < pauseUntilDate)
-                        {
-                            LogHelper.WriteLogToFile($"AutoUpdate | 自动更新已暂停，直到 {pauseUntilDate:yyyy-MM-dd}");
-                            return;
-                        }
-                        else
-                        {
-                            LogHelper.WriteLogToFile($"AutoUpdate | 暂停期已过，恢复自动更新检查");
-                            Settings.Startup.AutoUpdatePauseUntilDate = "";
-                            try { await Dispatcher.InvokeAsync(() => SaveSettingsToFile()); } catch (TaskCanceledException) { } catch (ObjectDisposedException) { }
-                        }
-                    }
-                }
-
-                // 清除之前的更新状态，确保使用新通道重新检查
-                AvailableLatestVersion = null;
-                AvailableLatestLineGroup = null;
-                AvailableLatestReleaseNotes = null;
-
-                // 使用当前选择的更新通道检查更新
-                var (remoteVersion, lineGroup, apiReleaseNotes) = await AutoUpdateHelper.CheckForUpdates(Settings.Startup.UpdateChannel);
-                AvailableLatestVersion = remoteVersion;
-                AvailableLatestLineGroup = lineGroup;
-                AvailableLatestReleaseNotes = apiReleaseNotes;
-
-                // 声明下载状态变量，用于整个方法
-                bool isDownloadSuccessful = false;
-
-                bool hasValidLineGroup = lineGroup != null;
-
-                if (AvailableLatestVersion != null)
-                {
-                    try
-                    {
-                        await Dispatcher.InvokeAsync(() =>
-                        {
-                            timerCheckAutoUpdateRetry.Stop();
-                            updateCheckRetryCount = 0;
-                        });
-                    }
-                    catch (TaskCanceledException) { }
-                    catch (ObjectDisposedException) { }
-
-                    // 检测到新版本
-                    LogHelper.WriteLogToFile($"AutoUpdate | New version available: {AvailableLatestVersion}");
-
-                    var updateMessage = new NotificationMessage
-                    {
-                        Id = "update-" + AvailableLatestVersion,
-                        Type = NotificationMessageType.Update,
-                        Level = NotificationMessageLevel.Normal,
-                        Title = NotificationStrings.UpdateTitle,
-                        Summary = string.Format(NotificationStrings.NewVersion, AvailableLatestVersion),
-                        Content = AvailableLatestReleaseNotes ?? string.Empty,
-                        Icon = "Update",
-                        ActionText = NotificationStrings.ViewDetails,
-                        DisplaySeconds = Settings?.Notification?.UpdateDurationSeconds > 0 ? Settings.Notification.UpdateDurationSeconds : 3,
-                        Source = "update",
-                        Action = () =>
-                        {
-                            try
-                            {
-                                var settingsWindow = new SettingsWindow();
-                                settingsWindow.Show();
-                                settingsWindow.NavigateToPage("UpdatePage");
-                            }
-                            catch (Exception ex)
-                            {
-                                LogHelper.WriteLogToFile($"打开更新设置页失败: {ex.Message}", LogHelper.LogType.Warning);
-                            }
-                        }
-                    };
-
-                    NotificationCenterService.Enqueue(updateMessage);
-
-                    // 检查是否是用户选择跳过的版本
-                    if (!string.IsNullOrEmpty(Settings.Startup.SkippedVersion) &&
-                        Settings.Startup.SkippedVersion == AvailableLatestVersion)
-                    {
-                        LogHelper.WriteLogToFile($"AutoUpdate | Version {AvailableLatestVersion} was marked to be skipped by the user");
-                        return; // 跳过此版本，不执行更新操作
-                    }
-
-                    // 如果检测到的版本与跳过的版本不同，则清除跳过版本记录
-                    // 这确保用户只能跳过当前最新版本，而不是永久跳过所有更新
-                    if (!string.IsNullOrEmpty(Settings.Startup.SkippedVersion) &&
-                        Settings.Startup.SkippedVersion != AvailableLatestVersion)
-                    {
-                        LogHelper.WriteLogToFile($"AutoUpdate | Detected new version {AvailableLatestVersion} different from skipped version {Settings.Startup.SkippedVersion}, clearing skip record");
-                        Settings.Startup.SkippedVersion = "";
-                        try { await Dispatcher.InvokeAsync(() => SaveSettingsToFile()); } catch (TaskCanceledException) { } catch (ObjectDisposedException) { }
-                    }
-
-                    // 如果启用了静默更新，则自动下载更新而不显示提示
-                    if (Settings.Startup.IsAutoUpdateWithSilence)
-                    {
-                        LogHelper.WriteLogToFile("AutoUpdate | Silent update enabled, downloading update automatically without notification");
-
-                        // 静默下载更新，使用多线路组下载功能
-                        isDownloadSuccessful = await DownloadUpdateWithFallback(AvailableLatestVersion, AvailableLatestLineGroup, Settings.Startup.UpdateChannel);
-
-                        if (isDownloadSuccessful)
-                        {
-                            LogHelper.WriteLogToFile("AutoUpdate | Update downloaded successfully, will install when conditions are met");
-
-                            // 启动检查定时器，定期检查是否可以安装
-                            try { await Dispatcher.InvokeAsync(() => timerCheckAutoUpdateWithSilence.Start()); } catch (TaskCanceledException) { } catch (ObjectDisposedException) { }
-                        }
-                        else
-                        {
-                            LogHelper.WriteLogToFile("AutoUpdate | Silent update download failed", LogHelper.LogType.Error);
-                        }
-
-                        return;
-                    }
-
-                    // 如果没有启用静默更新，则记录日志并依赖 Toast 通知用户。
-                    // 用户可在 设置 → 更新 中查看版本说明并选择更新方式。
-                    LogHelper.WriteLogToFile(
-                        $"AutoUpdate | New version {AvailableLatestVersion} available; user notified via toast, will act from settings page.");
-                }
-                else if (hasValidLineGroup)
-                {
-                    LogHelper.WriteLogToFile("AutoUpdate | Current version is already the latest, no retry needed");
-
-                    try
-                    {
-                        await Dispatcher.InvokeAsync(() =>
-                        {
-                            timerCheckAutoUpdateRetry.Stop();
-                            updateCheckRetryCount = 0;
-                        });
-                    }
-                    catch (TaskCanceledException) { }
-                    catch (ObjectDisposedException) { }
-                }
-                else
-                {
-                    // 检查更新失败，启动重试定时器
-                    LogHelper.WriteLogToFile("AutoUpdate | Update check failed, starting retry timer");
-
-                    // 重置重试计数
-                    updateCheckRetryCount = 0;
-
-                    // 启动重试定时器，10分钟后重新检查
-                    try { await Dispatcher.InvokeAsync(() => timerCheckAutoUpdateRetry.Start()); } catch (TaskCanceledException) { } catch (ObjectDisposedException) { }
-
-                    // 清理更新文件夹
-                    AutoUpdateHelper.DeleteUpdatesFolder();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"AutoUpdate | Error in AutoUpdate: {ex.Message}", LogHelper.LogType.Error);
-            }
         }
 
         // 添加一个辅助方法，根据当前编辑模式设置光标
@@ -2745,16 +2516,6 @@ namespace Ink_Canvas
                 StartPowerPointProcessMonitoring();
             }
 
-            if (_pendingStartupAutoUpdateCheck && Settings.Startup?.IsAutoUpdate == true)
-            {
-                _pendingStartupAutoUpdateCheck = false;
-                await Task.Delay(8000);
-                _ = Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    LogHelper.WriteLogToFile("AutoUpdate | Running deferred auto-update check at UI idle");
-                    _ = Task.Run(() => AutoUpdate());
-                }), DispatcherPriority.ApplicationIdle);
-            }
         }
 
         /// <summary>

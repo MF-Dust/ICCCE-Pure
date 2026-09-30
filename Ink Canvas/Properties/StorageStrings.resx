@@ -45,14 +45,11 @@
   <data name="AutoSave_Title" xml:space="preserve">
     <value>自动保存</value>
   </data>
-  <data name="Backup_AutoBeforeUpdate" xml:space="preserve">
-    <value>自动更新前备份</value>
-  </data>
   <data name="Backup_AutoPeriodic" xml:space="preserve">
     <value>定期自动备份</value>
   </data>
   <data name="Backup_Desc" xml:space="preserve">
-    <value>可手动备份当前设置或还原之前的备份，自动更新前也会自动备份</value>
+    <value>可手动备份当前设置、还原之前的备份，或启用定期自动备份。</value>
   </data>
   <data name="Backup_Interval" xml:space="preserve">
     <value>备份间隔</value>
@@ -193,9 +190,6 @@
   <data name="Storage_Legend_Other" xml:space="preserve">
     <value>其他</value>
   </data>
-  <data name="Storage_Legend_Update" xml:space="preserve">
-    <value>自动更新</value>
-  </data>
   <data name="Storage_Legend_Plugins" xml:space="preserve">
     <value>插件</value>
   </data>
@@ -276,12 +270,6 @@
   </data>
   <data name="Storage_TotalUsage" xml:space="preserve">
     <value>ICC CE 总占用</value>
-  </data>
-  <data name="Storage_Update_Desc" xml:space="preserve">
-    <value>AutoUpdate 目录中的安装包与下载缓存，每次更新完成后会被清理</value>
-  </data>
-  <data name="Storage_Update_Header" xml:space="preserve">
-    <value>自动更新</value>
   </data>
   <data name="Backup_SuccessTitle" xml:space="preserve">
     <value>备份成功</value>

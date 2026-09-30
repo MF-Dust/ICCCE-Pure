@@ -38,7 +38,6 @@ namespace Ink_Canvas.Windows.SettingsViews
             { "BoardToolbarPage", typeof(BoardToolbarPage) },
             { "BoardAppearancePage", typeof(BoardAppearancePage) },
             { "BoardMenuPage", typeof(BoardMenuPage) },
-            { "UpdatePage", typeof(UpdatePage) },
             { "NotificationPage", typeof(NotificationPage) },
             { "ExperimentalPage", typeof(ExperimentalPage) },
             { "AdvancedPage", typeof(AdvancedPage) },
@@ -65,7 +64,6 @@ namespace Ink_Canvas.Windows.SettingsViews
         private bool _wasMaximized = false;
 
         private bool _isNavigating = false;
-        private bool _updateBadgeDismissed = false;
 
         /// <summary>
         /// 若为 true，则跳过 Loaded 中默认导航到 HomePage 的行为。
@@ -116,7 +114,6 @@ namespace Ink_Canvas.Windows.SettingsViews
                 { "BoardToolbarPage", typeof(BoardToolbarPage) },
                 { "BoardAppearancePage", typeof(BoardAppearancePage) },
                 { "BoardMenuPage", typeof(BoardMenuPage) },
-                { "UpdatePage", typeof(UpdatePage) },
                 { "NotificationPage", typeof(NotificationPage) },
                 { "ExperimentalPage", typeof(ExperimentalPage) },
                 { "AdvancedPage", typeof(AdvancedPage) },
@@ -151,7 +148,6 @@ namespace Ink_Canvas.Windows.SettingsViews
 
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        UpdateUpdateBadgeVisibility();
                         // 绑定设置窗口中的 ToggleSwitch 本地化文本
                         Ink_Canvas.Helpers.LocalizationHelper.BindToggleSwitchesInWindow(this);
                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -371,11 +367,6 @@ namespace Ink_Canvas.Windows.SettingsViews
                     }
                     NavigationViewControl.Header = selectedItem.Content;
 
-                    if (tag == "UpdatePage")
-                    {
-                        _updateBadgeDismissed = true;
-                        UpdateUpdateBadgeVisibility();
-                    }
                 }
             }
         }
@@ -1292,22 +1283,6 @@ namespace Ink_Canvas.Windows.SettingsViews
             {
                 System.Diagnostics.Debug.WriteLine(string.Format(NavStrings.Nav_PreloadPagesFailed, ex.Message));
             }
-        }
-
-        public void UpdateUpdateBadgeVisibility()
-        {
-            try
-            {
-                var mainWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();
-                bool hasUpdate = mainWindow != null && !string.IsNullOrEmpty(mainWindow.AvailableLatestVersion);
-                var item = FindNavigationViewItemByTag("UpdatePage");
-                var badge = item?.InfoBadge;
-                if (badge != null)
-                {
-                    badge.Visibility = (hasUpdate && !_updateBadgeDismissed) ? Visibility.Visible : Visibility.Collapsed;
-                }
-            }
-            catch { }
         }
 
     }
