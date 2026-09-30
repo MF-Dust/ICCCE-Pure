@@ -29,9 +29,6 @@
                     <Style TargetType="Label" BasedOn="{StaticResource AutoFitToolPopupLabel8}" />
                 </ikw:SimpleStackPanel.Resources>
                 <!-- All buttons declared here; layout is applied dynamically via ApplyMenuLayout() -->
-                <controls:ToolMenuButton x:Name="TimerToolBtn" Label="{x:Static props:FloatingBarStrings.QuickPanel_Timer}" Visibility="Collapsed" />
-                <controls:ToolMenuButton x:Name="RandomDrawToolBtn" Label="{x:Static props:FloatingBarStrings.Tools_RandomDraw}" Visibility="Collapsed" />
-                <controls:ToolMenuButton x:Name="SingleDrawToolBtn" Label="{x:Static props:FloatingBarStrings.QuickPanel_SingleDraw}" Visibility="Collapsed" />
                 <controls:ToolMenuButton x:Name="SaveToolBtn" Label="{x:Static props:FloatingBarStrings.Tools_Save}" Visibility="Collapsed" />
                 <controls:ToolMenuButton x:Name="OpenToolBtn" Label="{x:Static props:FloatingBarStrings.Tools_Open}" Visibility="Collapsed" />
                 <controls:ToolMenuButton x:Name="ReplayToolBtn" Label="{x:Static props:FloatingBarStrings.Tools_Replay}" Visibility="Collapsed" />

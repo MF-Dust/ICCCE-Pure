@@ -60,8 +60,6 @@ namespace Ink_Canvas.Properties
 
         public static string Home_MainUI => ResourceManager.GetString(nameof(Home_MainUI), _resourceCulture);
 
-        public static string Home_PluginSettings => ResourceManager.GetString(nameof(Home_PluginSettings), _resourceCulture);
-
         public static string Home_PPTSettings => ResourceManager.GetString(nameof(Home_PPTSettings), _resourceCulture);
 
         public static string Home_Privacy => ResourceManager.GetString(nameof(Home_Privacy), _resourceCulture);

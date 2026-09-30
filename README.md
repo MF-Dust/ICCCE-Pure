@@ -13,7 +13,6 @@
 ![GitHub forks](https://img.shields.io/github/forks/InkCanvasForClass/community)
 [![All Contributors](https://img.shields.io/github/all-contributors/InkCanvasForClass/community?color=ee8449)](#贡献者)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/InkCanvasForClass/community)
-[![NuGet PluginSdk](https://img.shields.io/nuget/v/InkCanvas.PluginSdk?label=PluginSdk&logo=nuget)](https://www.nuget.org/packages/InkCanvas.PluginSdk)
 [![NuGet Controls](https://img.shields.io/nuget/v/InkCanvas.Controls?label=Controls&logo=nuget)](https://www.nuget.org/packages/InkCanvas.Controls)
 
 [![Discord](https://img.shields.io/discord/1383039050184917053?label=Discord&logo=discord)](https://discord.gg/ahj7eJWhEG)
@@ -23,6 +22,37 @@
 <img src="Images/icc ce.png" width="2048">
 
 </div>
+
+## 核心功能 (Core Features)
+
+- **墨迹书写**：基于 WPF InkCanvas 的触控、手写笔书写与压感。
+- **黑板 / 白板教学模式**：多指缩放、旋转、移动、多指漫游与黑白板快速切换。
+- **屏幕画笔批注**：随时在屏幕任意内容上画线、圈点与批注，支持快速清屏与侧边栏隐藏。
+- **PowerPoint 放映深度联动**：支持 ROT 与 VSTO 双模式联动，PPT 放映时自动进入批注模式并与幻灯片翻页同步墨迹。
+- **智能墨迹图形识别**：支持识别标准圆、椭圆、多边形、直角坐标系等多种几何图形并自动规范化。
+- **笔迹与截图保存**：支持一键截屏与板书笔迹结构化保存。
+
+## 运行环境与架构说明 (Architecture & Runtime)
+
+- **目标平台**：Windows 10 2004（19041）及以上版本（`net10.0-windows10.0.19041.0`）。
+- **运行环境**：**必须安装 .NET Desktop Runtime 10**（确切为 10.x 主版本，不支持控制台运行时或其它主版本）。
+- **特例组件与约束说明**：
+  - `InkCanvas.IACoreHelper`：由于依赖 32 位底层原生微软墨迹分析 COM 组件（IACore），受二进制接口约束保持在 **.NET Framework 4.7.2 (win-x86)**。
+  - `InkCanvas.PowerPointAddIn`：作为直接注入 Microsoft PowerPoint 的 VSTO COM 外接程序，受宿主 Office 进程机制约束保持在 **.NET Framework 4.7.2**。
+
+## 构建与验证 (Build & Verification)
+
+- **编译核心主项目**：
+  ```bash
+  dotnet build "Ink Canvas/InkCanvasForClass.csproj" -c Debug
+  ```
+- **运行保存与自动保存回归检查**：
+  ```bash
+  dotnet run --project InkCanvas.Core.Tests -c Release
+  ```
+- 抽选、点名、课堂计时器、鸡汤提示及插件系统已移除；升级前建议备份配置和墨迹文件。
+- `InkCanvas.NativeInk.Tests` 测试的是未启用的实验墨迹管线。现有 `PredictionHorizonStaysWithinAdaptiveBounds` 检查在 .NET 6 和 .NET 10 下均失败，不代表主程序批注管线的测试结果。
+
 
 ## 💫 软件说明
 
@@ -67,7 +97,7 @@
 
 ### 程序无法正常启动
 
-请检查你的电脑上是否安装了 `.Net Runtime 6.0` 或更高版本。若没有，请[前往官网](https://dotnet.microsoft.com/zh-cn/download/dotnet/6.0)下载安装。
+请检查你的电脑上是否安装了 **.NET Desktop Runtime 10**（确切为 10.x 主版本，不支持控制台运行时或其它主版本跨版本运行）。若没有，请[前往微软官网](https://dotnet.microsoft.com/download/dotnet/10.0)下载安装 **.NET Desktop Runtime 10 (Windows 桌面运行时)**。
 
 如果仍无法运行，请[安装 `Microsoft Office`](https://www.coolhub.top/archives/11)。
 
@@ -78,7 +108,6 @@
 ## Todo LIST
 
 1. 预备 2.0 版本开发
-2. Ci 联动插件
 
 ## 贡献者
 

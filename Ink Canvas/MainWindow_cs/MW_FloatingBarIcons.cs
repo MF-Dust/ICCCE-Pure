@@ -991,65 +991,6 @@ namespace Ink_Canvas
                     WaterMarkDate.Visibility = Visibility.Collapsed;
                 }
 
-                if (Settings.Appearance.EnableChickenSoupInWhiteboardMode)
-                {
-                    ApplyChickenSoupPosition();
-                    BlackBoardWaterMark.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    BlackBoardWaterMark.Visibility = Visibility.Collapsed;
-                }
-
-                _ = UpdateChickenSoupTextAsync().ContinueWith(t =>
-                {
-                    if (t.IsFaulted)
-                    {
-                        try
-                        {
-                            LogHelper.WriteLogToFile($"进入白板模式时更新名言失败: {t.Exception?.GetBaseException().Message}", LogHelper.LogType.Warning);
-                        }
-                        catch
-                        {
-                        }
-                        if (Settings.Appearance.EnableChickenSoupInWhiteboardMode && Settings.Appearance.ChickenSoupSource != 3)
-                        {
-                            try
-                            {
-                                if (Settings.Appearance.ChickenSoupSource == 0)
-                                {
-                                    int randChickenSoupIndex = new Random().Next(ChickenSoup.OSUPlayerYuLu.Length);
-                                    BlackBoardWaterMark.Text = ChickenSoup.OSUPlayerYuLu[randChickenSoupIndex];
-                                }
-                                else if (Settings.Appearance.ChickenSoupSource == 1)
-                                {
-                                    int randChickenSoupIndex = new Random().Next(ChickenSoup.MingYanJingJu.Length);
-                                    BlackBoardWaterMark.Text = ChickenSoup.MingYanJingJu[randChickenSoupIndex];
-                                }
-                                else if (Settings.Appearance.ChickenSoupSource == 2)
-                                {
-                                    int randChickenSoupIndex = new Random().Next(ChickenSoup.GaoKaoPhrases.Length);
-                                    BlackBoardWaterMark.Text = ChickenSoup.GaoKaoPhrases[randChickenSoupIndex];
-                                }
-                                else if (Settings.Appearance.ChickenSoupSource == 4)
-                                {
-                                    int randChickenSoupIndex = new Random().Next(ChickenSoup.PhigrosTips.Length);
-                                    BlackBoardWaterMark.Text = ChickenSoup.PhigrosTips[randChickenSoupIndex];
-                                }
-                            }
-                            catch
-                            {
-                                BlackBoardWaterMark.Visibility = Visibility.Collapsed;
-                            }
-                        }
-                        else if (Settings.Appearance.EnableChickenSoupInWhiteboardMode && Settings.Appearance.ChickenSoupSource == 3)
-                        {
-                            BlackBoardWaterMark.Text = Properties.MainWindowStrings.Main_Hitokoto_Unavailable;
-                        }
-                    }
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-                StartChickenSoupAutoRotation();
-
                 if (Settings.Canvas.UsingWhiteboard)
                 {
                     ICCWaterMarkDark.Visibility = Visibility.Visible;
@@ -1117,10 +1058,8 @@ namespace Ink_Canvas
                     PenIcon_Click(null, null);
                 }
 
-                StopChickenSoupAutoRotation();
                 WaterMarkTime.Visibility = Visibility.Collapsed;
                 WaterMarkDate.Visibility = Visibility.Collapsed;
-                BlackBoardWaterMark.Visibility = Visibility.Collapsed;
                 ICCWaterMarkDark.Visibility = Visibility.Collapsed;
                 ICCWaterMarkWhite.Visibility = Visibility.Collapsed;
 
@@ -1422,59 +1361,6 @@ namespace Ink_Canvas
         }
 
         /// <summary>
-        /// 倒计时计时器图标点击事件处理
-        /// </summary>
-        /// <param name="sender">发送者</param>
-        /// <param name="e">路由事件参数</param>
-        internal void ImageCountdownTimer_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            LeftUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            RightUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            SidePannelMarginAnimation(-10);
-            AnimationsHelper.HidePopupWithSlideAndFade(BorderTools);
-            AnimationsHelper.HidePopupWithSlideAndFade(BoardBorderToolsPopup);
-            AnimationsHelper.HideWithSlideAndFade(BoardImageOptionsPanel);
-
-            if (Settings.RandSettings?.UseNewStyleUI == true)
-            {
-                var timerWindow = new Windows.NewStyleTimerWindow
-                {
-                    Owner = this
-                };
-
-                // 连接 PPT 时间胶囊
-                PPTTimeCapsule?.SetParentControl(timerWindow);
-
-                // 监听计时器完成事件
-                timerWindow.TimerCompleted += (s, args) =>
-                {
-                    if (Settings.PowerPointSettings.EnablePPTTimeCapsule &&
-                        IsInPPTPresentationMode &&
-                        PPTTimeCapsule != null)
-                    {
-                        PPTTimeCapsule.OnTimerCompleted();
-                    }
-                };
-
-                timerWindow.Show();
-            }
-            else
-            {
-                if (currentMode == 1)
-                {
-                    Topmost = false;
-                }
-
-                var timerWindow = CountdownTimerWindow.CreateTimerWindow();
-                timerWindow.Show();
-                if (currentMode == 1)
-                {
-                    timerWindow.Topmost = true;
-                }
-            }
-        }
-
-        /// <summary>
         /// 操作指南窗口图标点击事件处理
         /// </summary>
         /// <param name="sender">发送者</param>
@@ -1489,40 +1375,6 @@ namespace Ink_Canvas
         }
 
         /// <summary>
-        /// 随机点名图标点击事件处理
-        /// </summary>
-        /// <param name="sender">发送者</param>
-        /// <param name="e">路由事件参数</param>
-        internal void SymbolIconRand_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            // 如果控件被隐藏，不处理事件
-            if (BoardRandomDrawToolBtn == null || BoardRandomDrawToolBtn.Visibility != Visibility.Visible) return;
-
-            LeftUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            RightUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            SidePannelMarginAnimation(-10);
-            AnimationsHelper.HidePopupWithSlideAndFade(BorderTools);
-            AnimationsHelper.HidePopupWithSlideAndFade(BoardBorderToolsPopup);
-            AnimationsHelper.HideWithSlideAndFade(BoardImageOptionsPanel);
-
-            // 根据设置决定使用哪个点名窗口
-            if (Settings.RandSettings.UseNewRollCallUI)
-            {
-                // 使用新点名UI - 随机抽模式（非模态，可与主窗口同时操作）
-                var rollCallWindow = new NewStyleRollCallWindow(Settings, false);
-                rollCallWindow.Owner = this;
-                rollCallWindow.Show();
-            }
-            else
-            {
-                // 使用默认的随机点名窗口
-                var randWindow = new RandWindow(Settings);
-                randWindow.Show();
-                // WindowTopmostManager 会自动管理 RandWindow 的置顶状态
-            }
-        }
-
-        /// <summary>
         /// 检查并更新橡皮擦类型标签的状态
         /// </summary>
         public void CheckEraserTypeTab()
@@ -1531,89 +1383,6 @@ namespace Ink_Canvas
                 EraserTypeTab.SelectedIndex = Settings.Canvas.EraserShapeType;
             if (BoardEraserTypeTab != null)
                 BoardEraserTypeTab.SelectedIndex = Settings.Canvas.EraserShapeType;
-        }
-
-        /// <summary>
-        /// 单次点名图标点击事件处理
-        /// </summary>
-        /// <param name="sender">发送者</param>
-        /// <param name="e">路由事件参数</param>
-        internal void SymbolIconRandOne_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            // 如果控件被隐藏，不处理事件
-            if (BoardSingleDrawToolBtn == null || BoardSingleDrawToolBtn.Visibility != Visibility.Visible) return;
-
-            LeftUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            RightUnFoldButtonQuickPanel.Visibility = Visibility.Collapsed;
-            SidePannelMarginAnimation(-10);
-            AnimationsHelper.HidePopupWithSlideAndFade(BorderTools);
-            AnimationsHelper.HidePopupWithSlideAndFade(BoardBorderToolsPopup);
-            AnimationsHelper.HideWithSlideAndFade(BoardImageOptionsPanel);
-
-            // 检查是否启用了外部点名功能
-            if (Settings.RandSettings.DirectCallCiRand)
-            {
-                try
-                {
-                    string[] protocols;
-                    switch (Settings.RandSettings.ExternalCallerType)
-                    {
-                        case 0: // ClassIsland点名
-                            protocols = ExternalCallerLauncher.GetProtocolsByType(0);
-                            break;
-                        case 1: // SecRandom点名
-                            protocols = ExternalCallerLauncher.GetProtocolsByType(1);
-                            break;
-                        case 2: // NamePicker点名
-                            protocols = ExternalCallerLauncher.GetProtocolsByType(2);
-                            break;
-                        default:
-                            protocols = ExternalCallerLauncher.GetProtocolsByType(0);
-                            break;
-                    }
-
-                    if (!ExternalCallerLauncher.TryLaunch(protocols, out Exception lastException))
-                    {
-                        throw lastException ?? new InvalidOperationException("external caller protocols are unavailable");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format(Properties.MainWindowStrings.Main_RollCall_CannotCallExternal, ex.Message));
-
-                    // 调用失败时回退到相应的点名窗口
-                    if (Settings.RandSettings.UseNewRollCallUI)
-                    {
-                        var rollCallWindow = new NewStyleRollCallWindow(Settings, true); // 单次抽模式（非模态）
-                        rollCallWindow.Owner = this;
-                        rollCallWindow.Show();
-                    }
-                    else
-                    {
-                        var randWindow = new RandWindow(Settings, true);
-                        randWindow.Owner = this;
-                        randWindow.ShowDialog();
-                    }
-                }
-            }
-            else
-            {
-                // 根据设置决定使用哪个点名窗口
-                if (Settings.RandSettings.UseNewRollCallUI)
-                {
-                    // 使用新点名UI - 单次抽模式（非模态，可与主窗口同时操作）
-                    var rollCallWindow = new NewStyleRollCallWindow(Settings, true);
-                    rollCallWindow.Owner = this;
-                    rollCallWindow.Show();
-                }
-                else
-                {
-                    // 使用默认的随机点名窗口
-                    var randWindow = new RandWindow(Settings, true);
-                    randWindow.Owner = this;
-                    randWindow.ShowDialog();
-                }
-            }
         }
 
         /// <summary>
@@ -4469,7 +4238,6 @@ namespace Ink_Canvas
         public void ExitApplication(object sender, RoutedEventArgs e)
         {
             App.IsAppExitByUser = true;
-            _exitApplicationRequested = true;
             _forceCloseFromExitOrRestartButton = false;
             // 通过主窗口 Close 进入统一的 Closing 验证流程。
             // Window_Closed 中再显式关闭 Application，确保托盘和隐藏窗口一并退出。
@@ -4495,7 +4263,6 @@ namespace Ink_Canvas
 
             Process.Start(System.Windows.Forms.Application.ExecutablePath, "-m");
             _forceCloseFromExitOrRestartButton = true;
-            _exitApplicationRequested = true;
             App.IsAppExitByUser = true;
             CloseIsFromButton = true;
             Close();

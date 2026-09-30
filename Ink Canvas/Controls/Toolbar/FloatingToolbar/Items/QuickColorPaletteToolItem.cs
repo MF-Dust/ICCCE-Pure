@@ -1,4 +1,3 @@
-using Ink_Canvas.Plugins;
 using Ink_Canvas.Properties;
 using iNKORE.UI.WPF.Modern.Common.IconKeys;
 using System.Collections.Generic;
@@ -18,14 +17,14 @@ namespace Ink_Canvas.Controls.Toolbar.FloatingToolbar.Items
         public bool DefaultShowSeparateBorder => false;
         public bool DefaultPreventHideOnDragClick => false;
 
-        public IReadOnlyList<PluginToolbarSettingInfo> CustomSettings { get; } = new List<PluginToolbarSettingInfo>
+        public IReadOnlyList<ToolbarSettingInfo> CustomSettings { get; } = new List<ToolbarSettingInfo>
         {
-            new PluginToolbarSettingInfo
+            new ToolbarSettingInfo
             {
                 Key = ComponentSettingKeys.DisplayMode,
                 DisplayName = FloatingBarStrings.ToolbarPage_DisplayMode,
                 Description = FloatingBarStrings.ToolbarPage_QuickPaletteDisplayModeDesc,
-                Type = PluginToolbarSettingType.ComboBox,
+                Type = ToolbarSettingType.ComboBox,
                 Options = new List<string>
                 {
                     ThemeStrings.Theme_QuickPalette_DoubleRow,

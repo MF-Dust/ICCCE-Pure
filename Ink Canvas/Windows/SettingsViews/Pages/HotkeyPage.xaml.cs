@@ -81,7 +81,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             _hotkeyItems["Pen5"] = Pen5Hotkey; Pen5Hotkey.HotkeyName = "Pen5";
             _hotkeyItems["DrawLine"] = DrawLineHotkey; DrawLineHotkey.HotkeyName = "DrawLine";
             _hotkeyItems["Screenshot"] = ScreenshotHotkey; ScreenshotHotkey.HotkeyName = "Screenshot";
-            _hotkeyItems["QuickDraw"] = QuickDrawHotkey; QuickDrawHotkey.HotkeyName = "QuickDraw";
             _hotkeyItems["Hide"] = HideHotkey; HideHotkey.HotkeyName = "Hide";
             _hotkeyItems["Exit"] = ExitHotkey; ExitHotkey.HotkeyName = "Exit";
         }
@@ -142,7 +141,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 case "Pen5": hotkeyItem.SetCurrentHotkey(Key.D5, ModifierKeys.Alt); break;
                 case "DrawLine": hotkeyItem.SetCurrentHotkey(Key.L, ModifierKeys.Alt); break;
                 case "Screenshot": hotkeyItem.SetCurrentHotkey(Key.C, ModifierKeys.Alt); break;
-                case "QuickDraw": hotkeyItem.SetCurrentHotkey(Key.K, ModifierKeys.Alt); break;
                 case "Hide": hotkeyItem.SetCurrentHotkey(Key.V, ModifierKeys.Alt); break;
                 case "Exit": hotkeyItem.SetCurrentHotkey(Key.Escape, ModifierKeys.None); break;
             }
@@ -313,7 +311,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 case "Pen5": return () => SwitchToPenType(4);
                 case "DrawLine": return () => _mainWindow.DrawLineFromHotkey();
                 case "Screenshot": return () => _mainWindow.SaveScreenShotToDesktop();
-                case "QuickDraw": return () => _mainWindow.OpenQuickDrawFromHotkey();
                 case "Hide": return () => _mainWindow.SymbolIconEmoji_MouseUp(null, null);
                 case "Exit": return () => _mainWindow.KeyExit(null, null);
                 default: return null;

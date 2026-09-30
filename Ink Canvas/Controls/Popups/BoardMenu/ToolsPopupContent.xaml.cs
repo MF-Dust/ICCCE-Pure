@@ -7,9 +7,6 @@ namespace Ink_Canvas.Controls
 {
     public partial class BoardToolsPopupContent : ToolsPopupContent
     {
-        public override ToolMenuButton TimerBtn => TimerToolBtn;
-        public override ToolMenuButton RandomDrawBtn => RandomDrawToolBtn;
-        public override ToolMenuButton SingleDrawBtn => SingleDrawToolBtn;
         public override ToolMenuButton SaveBtn => SaveToolBtn;
         public override ToolMenuButton OpenBtn => OpenToolBtn;
         public override ToolMenuButton ReplayBtn => ReplayToolBtn;
@@ -32,9 +29,6 @@ namespace Ink_Canvas.Controls
         {
             return new Dictionary<string, ToolMenuButton>
             {
-                { "timer", TimerToolBtn },
-                { "randomDraw", RandomDrawToolBtn },
-                { "singleDraw", SingleDrawToolBtn },
                 { "save", SaveToolBtn },
                 { "open", OpenToolBtn },
                 { "replay", ReplayToolBtn },

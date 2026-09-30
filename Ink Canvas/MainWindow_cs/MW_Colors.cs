@@ -147,7 +147,6 @@ namespace Ink_Canvas
                         }
                         WaterMarkTime.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
                         WaterMarkDate.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
-                        BlackBoardWaterMark.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
                         isUselightThemeColor = false;
                     }
                     else
@@ -163,7 +162,6 @@ namespace Ink_Canvas
                         }
                         WaterMarkTime.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
                         WaterMarkDate.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
-                        BlackBoardWaterMark.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
                         isUselightThemeColor = true;
                     }
                 }

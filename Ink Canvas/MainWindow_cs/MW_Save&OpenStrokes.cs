@@ -215,6 +215,23 @@ namespace Ink_Canvas
         /// 5. 异步上传保存的文件到Dlass
         /// 6. 保存元素信息
         /// </remarks>
+        private StrokeCollection GetWhiteboardStrokesForSave(int page)
+        {
+            // 当前页尚未切换出去：历史快照可能不存在或已过期，不能代替实时墨迹。
+            return page == CurrentWhiteboardIndex
+                ? inkCanvas.Strokes.Clone()
+                : TimeMachineHistories[page] != null
+                    ? ApplyHistoriesToNewStrokeCollection(TimeMachineHistories[page])
+                    : new StrokeCollection();
+        }
+
+        private StrokeCollection GetPptStrokesForSave(int slide, int currentSlide)
+        {
+            return slide == currentSlide
+                ? inkCanvas.Strokes.Clone()
+                : _singlePPTInkManager?.LoadSlideStrokes(slide) ?? new StrokeCollection();
+        }
+
         public void SaveInkCanvasStrokes(bool newNotice = true, bool saveByUser = false)
         {
             try
@@ -265,19 +282,7 @@ namespace Ink_Canvas
 
                         for (int i = 1; i <= totalSlides; i++)
                         {
-                            var slideStrokes = _singlePPTInkManager?.LoadSlideStrokes(i);
-                            if (slideStrokes != null && slideStrokes.Count > 0)
-                            {
-                                allPageStrokes.Add(slideStrokes);
-                            }
-                            else if (i == currentSlide && inkCanvas.Strokes.Count > 0)
-                            {
-                                allPageStrokes.Add(inkCanvas.Strokes.Clone());
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection());
-                            }
+                            allPageStrokes.Add(GetPptStrokesForSave(i, currentSlide));
                         }
                     }
                     // 检查白板模式下的多页面墨迹
@@ -285,17 +290,7 @@ namespace Ink_Canvas
                     {
                         hasMultiplePages = true;
                         for (int i = 1; i <= WhiteboardTotalCount; i++)
-                        {
-                            if (TimeMachineHistories[i] != null)
-                            {
-                                var strokes = ApplyHistoriesToNewStrokeCollection(TimeMachineHistories[i]);
-                                allPageStrokes.Add(strokes);
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection());
-                            }
-                        }
+                            allPageStrokes.Add(GetWhiteboardStrokesForSave(i));
                     }
 
                     if (hasMultiplePages && allPageStrokes.Count > 0)
@@ -384,40 +379,15 @@ namespace Ink_Canvas
 
                         for (int i = 1; i <= totalSlides; i++)
                         {
-                            var slideStrokes = _singlePPTInkManager?.LoadSlideStrokes(i);
-                            if (slideStrokes != null && slideStrokes.Count > 0)
-                            {
-                                allPageStrokes.Add(slideStrokes);
-                            }
-                            else if (i == currentSlide && inkCanvas.Strokes.Count > 0)
-                            {
-                                // 当前页面的墨迹
-                                allPageStrokes.Add(inkCanvas.Strokes.Clone());
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection()); // 空页面
-                            }
+                            allPageStrokes.Add(GetPptStrokesForSave(i, currentSlide));
                         }
                     }
                     // 检查白板模式下的多页面墨迹
                     else if (currentMode != 0 && WhiteboardTotalCount > 1)
                     {
                         hasMultiplePages = true;
-                        // 收集白板模式下的所有页面墨迹
                         for (int i = 1; i <= WhiteboardTotalCount; i++)
-                        {
-                            if (TimeMachineHistories[i] != null)
-                            {
-                                // 从历史记录中恢复墨迹
-                                var strokes = ApplyHistoriesToNewStrokeCollection(TimeMachineHistories[i]);
-                                allPageStrokes.Add(strokes);
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection()); // 空页面
-                            }
-                        }
+                            allPageStrokes.Add(GetWhiteboardStrokesForSave(i));
                     }
 
                     if (hasMultiplePages && allPageStrokes.Count > 0)
@@ -447,19 +417,7 @@ namespace Ink_Canvas
 
                         for (int i = 1; i <= totalSlides; i++)
                         {
-                            var slideStrokes = _singlePPTInkManager?.LoadSlideStrokes(i);
-                            if (slideStrokes != null && slideStrokes.Count > 0)
-                            {
-                                allPageStrokes.Add(slideStrokes);
-                            }
-                            else if (i == currentSlide && inkCanvas.Strokes.Count > 0)
-                            {
-                                allPageStrokes.Add(inkCanvas.Strokes.Clone());
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection());
-                            }
+                            allPageStrokes.Add(GetPptStrokesForSave(i, currentSlide));
                         }
                     }
                     // 检查白板模式下的多页面墨迹
@@ -467,17 +425,7 @@ namespace Ink_Canvas
                     {
                         hasMultiplePages = true;
                         for (int i = 1; i <= WhiteboardTotalCount; i++)
-                        {
-                            if (TimeMachineHistories[i] != null)
-                            {
-                                var strokes = ApplyHistoriesToNewStrokeCollection(TimeMachineHistories[i]);
-                                allPageStrokes.Add(strokes);
-                            }
-                            else
-                            {
-                                allPageStrokes.Add(new StrokeCollection());
-                            }
-                        }
+                            allPageStrokes.Add(GetWhiteboardStrokesForSave(i));
                     }
 
                     if (hasMultiplePages && allPageStrokes.Count > 0)
@@ -1014,45 +962,6 @@ namespace Ink_Canvas
             {
                 LogHelper.WriteLogToFile($"保存页面图像失败: {ex}", LogHelper.LogType.Error);
                 throw;
-            }
-        }
-
-        /// <summary>
-        /// 供插件导出的当前画布页 PNG 入口（墨迹 + 背景色）。
-        /// </summary>
-        internal bool ExportCurrentPageAsPngForPlugin(string filePath)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(filePath)) return false;
-                SaveSinglePageStrokesAsImage(filePath, false);
-                return File.Exists(filePath);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"插件导出当前页 PNG 失败: {ex.Message}", LogHelper.LogType.Error);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 供插件导出的任意墨迹 PNG 入口。
-        /// </summary>
-        internal bool ExportStrokesAsPngForPlugin(StrokeCollection strokes, string filePath)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(filePath) || strokes == null) return false;
-                using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                {
-                    SavePageAsImage(strokes, stream);
-                }
-                return File.Exists(filePath);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"插件导出墨迹 PNG 失败: {ex.Message}", LogHelper.LogType.Error);
-                return false;
             }
         }
 

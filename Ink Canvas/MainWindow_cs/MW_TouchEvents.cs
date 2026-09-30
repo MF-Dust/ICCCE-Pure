@@ -1985,16 +1985,6 @@ namespace Ink_Canvas
             // 通用双指分支（dec.Count > 1）有 100ms 去抖窗口，那 100ms 内第一指会继续画，
             // 因此必须在此立即处理。不能设 e.Handled = true —— 会阻断 Manipulation 提升，
             // 插件手势（OnCanvasGestureStarting/Delta）收不到增量事件。
-            if (_pluginCanvasGestureHandler != null && dec.Count > 1)
-            {
-                AbortAllActiveTouchInputs();
-                if (inkCanvas != null && inkCanvas.EditingMode != InkCanvasEditingMode.None)
-                {
-                    lastInkCanvasEditingMode = inkCanvas.EditingMode;
-                    inkCanvas.EditingMode = InkCanvasEditingMode.None;
-                }
-                return;
-            }
 
             if (ShouldUseRealtimeVelocityBrushTipForTouch()
                 && inkCanvas.EditingMode != InkCanvasEditingMode.EraseByPoint
@@ -2414,10 +2404,6 @@ namespace Ink_Canvas
         private void InkCanvas_ManipulationStarting(object sender, ManipulationStartingEventArgs e)
         {
             // 插件画布手势（如 PDF 阅读器双指缩放/平移）：优先让插件声明手势模式。
-            if (_pluginCanvasGestureHandler != null && (e.Manipulators?.Count() ?? 0) >= 2)
-            {
-                if (_pluginCanvasGestureHandler.OnCanvasGestureStarting(e)) return;
-            }
 
             e.Mode = ManipulationModes.All;
         }
@@ -2452,10 +2438,6 @@ namespace Ink_Canvas
             {
                 return;
             }
-
-            // 插件画布手势结束通知（插件内部用 _gestureActive 自保护，非手势时是无操作）。
-            try { _pluginCanvasGestureHandler?.OnCanvasGestureCompleted(e); }
-            catch (Exception ex) { LogHelper.WriteLogToFile($"插件画布手势结束通知失败: {ex.Message}", LogHelper.LogType.Warning); }
 
             if (e.Manipulators.Count() == 0)
             {
@@ -2554,14 +2536,6 @@ namespace Ink_Canvas
 
             // 插件画布手势（如 PDF 阅读器双指缩放/平移）：双指一律优先转发。
             // 插件返回 true 表示已接管，宿主跳过默认的墨迹/画布变换。
-            if (_pluginCanvasGestureHandler != null && (e.Manipulators?.Count() ?? 0) >= 2)
-            {
-                if (_pluginCanvasGestureHandler.OnCanvasGestureDelta(e))
-                {
-                    e.Handled = true;
-                    return;
-                }
-            }
 
             if (inkCanvas.EditingMode == InkCanvasEditingMode.EraseByPoint)
                 return;

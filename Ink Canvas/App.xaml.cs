@@ -1,6 +1,5 @@
 using H.NotifyIcon;
 using Ink_Canvas.Helpers;
-using Ink_Canvas.Plugins;
 using Ink_Canvas.Properties;
 using iNKORE.UI.WPF.Modern.Controls;
 using Microsoft.Win32;
@@ -101,8 +100,6 @@ namespace Ink_Canvas
         public static Process watchdogProcess;
         // 新增：标记是否为软件内主动退出
         public static bool IsAppExitByUser;
-        // 新增：插件事件服务引用，App_Exit 时向插件广播 AppExiting
-        private static Plugins.EventService _pluginEventService;
         // 新增：标记是否正在触发安装更新（用于跳过某些交互确认）
         public static bool IsUpdateInstalling;
         // 新增：标记是否启用了UIA置顶功能
@@ -165,9 +162,6 @@ namespace Ink_Canvas
             catch
             {
             }
-
-            // 配置TLS协议以支持Windows 7
-            ConfigureTlsForWindows7();
 
             // Dispatcher 长任务监控（诊断用）：
             // OperationStarted = 操作真正开始执行，记录执行时长（Completed-Started），
@@ -239,7 +233,7 @@ namespace Ink_Canvas
             // 构造函数中先用默认值（ShowCrashWindow），LoadSettings 运行后会被覆盖。
 
             // 注意：Exit 事件在 Application.Shutdown() 或 Application.Run() 正常返回时触发，
-            // 用于释放 mutex、清理 IpcIACoreClient、卸载插件、写看门狗退出信号、记录设备退出等。
+            // 用于释放 mutex、清理 IpcIACoreClient、写看门狗退出信号、记录设备退出等。
             // 若不挂载此事件，App_Exit 中已实现的所有清理与看门狗通知逻辑都不会执行，
             // 软件正常关闭后会被看门狗误判为崩溃并触发重复重启。
             Startup += App_Startup;
@@ -255,99 +249,6 @@ namespace Ink_Canvas
             // 构造函数阶段仍使用默认 CrashAction，不能在此处做判断。
         }
 
-        /// <summary>
-        /// 统一注册所有插件服务到 PluginManager。
-        /// </summary>
-        private void RegisterPluginServices(MainWindow mainWindow)
-        {
-            var host = Plugins.PluginManager.Instance;
-
-            // 外部演示源服务需要回注到 MainWindow：翻页条事件要能路由到当前激活的演示源。
-            var presentationSourceService = new Plugins.Services.PresentationSourceService(mainWindow);
-            mainWindow.AttachPresentationSourceService(presentationSourceService);
-
-            // 保存事件服务引用，App_Exit 时向插件广播 AppExiting。
-            _pluginEventService = new Plugins.EventService(mainWindow);
-
-            var services = new (Type iface, object impl)[]
-            {
-                (typeof(Plugins.IAppRestartService),      new Plugins.AppRestartService()),
-                (typeof(Plugins.IWindowService),          new Plugins.WindowService(mainWindow)),
-                (typeof(Plugins.IPowerPointService),      new Plugins.PowerPointService(mainWindow)),
-                // 复用 _pluginEventService 实例：App_Exit 广播 AppExiting 时，插件经 DI 拿到的就是同一实例
-                (typeof(Plugins.IEventService),           _pluginEventService),
-                (typeof(Plugins.ISettingsService),        new Plugins.SettingsService()),
-                (typeof(Plugins.IHotkeyService),          new Plugins.HotkeyService(mainWindow.GlobalHotkeyManagerInstance)),
-                (typeof(Plugins.INotificationService),    new Plugins.NotificationService(mainWindow)),
-                (typeof(Plugins.IFileAssociationService),      new Plugins.FileAssociationService()),
-                (typeof(Plugins.IWindowOverviewService),        new Plugins.WindowOverviewService(mainWindow.WindowOverviewModel)),
-                (typeof(Plugins.ICanvasCompositionService),      new Plugins.CanvasCompositionService(mainWindow)),
-                (typeof(Plugins.IPresentationSourceService),     presentationSourceService),
-                (typeof(Plugins.ICanvasInkService),        new Plugins.CanvasInkService(mainWindow)),
-                (typeof(Plugins.ICanvasElementService),    new Plugins.CanvasElementService(mainWindow)),
-                (typeof(Plugins.IRecognitionService),      new Plugins.RecognitionService()),
-                (typeof(Plugins.ITrayService),            new Plugins.TrayService(this)),
-                (typeof(Plugins.IPluginUriService),       new Plugins.UriService(host)),
-                (typeof(Plugins.IScreenshotService),      new Plugins.ScreenshotService(mainWindow)),
-                (typeof(Plugins.IClipboardService),       new Plugins.ClipboardService()),
-                (typeof(Plugins.IAppInfoService),         new Plugins.AppInfoService()),
-                (typeof(Plugins.IScreenInfoService),      new Plugins.ScreenInfoService()),
-                (typeof(Plugins.IUpdateService),          new Plugins.UpdateService()),
-                (typeof(Plugins.IConfigProfileService),   new Plugins.ConfigProfileService()),
-                (typeof(Plugins.IQuoteService),           new Plugins.QuoteService(mainWindow)),
-                (typeof(Plugins.INameRosterService),      new Plugins.NameRosterService()),
-                (typeof(Plugins.IInkEffectService),       new Plugins.InkEffectService(mainWindow)),
-                (typeof(Plugins.ICameraService),          new Plugins.CameraService()),
-                (typeof(Plugins.ISystemInfoService),      new Plugins.SystemInfoService()),
-                (typeof(Plugins.IBackupService),          new Plugins.BackupService()),
-                (typeof(Plugins.IFileDialogService),      new Plugins.FileDialogService(mainWindow)),
-                (typeof(Plugins.IThemeService),           new Plugins.ThemeService()),
-                (typeof(Plugins.IAnnouncementService),    new Plugins.AnnouncementService()),
-            };
-
-            foreach (var (iface, impl) in services)
-            {
-                try
-                {
-                    host.RegisterService(iface, impl);
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile($"Failed to register plugin service {iface.Name}: {ex.Message}", LogHelper.LogType.Error);
-                }
-            }
-        }
-
-        // 配置TLS协议以支持Windows 7
-        private void ConfigureTlsForWindows7()
-        {
-            try
-            {
-                // 检测操作系统版本
-                var osVersion = Environment.OSVersion;
-                bool isWindows7 = osVersion.Version.Major == 6 && osVersion.Version.Minor == 1;
-
-                if (isWindows7)
-                {
-
-                    // 启用所有TLS版本以支持Windows 7
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-                    // 配置ServicePointManager以支持Windows 7
-                    ServicePointManager.DefaultConnectionLimit = 10;
-                    ServicePointManager.Expect100Continue = false;
-                    ServicePointManager.UseNagleAlgorithm = false;
-
-                }
-                else
-                {
-                    // 对于更新的Windows版本，不进行任何TLS配置，使用系统默认设置
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
 
         // 初始化崩溃监听器
         private void InitializeCrashListeners()
@@ -1420,12 +1321,6 @@ namespace Ink_Canvas
             var mainWindow = new MainWindow();
             MainWindow = mainWindow;
 
-            // 最快模式将插件服务注册延迟到首帧显示之后，其他模式在显示主窗口前注册。
-            if (!IsFastestStartupMode)
-            {
-                RegisterPluginServices(mainWindow);
-            }
-
             // 主窗口加载完成后关闭启动画面
             mainWindow.Loaded += (s, args) =>
             {
@@ -1470,8 +1365,8 @@ namespace Ink_Canvas
 
             if (IsFastestStartupMode)
             {
-                _ = RunFastestStartupPostRenderTasksAsync(mainWindow);
                 _ = Dispatcher.BeginInvoke(new Action(() => _taskbar?.ForceCreate()), DispatcherPriority.ContextIdle);
+                _ = RunFastestStartupPostRenderTasksAsync(mainWindow);
             }
             else if (IsDefaultStartupMode)
             {
@@ -1506,16 +1401,15 @@ namespace Ink_Canvas
             _ = RunDeferredStartupTasksAsync();
         }
 
+
         private async Task RunFastestStartupPostRenderTasksAsync(MainWindow mainWindow)
         {
             try
             {
                 await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ContextIdle);
                 await Task.Delay(1000);
-
-                RegisterPluginServices(mainWindow);
+                if (isAppExiting || !mainWindow.IsLoaded) return;
                 WindowTopmostManager.Initialize(mainWindow, skipScan: true);
-                LogHelper.WriteLogToFile("App | 最快启动模式的应用级延迟任务已开始");
             }
             catch (Exception ex)
             {
@@ -1583,36 +1477,6 @@ namespace Ink_Canvas
                 catch (Exception ex)
                 {
                     LogHelper.WriteLogToFile($"初始化上传帮助类时出错: {ex.Message}", LogHelper.LogType.Error);
-                }
-
-                try
-                {
-                    LogHelper.WriteLogToFile("开始加载插件");
-                    PluginManager.Instance.InitializeAdvancedServices(PluginMarketService.Instance);
-                    await PluginManager.Instance.LoadAllAsync();
-
-                    // 主窗口在 Window_Loaded 阶段已先构建浮动栏；插件随后才在延迟任务中注册组件。
-                    // 插件加载完成后必须重建一次，确保启动时立即显示插件工具栏项。
-                    await Dispatcher.InvokeAsync(() =>
-                    {
-                        if (Current.MainWindow is MainWindow window)
-                            window.RebuildToolbar();
-                    }, DispatcherPriority.Loaded);
-
-                    try
-                    {
-                        PluginManager.Instance.StartIpc();
-                        LogHelper.WriteLogToFile("插件 IPC 总线已启动");
-                    }
-                    catch (Exception ipcEx)
-                    {
-                        LogHelper.WriteLogToFile($"启动插件 IPC 总线失败: {ipcEx.Message}", LogHelper.LogType.Warning);
-                    }
-                    LogHelper.WriteLogToFile(string.Format("插件加载完成，共加载 {0} 个插件", PluginManager.Instance.Plugins.Count));
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile(string.Format("加载插件时出错: {0}", ex.Message), LogHelper.LogType.Error);
                 }
 
                 try
@@ -2041,16 +1905,6 @@ namespace Ink_Canvas
         {
             isAppExiting = true;
 
-            // 在卸载插件前广播 AppExiting，让插件有机会清理自身资源。
-            try
-            {
-                _pluginEventService?.OnAppExiting();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"广播插件 AppExiting 失败: {ex.Message}", LogHelper.LogType.Warning);
-            }
-
             try { heartbeatTimer?.Stop(); } catch { }
             try { watchdogTimer?.Change(Timeout.Infinite, Timeout.Infinite); watchdogTimer?.Dispose(); } catch { }
             MemoryBreakdownHelper.StopAutomaticDumpMonitor();
@@ -2076,18 +1930,6 @@ namespace Ink_Canvas
                 }
             }
             catch { }
-
-            // 卸载所有插件
-            try
-            {
-                LogHelper.WriteLogToFile("正在卸载插件...");
-                PluginManager.Instance.UnloadAll();
-                LogHelper.WriteLogToFile("插件卸载完成");
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"卸载插件时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
 
             // 仅在软件内主动退出时关闭看门狗，并写入退出信号
             try

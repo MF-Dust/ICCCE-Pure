@@ -285,7 +285,7 @@ namespace Ink_Canvas
         }
         #endregion
 
-        internal void InitializeToolbarPlugins()
+        internal void InitializeToolbars()
         {
             try
             {
@@ -317,7 +317,7 @@ namespace Ink_Canvas
             }
             catch (Exception ex)
             {
-                LogHelper.WriteLogToFile($"MW_Toolbar: InitializeToolbarPlugins 异常: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogHelper.LogType.Error);
+                LogHelper.WriteLogToFile($"MW_Toolbar: InitializeToolbars 异常: {ex.GetType().Name}: {ex.Message}\n{ex.StackTrace}", LogHelper.LogType.Error);
             }
         }
 
@@ -424,7 +424,7 @@ namespace Ink_Canvas
                 _lastHighlightButton = null;
                 _quickColorPalette = null;
                 ToolbarRegistry.ClearInjected(StackPanelFloatingBarRoot);
-                InitializeToolbarPlugins();
+                InitializeToolbars();
                 UpdateToolbarComponentVisibility();
                 ApplyFloatingBarIconHighlightImmediate(_currentToolMode);
                 RefreshFloatingBarButtonColors();

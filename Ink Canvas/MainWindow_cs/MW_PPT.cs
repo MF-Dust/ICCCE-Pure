@@ -1123,8 +1123,6 @@ namespace Ink_Canvas
                 {
                     // 通知UI管理器放映状态变化
                     _pptUIManager?.OnSlideShowStateChanged(isInSlideShow);
-                    NotifyPluginSlideShowStateChanged(isInSlideShow);
-
                     if (!isInSlideShow)
                     {
                         CollapseAllPPTNavBarPreviews();
@@ -1247,8 +1245,6 @@ namespace Ink_Canvas
 
                 _currentSlideShowPosition = currentSlide;
                 _previousSlideID = currentSlide;
-                NotifyPluginSlideShowStateChanged(true);
-
                 lock (_memoryStreams)
                 {
                     foreach (var stream in _memoryStreams.Values)
@@ -1535,8 +1531,6 @@ namespace Ink_Canvas
                     }
                 });
                 _previousSlideID = currentSlide;
-                NotifyPluginSlideChanged(currentSlide);
-
                 // 刷新智慧模式区域（翻页时视频控件可能变化）
                 if (Settings.PowerPointSettings.EnableSmartMode)
                     Application.Current.Dispatcher.InvokeAsync(() => RefreshSmartModeRegions());
@@ -1813,8 +1807,6 @@ namespace Ink_Canvas
 
                 if (isEnteredSlideShowEndEvent) return;
                 isEnteredSlideShowEndEvent = true;
-                NotifyPluginSlideShowStateChanged(false);
-
                 // 清除智慧模式区域
                 _smartModeRegions = null;
                 _smartModeSlideIndex = -1;
@@ -2639,11 +2631,7 @@ namespace Ink_Canvas
         /// <param name="e">路由事件参数。</param>
         private void BtnPPTSlidesUp_Click(object sender, RoutedEventArgs e)
         {
-            // 外部演示源（插件把自己的文档接入放映模式）优先接管翻页，
-            // 此时不存在 PPT COM 会话，不能走下面的 STA COM 路径。
-            if (TryRouteNavigationToPresentationSource(Plugins.PresentationNavigation.Previous)) return;
-
-            int strokeCount = inkCanvas?.Strokes?.Count ?? 0;
+int strokeCount = inkCanvas?.Strokes?.Count ?? 0;
             bool needScreenshot = strokeCount > Settings.Automation.MinimumAutomationStrokeNumber &&
                 Settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint;
 
@@ -2699,10 +2687,7 @@ namespace Ink_Canvas
         /// </remarks>
         private void BtnPPTSlidesDown_Click(object sender, RoutedEventArgs e)
         {
-            // 外部演示源优先接管翻页，理由同 BtnPPTSlidesUp_Click。
-            if (TryRouteNavigationToPresentationSource(Plugins.PresentationNavigation.Next)) return;
-
-            int strokeCount = inkCanvas?.Strokes?.Count ?? 0;
+int strokeCount = inkCanvas?.Strokes?.Count ?? 0;
             bool needScreenshot = strokeCount > Settings.Automation.MinimumAutomationStrokeNumber &&
                 Settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint;
 
@@ -2767,18 +2752,7 @@ namespace Ink_Canvas
         private async Task OnPPTNavBarPageClickAsync(Controls.PPTNavBar bar)
         {
             if (!Settings.PowerPointSettings.EnablePPTButtonPageClickable) return;
-
-            // 外部演示源没有幻灯片导航对话框，也没有缩略图来源；
-            // 未显式允许时直接忽略点击，避免走下面依赖 PPT COM 的分支。
-            if (_presentationSourceService?.IsActive == true)
-            {
-                if (_presentationSourceService.IsPageNumberClickDisabled()) return;
-                LogHelper.WriteLogToFile("外部演示源允许页码点击，但宿主未提供跳页 UI，已忽略。",
-                    LogHelper.LogType.Info);
-                return;
-            }
-
-            if (_pptManager?.IsConnected != true || _pptManager?.IsInSlideShow != true)
+if (_pptManager?.IsConnected != true || _pptManager?.IsInSlideShow != true)
             {
                 LogHelper.WriteLogToFile("PPT未连接或未在放映状态，无法执行页码点击操作", LogHelper.LogType.Warning);
                 return;
@@ -2988,37 +2962,6 @@ namespace Ink_Canvas
                     "重置 PPT 导航栏预览状态失败",
                     continueOnError: true);
             }
-        }
-
-        /// <summary>
-        /// 外部演示源服务（插件把自己的文档接入放映模式）。
-        /// 由 App 启动时通过 <see cref="AttachPresentationSourceService"/> 注入。
-        /// </summary>
-        private Plugins.Services.PresentationSourceService _presentationSourceService;
-
-        /// <summary>供 App 在创建服务实例后注入，使翻页条能路由到外部演示源。</summary>
-        internal void AttachPresentationSourceService(Plugins.Services.PresentationSourceService service)
-        {
-            _presentationSourceService = service;
-        }
-
-        /// <summary>当前是否由外部演示源（而非真实 PowerPoint）占用放映模式。</summary>
-        internal bool IsExternalPresentationActive => _presentationSourceService?.IsActive == true;
-
-        /// <summary>外部演示源的总页数；未激活时为 0。供 PPTUIManager 判断翻页条可见性。</summary>
-        internal int ExternalPresentationPageCount => _presentationSourceService?.PageCount ?? 0;
-
-        /// <summary>
-        /// 若外部演示源处于激活状态，把翻页请求交给它并返回 true；否则返回 false 让调用方走 PPT COM 路径。
-        /// </summary>
-        private bool TryRouteNavigationToPresentationSource(Plugins.PresentationNavigation direction)
-        {
-            var service = _presentationSourceService;
-            if (service?.IsActive != true) return false;
-
-            // 不 await：翻页条点击是同步事件，插件渲染完成后会通过服务回写页码。
-            _ = service.HandleNavigationAsync(direction);
-            return true;
         }
 
         /// <summary>在 MainWindow 加载完成后调用,把 4 个 PPTNavBar 的事件接到本类。</summary>
@@ -3458,15 +3401,7 @@ namespace Ink_Canvas
         {
             try
             {
-                // 外部演示源（插件文档，如 PDF）激活时，退出按钮等价于结束该演示源：
-                // 没有 PPT COM 会话，下面的幻灯片墨迹保存与 TryEndSlideShow 全部不适用。
-                if (IsExternalPresentationActive)
-                {
-                    _presentationSourceService?.ForceEnd("用户点击退出按钮");
-                    return;
-                }
-
-                var currentSlide = _pptManager?.GetCurrentSlideNumber() ?? 0;
+var currentSlide = _pptManager?.GetCurrentSlideNumber() ?? 0;
                 if (currentSlide > 0)
                 {
                     // ExitPPTPresentation 通常在 UI 线程上调用。直接在当前线程保存墨迹，

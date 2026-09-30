@@ -2,7 +2,7 @@ name: .NET Build & Package
 
 on:
   push:
-    branches: [net6]
+    branches: [net6, main, net10]
   workflow_dispatch:
 
 concurrency:
@@ -32,6 +32,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         with:
+          dotnet-version: '10.0.x'
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 
@@ -97,7 +98,7 @@ jobs:
             /p:SignManifests=true `
             /p:ManifestCertificateThumbprint=$env:SIGN_THUMBPRINT `
             /verbosity:minimal -maxcpucount
-          $pptAgentDir = "Ink Canvas\bin\Debug\AnyCPU\net6.0-windows10.0.19041.0\ppt-agent"
+          $pptAgentDir = "Ink Canvas\bin\Debug\AnyCPU\net10.0-windows10.0.19041.0\ppt-agent"
           New-Item -ItemType Directory -Force -Path $pptAgentDir | Out-Null
           Copy-Item "InkCanvas.PowerPointAddIn\bin\Debug\*" $pptAgentDir -Recurse -Force
           Copy-Item "InkCanvas.PPTAgent.Contracts\bin\Debug\netstandard2.0\InkCanvas.PPTAgent.Contracts.dll" $pptAgentDir -Force
@@ -127,7 +128,7 @@ jobs:
             /p:SignManifests=true `
             /p:ManifestCertificateThumbprint=$env:SIGN_THUMBPRINT `
             /verbosity:minimal -maxcpucount
-          $pptAgentDir = "Ink Canvas\bin\Debug\x86\net6.0-windows10.0.19041.0\ppt-agent"
+          $pptAgentDir = "Ink Canvas\bin\Debug\x86\net10.0-windows10.0.19041.0\ppt-agent"
           New-Item -ItemType Directory -Force -Path $pptAgentDir | Out-Null
           Copy-Item "InkCanvas.PowerPointAddIn\bin\Debug\*" $pptAgentDir -Recurse -Force
           Copy-Item "InkCanvas.PPTAgent.Contracts\bin\Debug\netstandard2.0\InkCanvas.PPTAgent.Contracts.dll" $pptAgentDir -Force
@@ -157,7 +158,7 @@ jobs:
             /p:SignManifests=true `
             /p:ManifestCertificateThumbprint=$env:SIGN_THUMBPRINT `
             /verbosity:minimal -maxcpucount
-          $pptAgentDir = "Ink Canvas\bin\Debug\x64\net6.0-windows10.0.19041.0\ppt-agent"
+          $pptAgentDir = "Ink Canvas\bin\Debug\x64\net10.0-windows10.0.19041.0\ppt-agent"
           New-Item -ItemType Directory -Force -Path $pptAgentDir | Out-Null
           Copy-Item "InkCanvas.PowerPointAddIn\bin\Debug\*" $pptAgentDir -Recurse -Force
           Copy-Item "InkCanvas.PPTAgent.Contracts\bin\Debug\netstandard2.0\InkCanvas.PPTAgent.Contracts.dll" $pptAgentDir -Force
@@ -189,7 +190,7 @@ jobs:
             /p:SignManifests=true `
             /p:ManifestCertificateThumbprint=$env:SIGN_THUMBPRINT `
             /verbosity:minimal -maxcpucount
-          $pptAgentDir = "Ink Canvas\bin\Debug\ARM64\net6.0-windows10.0.19041.0\ppt-agent"
+          $pptAgentDir = "Ink Canvas\bin\Debug\ARM64\net10.0-windows10.0.19041.0\ppt-agent"
           New-Item -ItemType Directory -Force -Path $pptAgentDir | Out-Null
           Copy-Item "InkCanvas.PowerPointAddIn\bin\Debug\*" $pptAgentDir -Recurse -Force
           Copy-Item "InkCanvas.PPTAgent.Contracts\bin\Debug\netstandard2.0\InkCanvas.PPTAgent.Contracts.dll" $pptAgentDir -Force
@@ -213,7 +214,7 @@ jobs:
         id: check-exe
         shell: pwsh
         run: |
-          $exePath = "Ink Canvas\bin\Debug\${{ matrix.architecture }}\net6.0-windows10.0.19041.0\InkCanvasForClass.exe"
+          $exePath = "Ink Canvas\bin\Debug\${{ matrix.architecture }}\net10.0-windows10.0.19041.0\InkCanvasForClass.exe"
 
           if (Test-Path $exePath) {
             echo "build_success=true" >> $env:GITHUB_OUTPUT
@@ -241,7 +242,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: InkCanvasForClass.CE.debug.${{ matrix.architecture }}
-          path: "Ink Canvas/bin/Debug/${{ matrix.architecture }}/net6.0-windows10.0.19041.0/*"
+          path: "Ink Canvas/bin/Debug/${{ matrix.architecture }}/net10.0-windows10.0.19041.0/*"
 
       - name: Create Summary
         if: always()

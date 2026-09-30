@@ -143,63 +143,6 @@
                             Icon="{x:Static ui:SegoeFluentIcons.Handwriting}"
                             Toggled="ToggleSwitchEnableFingerGestureSlideShowControl_Toggled"/>
 
-                    <controls:LabeledSettingsCard x:Name="CardEnablePPTTimeCapsule"
-                            Header="{x:Static props:PPTStrings.TimeCapsule}"
-                            Description="{x:Static props:PPTStrings.TimeCapsuleHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.QuietHours}"
-                            Toggled="ToggleSwitchEnablePPTTimeCapsule_Toggled"/>
-
-                    <ui:SettingsCard Header="{x:Static props:PPTStrings.TimeCapsulePosition}">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Location}"/>
-                        </ui:SettingsCard.HeaderIcon>
-                        <ComboBox x:Name="ComboBoxPPTTimeCapsulePosition"
-                                  SelectionChanged="ComboBoxPPTTimeCapsulePosition_SelectionChanged">
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.TimeCapsulePos_TL}"/>
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.TimeCapsulePos_TR}"/>
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.TimeCapsulePos_Center}"/>
-                        </ComboBox>
-                    </ui:SettingsCard>
-
-                    <ui:SettingsCard Header="{x:Static props:PPTStrings.TimeCapsuleOpacity}">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EaseOfAccess}"/>
-                        </ui:SettingsCard.HeaderIcon>
-                        <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="{Binding ElementName=SliderPPTTimeCapsuleOpacity, Path=Value, StringFormat={}{0:F2}}"
-                                       VerticalAlignment="Center" FontFamily="Consolas"/>
-                            <Slider x:Name="SliderPPTTimeCapsuleOpacity" Minimum="0.2"
-                                    Maximum="1" Width="200"
-                                    IsSnapToTickEnabled="True" Value="1" TickFrequency="0.05"
-                                    TickPlacement="None" AutoToolTipPlacement="None"
-                                    ValueChanged="SliderPPTTimeCapsuleOpacity_ValueChanged" />
-                        </ikw:SimpleStackPanel>
-                    </ui:SettingsCard>
-
-                    <ui:SettingsCard Header="{x:Static props:PPTStrings.TimeCapsuleScale}">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Zoom}"/>
-                        </ui:SettingsCard.HeaderIcon>
-                        <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="8">
-                            <TextBlock Text="{Binding ElementName=SliderPPTTimeCapsuleScale, Path=Value, StringFormat={}{0:F1}}"
-                                       VerticalAlignment="Center" FontFamily="Consolas"/>
-                            <Slider x:Name="SliderPPTTimeCapsuleScale" Minimum="0.5"
-                                    Maximum="2.0" Width="200"
-                                    IsSnapToTickEnabled="True" Value="1" TickFrequency="0.1"
-                                    TickPlacement="None" AutoToolTipPlacement="None"
-                                    ValueChanged="SliderPPTTimeCapsuleScale_ValueChanged" />
-                        </ikw:SimpleStackPanel>
-                    </ui:SettingsCard>
-
-                    <ui:SettingsCard Header="{x:Static props:PPTStrings.TimeCapsuleResetPosition}"
-                                     Description="{x:Static props:PPTStrings.TimeCapsuleResetPositionHint}">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Redo}"/>
-                        </ui:SettingsCard.HeaderIcon>
-                        <Button Content="{x:Static props:PPTStrings.TimeCapsuleResetPosition}"
-                                Click="ButtonResetPPTTimeCapsulePosition_Click"/>
-                    </ui:SettingsCard>
-
                     <controls:LabeledSettingsCard x:Name="CardShowPPTSidebarByDefault"
                             Header="{x:Static props:PPTStrings.ShowQuickPanelInShow}"
                             Description="{x:Static props:PPTStrings.ShowQuickPanelInShowHint}"

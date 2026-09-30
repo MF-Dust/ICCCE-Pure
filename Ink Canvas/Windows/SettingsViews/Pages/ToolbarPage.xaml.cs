@@ -1,7 +1,6 @@
 using GongSolutions.Wpf.DragDrop;
 using Ink_Canvas.Controls.Toolbar.FloatingToolbar;
 using Ink_Canvas.Helpers;
-using Ink_Canvas.Plugins;
 using Ink_Canvas.Properties;
 using Ink_Canvas.Windows.SettingsViews.Helpers;
 using System;
@@ -116,7 +115,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             CheckBoxUseRedStyle.IsChecked = entry.GetSettingBool(ComponentSettingKeys.UseRedStyle);
 
             // 组件自定义设置：动态生成设置面板（内置组件和插件组件共用）
-            UpdatePluginCustomSettingsPanel(entry);
+            UpdateComponentCustomSettingsPanel(entry);
 
             var ruleset = ToolbarRegistry.GetEffectiveRuleset(entry);
             ComboBoxRulesetMode.SelectedIndex = (int)ruleset.Mode;
@@ -572,10 +571,10 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             SaveSettings();
         }
 
-        private void UpdatePluginCustomSettingsPanel(ToolbarComponentEntry entry)
+        private void UpdateComponentCustomSettingsPanel(ToolbarComponentEntry entry)
         {
-            PanelPluginCustomSettings.Visibility = Visibility.Collapsed;
-            PanelPluginCustomSettings.Children.Clear();
+            PanelComponentCustomSettings.Visibility = Visibility.Collapsed;
+            PanelComponentCustomSettings.Children.Clear();
 
             bool hasCustomSettings = false;
 
@@ -583,23 +582,16 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             var builtinItem = AvailableItems.FirstOrDefault(i => i.Id == entry.Id);
             if (builtinItem?.CustomSettingsPanelFactory != null)
             {
-                PanelPluginCustomSettings.Visibility = Visibility.Visible;
-                PanelPluginCustomSettings.Children.Add(builtinItem.CustomSettingsPanelFactory());
+                PanelComponentCustomSettings.Visibility = Visibility.Visible;
+                PanelComponentCustomSettings.Children.Add(builtinItem.CustomSettingsPanelFactory());
                 hasCustomSettings = true;
             }
             else
             {
-                // 否则通过 CustomSettings 声明式生成（插件项或内置项均可）
-                var pluginItems = ToolbarRegistry.GetPluginItems();
-                var pluginItem = pluginItems.FirstOrDefault(p => p.Id == entry.Id);
-                IReadOnlyList<PluginToolbarSettingInfo> customSettings = pluginItem?.CustomSettings;
-                if (customSettings == null || customSettings.Count == 0)
-                {
-                    customSettings = builtinItem?.CustomSettings;
-                }
+                var customSettings = builtinItem?.CustomSettings;
                 if (customSettings != null && customSettings.Count > 0)
                 {
-                    PanelPluginCustomSettings.Visibility = Visibility.Visible;
+                    PanelComponentCustomSettings.Visibility = Visibility.Visible;
                     hasCustomSettings = true;
 
                     foreach (var setting in customSettings)
@@ -612,7 +604,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
                         switch (setting.Type)
                         {
-                            case PluginToolbarSettingType.ComboBox:
+                            case ToolbarSettingType.ComboBox:
                                 var comboBox = new ComboBox { Tag = setting.Key };
                                 bool hasOptionValues = setting.OptionValues != null
                                     && setting.OptionValues.Count == setting.Options.Count
@@ -632,11 +624,11 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                                         break;
                                     }
                                 }
-                                comboBox.SelectionChanged += PluginCustomSetting_ComboBox_SelectionChanged;
+                                comboBox.SelectionChanged += ComponentCustomSetting_ComboBox_SelectionChanged;
                                 card.Content = comboBox;
                                 break;
 
-                            case PluginToolbarSettingType.Toggle:
+                            case ToolbarSettingType.Toggle:
                                 var toggle = new iNKORE.UI.WPF.Modern.Controls.ToggleSwitch
                                 {
                                     Tag = setting.Key,
@@ -647,11 +639,11 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                                 var boolValue = entry.GetSettingBool(setting.Key);
                                 if (setting.DefaultValue == "true") toggle.IsOn = boolValue || !entry.Settings.ContainsKey(setting.Key);
                                 else toggle.IsOn = boolValue;
-                                toggle.Toggled += PluginCustomSetting_Toggle_Toggled;
+                                toggle.Toggled += ComponentCustomSetting_Toggle_Toggled;
                                 card.Content = toggle;
                                 break;
 
-                            case PluginToolbarSettingType.Slider:
+                            case ToolbarSettingType.Slider:
                                 var slider = new Slider
                                 {
                                     Tag = setting.Key,
@@ -684,7 +676,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                                 slider.ValueChanged += (s, e) =>
                                 {
                                     sliderValueText.Text = FormatSliderValue(slider, slider.Value);
-                                    PluginCustomSetting_Slider_ValueChanged(s, e);
+                                    ComponentCustomSetting_Slider_ValueChanged(s, e);
                                 };
                                 card.Content = new StackPanel
                                 {
@@ -694,7 +686,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                                 break;
                         }
 
-                        PanelPluginCustomSettings.Children.Add(card);
+                        PanelComponentCustomSettings.Children.Add(card);
                     }
                 }
             }
@@ -707,7 +699,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             }
         }
 
-        private void PluginCustomSetting_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComponentCustomSetting_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_isLoaded || ActiveEntry == null || _suppressSave) return;
             var comboBox = sender as ComboBox;
@@ -720,7 +712,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             SaveSettings();
         }
 
-        private void PluginCustomSetting_Toggle_Toggled(object sender, RoutedEventArgs e)
+        private void ComponentCustomSetting_Toggle_Toggled(object sender, RoutedEventArgs e)
         {
             if (!_isLoaded || ActiveEntry == null || _suppressSave) return;
             var toggle = sender as iNKORE.UI.WPF.Modern.Controls.ToggleSwitch;
@@ -732,7 +724,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             SaveSettings();
         }
 
-        private void PluginCustomSetting_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void ComponentCustomSetting_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!_isLoaded || ActiveEntry == null || _suppressSave) return;
             var slider = sender as Slider;

@@ -387,33 +387,12 @@ namespace Ink_Canvas
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// 供插件粘贴剪贴板图片到画布的入口（可选指定坐标）。
-        /// </summary>
-        internal Task PasteClipboardImageForPlugin(Point? position = null)
-            => PasteImageFromClipboard(position);
-
-
-
-        /// <summary>
-        /// 处理白板右键事件，显示粘贴图片菜单
-        /// </summary>
-        /// <param name="sender">事件发送者</param>
-        /// <param name="e">事件参数</param>
-        /// <remarks>
-        /// - 只在白板模式下处理
-        /// - 检查是否有图片在剪贴板中
-        /// - 显示粘贴上下文菜单
-        /// - 包含异常处理
-        /// </remarks>
+        /// <summary>处理白板右键事件，显示粘贴图片菜单。</summary>
         private void InkCanvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                // 只在白板模式下处理
                 if (currentMode != 1) return;
-
-                // 检查是否有图片在剪贴板中
                 if (Clipboard.ContainsImage())
                 {
                     var position = e.GetPosition(inkCanvas);

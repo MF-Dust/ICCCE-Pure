@@ -35,9 +35,6 @@ namespace Ink_Canvas
         [JsonProperty("startup")]
         public Startup Startup { get; set; } = new Startup();
 
-        [JsonProperty("randSettings")]
-        public RandSettings RandSettings { get; set; } = new RandSettings();
-
         [JsonProperty("modeSettings")]
         public ModeSettings ModeSettings { get; set; } = new ModeSettings();
 
@@ -712,8 +709,6 @@ namespace Ink_Canvas
         public bool IsShowEraserButton { get; set; } = true;
         [JsonProperty("enableTimeDisplayInWhiteboardMode")]
         public bool EnableTimeDisplayInWhiteboardMode { get; set; } = true;
-        [JsonProperty("enableChickenSoupInWhiteboardMode")]
-        public bool EnableChickenSoupInWhiteboardMode { get; set; } = true;
         [JsonProperty("isShowHideControlButton")]
         public bool IsShowHideControlButton { get; set; }
         [JsonProperty("unFoldButtonImageType")]
@@ -730,20 +725,6 @@ namespace Ink_Canvas
         public int CustomSplashTextPosition { get; set; } = 1; // 0-左下, 1-中下, 2-右下
         [JsonProperty("isShowQuickPanel")]
         public bool IsShowQuickPanel { get; set; } = true;
-        [JsonProperty("chickenSoupSource")]
-        public int ChickenSoupSource { get; set; } = 1;
-        [JsonProperty("chickenSoupPosition")]
-        public string ChickenSoupPosition { get; set; } = "TopRight";
-        [JsonProperty("hitokotoCategories", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> HitokotoCategories { get; set; }
-        [JsonProperty("enableChickenSoupAutoRotation")]
-        public bool EnableChickenSoupAutoRotation { get; set; } = false;
-        [JsonProperty("chickenSoupAutoRotationInterval")]
-        public int ChickenSoupAutoRotationInterval { get; set; } = 60;
-        [JsonProperty("customTipsSchemes", NullValueHandling = NullValueHandling.Ignore)]
-        public List<TipsScheme> CustomTipsSchemes { get; set; }
-        [JsonProperty("enabledPresetTipsSources", NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> EnabledPresetTipsSources { get; set; }
         [JsonProperty("isShowModeFingerToggleSwitch")]
         public bool IsShowModeFingerToggleSwitch { get; set; } = true;
         [JsonProperty("theme")]
@@ -1137,18 +1118,6 @@ namespace Ink_Canvas
         public bool EnablePowerPointEnhancement { get; set; } = false;
         [JsonProperty("skipAnimationsWhenGoNext")]
         public bool SkipAnimationsWhenGoNext { get; set; } = false;
-        [JsonProperty("enablePPTTimeCapsule")]
-        public bool EnablePPTTimeCapsule { get; set; } = true;
-        [JsonProperty("pptTimeCapsulePosition")]
-        public int PPTTimeCapsulePosition { get; set; } = 1;
-        [JsonProperty("pptTimeCapsuleOpacity")]
-        public double PPTTimeCapsuleOpacity { get; set; } = 1.0;
-        [JsonProperty("pptTimeCapsuleScale")]
-        public double PPTTimeCapsuleScale { get; set; } = 1.0;
-        [JsonProperty("pptTimeCapsuleOffsetX")]
-        public double PPTTimeCapsuleOffsetX { get; set; } = 0;
-        [JsonProperty("pptTimeCapsuleOffsetY")]
-        public double PPTTimeCapsuleOffsetY { get; set; } = 0;
         [JsonProperty("pptLinkMode")]
         public PPTLinkMode PPTLinkMode { get; set; } = PPTLinkMode.Com;
         [JsonProperty("showPPTSidebarByDefault")]
@@ -1532,104 +1501,6 @@ namespace Ink_Canvas
         /// <summary>收笔后延迟识别的毫秒数（300-5000，默认 2000），多笔一字时等用户写完再识别。</summary>
         [JsonProperty("handwritingBeautifyDebounceMs")]
         public int HandwritingBeautifyDebounceMs { get; set; } = 2000;
-    }
-
-    public class RandSettings
-    {
-        [JsonProperty("displayRandWindowNamesInputBtn")]
-        public bool DisplayRandWindowNamesInputBtn { get; set; }
-        [JsonProperty("randWindowOnceCloseLatency")]
-        public double RandWindowOnceCloseLatency { get; set; } = 2.5;
-        [JsonProperty("randWindowOnceMaxStudents")]
-        public int RandWindowOnceMaxStudents { get; set; } = 10;
-        [JsonProperty("showRandomAndSingleDraw")]
-        public bool ShowRandomAndSingleDraw { get; set; } = true;
-        [JsonProperty("directCallCiRand")]
-        public bool DirectCallCiRand { get; set; }
-        [JsonProperty("externalCallerType")]
-        public int ExternalCallerType { get; set; } = 0;
-        [JsonProperty("selectedBackgroundIndex")]
-        public int SelectedBackgroundIndex { get; set; }
-        [JsonProperty("customPickNameBackgrounds")]
-        public List<CustomPickNameBackground> CustomPickNameBackgrounds { get; set; } = new List<CustomPickNameBackground>();
-        [JsonProperty("useLegacyTimerUI")]
-        public bool UseLegacyTimerUI { get; set; } = false;
-        [JsonProperty("useNewStyleUI")]
-        public bool UseNewStyleUI { get; set; } = true;
-        [JsonProperty("timerVolume")]
-        public double TimerVolume { get; set; } = 1.0;
-        [JsonProperty("customTimerSoundPath")]
-        public string CustomTimerSoundPath { get; set; } = "";
-        [JsonProperty("enableOvertimeCountUp")]
-        public bool EnableOvertimeCountUp { get; set; } = false;
-        [JsonProperty("enableOvertimeRedText")]
-        public bool EnableOvertimeRedText { get; set; } = false;
-        [JsonProperty("enableProgressiveReminder")]
-        public bool EnableProgressiveReminder { get; set; } = false;
-        [JsonProperty("progressiveReminderVolume")]
-        public double ProgressiveReminderVolume { get; set; } = 1.0;
-        [JsonProperty("progressiveReminderSoundPath")]
-        public string ProgressiveReminderSoundPath { get; set; } = "";
-        [JsonProperty("useNewRollCallUI")]
-        public bool UseNewRollCallUI { get; set; } = true;
-        [JsonProperty("enableMLAvoidance")]
-        public bool EnableMLAvoidance { get; set; } = true;
-        [JsonProperty("mlAvoidanceHistoryCount")]
-        public int MLAvoidanceHistoryCount { get; set; } = 50;
-        [JsonProperty("mlAvoidanceWeight")]
-        public double MLAvoidanceWeight { get; set; } = 1.0;
-        [JsonProperty("enableQuickDraw")]
-        public bool EnableQuickDraw { get; set; } = true;
-        [JsonProperty("quickDrawExternalCaller")]
-        public bool QuickDrawExternalCaller { get; set; }
-        [JsonProperty("nameRosters")]
-        public List<NameRoster> NameRosters { get; set; } = new List<NameRoster>();
-        [JsonProperty("selectedNameRosterGuid")]
-        public string SelectedNameRosterGuid { get; set; } = "";
-    }
-
-    public class NameRoster
-    {
-        [JsonProperty("guid")]
-        public string Guid { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        // 名单内容（每行一人），与 Names.txt 的格式保持一致
-        [JsonProperty("namesContent")]
-        public string NamesContent { get; set; } = "";
-
-        // 替换规则内容（每行一条），与 Replace.txt 的格式保持一致
-        [JsonProperty("replaceContent")]
-        public string ReplaceContent { get; set; } = "";
-
-        public NameRoster(string guid, string name)
-        {
-            Guid = guid;
-            Name = name;
-        }
-
-        // 用于JSON序列化
-        public NameRoster() { }
-    }
-
-    public class CustomPickNameBackground
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("filePath")]
-        public string FilePath { get; set; }
-
-        public CustomPickNameBackground(string name, string filePath)
-        {
-            Name = name;
-            FilePath = filePath;
-        }
-
-        // 用于JSON序列化
-        public CustomPickNameBackground() { }
     }
 
     public class CustomFloatingBarIcon

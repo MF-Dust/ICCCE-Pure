@@ -44,17 +44,6 @@
                             Toggled="ToggleSwitchShowPenColorOnBoardToolbarIcon_Toggled" />
 
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                        Text="{x:Static props:ThemeStrings.Theme_Tips_Title}" />
-
-                    <ui:SettingsCard Click="QuickNavCard_Click" Tag="WhiteboardTipsPage" IsEnabled="True"
-                                     Header="{x:Static props:ThemeStrings.Theme_Tips_Title}" IsClickEnabled="True">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Message}" />
-                        </ui:SettingsCard.HeaderIcon>
-
-                    </ui:SettingsCard>
-
-                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
                         Text="{x:Static props:ThemeStrings.Theme_BoardToolbarOpacity}" />
 
                     <ui:SettingsExpander Header="{x:Static props:ThemeStrings.Theme_BoardToolbarOpacity}"

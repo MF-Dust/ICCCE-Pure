@@ -13,7 +13,6 @@ The final stance of stubbornness based on the `InkCanvas` control...
 ![GitHub forks](https://img.shields.io/github/forks/InkCanvasForClass/community)
 [![All Contributors](https://img.shields.io/github/all-contributors/InkCanvasForClass/community?color=ee8449)](#贡献者)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/InkCanvasForClass/community)
-[![NuGet PluginSdk](https://img.shields.io/nuget/v/InkCanvas.PluginSdk?label=PluginSdk&logo=nuget)](https://www.nuget.org/packages/InkCanvas.PluginSdk)
 [![NuGet Controls](https://img.shields.io/nuget/v/InkCanvas.Controls?label=Controls&logo=nuget)](https://www.nuget.org/packages/InkCanvas.Controls)
 
 [![Discord](https://img.shields.io/discord/1383039050184917053?label=Discord&logo=discord)](https://discord.gg/ahj7eJWhEG)
@@ -23,6 +22,37 @@ The final stance of stubbornness based on the `InkCanvas` control...
 <img src="Images/icc ce.png" width="2048">
 
 </div>
+
+## Core Features
+
+- **Ink Writing**: WPF InkCanvas-based touch, stylus and pressure-sensitive writing.
+- **Blackboard / Whiteboard Mode**: Multi-finger zoom, rotate, pan, and rapid blackboard/whiteboard switching for classroom teaching.
+- **Screen Annotation**: Freely annotate and draw anywhere on the screen with quick clear and sidebar-collapse support.
+- **PowerPoint Slideshow Integration**: Deep integration via ROT or VSTO modes; automatically enters annotation mode and syncs strokes with slide transitions.
+- **Smart Shape Recognition**: Recognizes circles, ellipses, polygons, and coordinate axes into clean vector shapes.
+- **Stroke & Screenshot Saving**: Quick screen capture and automatic per-slide stroke preservation.
+
+## Architecture & Runtime
+
+- **Target Platform**: Windows 10 (Build 19041+) or higher (`net10.0-windows10.0.19041.0`).
+- **Runtime Requirement**: **.NET Desktop Runtime 10** (exact major version 10.x; non-desktop runtimes or other major versions are not supported).
+- **Architecture Exceptions & Constraints**:
+  - `InkCanvas.IACoreHelper`: Retained on **.NET Framework 4.7.2 (win-x86)** due to binary constraints with legacy 32-bit Microsoft Ink Analysis (IACore COM) components.
+  - `InkCanvas.PowerPointAddIn`: Retained on **.NET Framework 4.7.2** due to Microsoft PowerPoint VSTO COM add-in host constraints.
+
+## Build & Verification
+
+- **Build Core Application**:
+  ```bash
+  dotnet build "Ink Canvas/InkCanvasForClass.csproj" -c Debug
+  ```
+- **Run Save/Autosave Regression Checks**:
+  ```bash
+  dotnet run --project InkCanvas.Core.Tests -c Release
+  ```
+- Raffle, roll call, classroom timers, quote tips and the plugin system have been removed. Back up settings and ink files before upgrading.
+- `InkCanvas.NativeInk.Tests` covers the disabled experimental ink pipeline. Its existing `PredictionHorizonStaysWithinAdaptiveBounds` check fails on both .NET 6 and .NET 10; it is not a test of the active annotation pipeline.
+
 
 ## 💫 Software Disclaimer
 
@@ -64,7 +94,7 @@ Please [activate Microsoft Office](https://www.coolhub.top/archives/14).
 
 ### The application fails to launch normally
 
-Please check if `.Net Runtime 6.0` or higher is installed on your computer. If not, please [visit the official website](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) to download and install it.
+Please check whether **.NET Desktop Runtime 10** (exact major version 10.x) is installed on your computer. If not, please [visit the official Microsoft website](https://dotnet.microsoft.com/download/dotnet/10.0) to download and install **.NET Desktop Runtime 10 (Windows Desktop Runtime)**.
 
 If it still doesn't run, please [install `Microsoft Office`](https://www.coolhub.top/archives/11).
 
@@ -75,7 +105,6 @@ If it still doesn't run, please [install `Microsoft Office`](https://www.coolhub
 ## Todo LIST
 
 1. Prepare for version 2.0 development
-2. CI plugin integration
 
 ## Contributors
 
@@ -130,7 +159,7 @@ If it still doesn't run, please [install `Microsoft Office`](https://www.coolhub
 
 ## 🤝 Acknowledgments
 
-Thanks to [yuwenhui2020](https://github.com/yuwenhui2020) for their contributions to the `Ink Canvas User Guide`!  
+Thanks to [yuwenhui2020](https://github.com/yuwenhui2020) for their contributions to the `Ink Canvas User Guide`!<br>
 Thanks to [CN-Ironegg](https://github.com/CN-Ironegg), [jiajiaxd](https://github.com/jiajiaxd), [Kengwang](https://github.com/kengwang), [Raspberry Kan](https://github.com/Raspberry-Monster), [clover-yan](https://github.com/clover-yan), [STBBRD](https://github.com/STBBRD), and [ChangSakura](https://github.com/WuChanging) for contributing code to this project!
 
 ## License
@@ -139,7 +168,7 @@ GPLv3
 
 ## References
 
-[Alan-CRL/DesktopDrawpadBlocker](https://github.com/Alan-CRL/DesktopDrawpadBlocker)  
+[Alan-CRL/DesktopDrawpadBlocker](https://github.com/Alan-CRL/DesktopDrawpadBlocker)<br>
 [Alan-CRL/Inkeys](https://github.com/Alan-CRL/Inkeys)
 
 ## Star History

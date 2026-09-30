@@ -33,9 +33,6 @@ namespace Ink_Canvas.Controls.Toolbar
 
         public static readonly List<ToolsMenuItemInfo> AllItems = new List<ToolsMenuItemInfo>
         {
-            new ToolsMenuItemInfo { Id = "timer", LocalizationKey = "QuickPanel_Timer", Description = "计时器", IconGeometry = XamlGraphicsIconGeometries.TimerIconGeometry },
-            new ToolsMenuItemInfo { Id = "randomDraw", LocalizationKey = "Tools_RandomDraw", Description = "随机抽签", IconGeometry = XamlGraphicsIconGeometries.RandomDrawIconGeometry },
-            new ToolsMenuItemInfo { Id = "singleDraw", LocalizationKey = "QuickPanel_SingleDraw", Description = "单人抽签", IconGeometry = XamlGraphicsIconGeometries.SingleDrawIconGeometry },
             new ToolsMenuItemInfo { Id = "save", LocalizationKey = "Tools_Save", Description = "保存", IconGeometry = XamlGraphicsIconGeometries.SaveIconGeometry },
             new ToolsMenuItemInfo { Id = "open", LocalizationKey = "Tools_Open", Description = "打开", IconGeometry = XamlGraphicsIconGeometries.OpenIconGeometry },
             new ToolsMenuItemInfo { Id = "replay", LocalizationKey = "Tools_Replay", Description = "回放", IconGeometry = XamlGraphicsIconGeometries.ReplayIconGeometry },
@@ -59,7 +56,6 @@ namespace Ink_Canvas.Controls.Toolbar
             {
                 FloatingBarItems = new List<string>
                 {
-                    "timer", "randomDraw", "singleDraw",
                     "save", "open", "replay",
                     "screenshot", "manual", "settings"
                 }
@@ -72,7 +68,6 @@ namespace Ink_Canvas.Controls.Toolbar
             {
                 BoardItems = new List<string>
                 {
-                    "timer", "randomDraw", "singleDraw",
                     "save", "open", "replay",
                     "screenshot", "manual", "settings"
                 }
@@ -103,8 +98,11 @@ namespace Ink_Canvas.Controls.Toolbar
             {
                 var json = File.ReadAllText(path);
                 var layout = JsonConvert.DeserializeObject<ToolsMenuLayoutSettings>(json);
-                if (layout?.FloatingBarItems != null && layout.FloatingBarItems.Count > 0)
-                    return layout;
+                if (layout?.FloatingBarItems != null)
+                {
+                    layout.FloatingBarItems = layout.FloatingBarItems.Where(id => FindItem(id) != null).Distinct().ToList();
+                    if (layout.FloatingBarItems.Count > 0) return layout;
+                }
             }
             catch (Exception ex)
             {
@@ -126,8 +124,11 @@ namespace Ink_Canvas.Controls.Toolbar
             {
                 var json = File.ReadAllText(path);
                 var layout = JsonConvert.DeserializeObject<ToolsMenuLayoutSettings>(json);
-                if (layout?.BoardItems != null && layout.BoardItems.Count > 0)
-                    return layout;
+                if (layout?.BoardItems != null)
+                {
+                    layout.BoardItems = layout.BoardItems.Where(id => FindItem(id) != null).Distinct().ToList();
+                    if (layout.BoardItems.Count > 0) return layout;
+                }
             }
             catch (Exception ex)
             {

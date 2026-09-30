@@ -205,54 +205,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
             }
         }
 
-        public static void OnChickenSoupInWhiteboardChanged(bool isOn, bool isTimeDisplayOn)
-        {
-            var mw = GetMainWindow();
-            if (mw != null && mw.currentMode == 1 && isTimeDisplayOn)
-            {
-                mw.BlackBoardWaterMark.Visibility = isOn ? Visibility.Visible : Visibility.Collapsed;
-            }
-
-            // Start/stop auto-rotation based on master toggle
-            if (mw != null)
-            {
-                if (isOn)
-                {
-                    mw.StartChickenSoupAutoRotation();
-                }
-                else
-                {
-                    mw.StopChickenSoupAutoRotation();
-                }
-            }
-        }
-
-        public static void OnChickenSoupSchemesChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null) mw.UpdateChickenSoupTextAsync().ConfigureAwait(false);
-        }
-
-        public static void OnChickenSoupAutoRotationChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null)
-            {
-                mw.RestartChickenSoupAutoRotation();
-            }
-        }
-
-        public static void OnChickenSoupSourceChanged()
-        {
-            OnChickenSoupSchemesChanged();
-        }
-
-        public static void OnChickenSoupPositionChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null) mw.ApplyChickenSoupPosition();
-        }
-
         public static void OnQuickPanelBottomOffsetChanged(double value)
         {
             var mw = GetMainWindow();
@@ -702,43 +654,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
             }
         }
 
-        public static void OnPPTTimeCapsuleChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null && mw.IsInPPTPresentationMode)
-            {
-                mw.UpdatePPTTimeCapsuleVisibility();
-                mw.UpdatePPTQuickPanelVisibility();
-            }
-        }
-
-        public static void OnPPTTimeCapsulePositionChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null && mw.IsInPPTPresentationMode)
-                mw.UpdatePPTTimeCapsulePosition();
-        }
-
-        public static void OnPPTTimeCapsuleOpacityChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null && mw.IsInPPTPresentationMode)
-                mw.UpdatePPTTimeCapsuleOpacity();
-        }
-
-        public static void OnPPTTimeCapsuleScaleChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null && mw.IsInPPTPresentationMode)
-                mw.UpdatePPTTimeCapsuleScale();
-        }
-
-        public static void OnResetPPTTimeCapsulePosition()
-        {
-            var mw = GetMainWindow();
-            mw?.ResetPPTTimeCapsuleOffset();
-        }
-
         public static void OnPPTNavBarScaleChanged(double scale)
         {
             var mw = GetMainWindow();
@@ -758,28 +673,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
             var mw = GetMainWindow();
             mw?.UpdatePPTUIManagerSettings();
             PPTPageFlipPreviewWindow.ActiveInstance?.UpdatePreview();
-        }
-
-        #endregion
-
-        #region RandomDraw
-
-        public static void OnShowRandomAndSingleDrawChanged(bool isOn)
-        {
-            var mw = GetMainWindow();
-            if (mw != null)
-            {
-                if (mw.BoardRandomDrawToolBtn != null)
-                    mw.BoardRandomDrawToolBtn.Visibility = isOn ? Visibility.Visible : Visibility.Collapsed;
-                if (mw.BoardSingleDrawToolBtn != null)
-                    mw.BoardSingleDrawToolBtn.Visibility = isOn ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
-        public static void OnEnableQuickDrawChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw != null) mw.ShowQuickDrawFloatingButton();
         }
 
         #endregion

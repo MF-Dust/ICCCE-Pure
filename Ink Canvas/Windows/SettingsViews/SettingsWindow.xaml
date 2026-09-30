@@ -477,17 +477,6 @@ Title="{x:Static props:NavStrings.Nav_SettingsWindow_Title}"
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
 
-                <!-- 点名与计时器 -->
-                <ui:NavigationViewItem
-                    x:Name="RandomDrawPageItem"
-                    Content="{x:Static props:RandomStrings.Random_Title}"
-                    Tag="RandomDrawPage"
-                    ToolTipService.ToolTip="{x:Static props:NavStrings.Nav_RandomDraw_Tooltip}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.People}"/>
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-
                 <!-- Debug -->
                 <ui:NavigationViewItem
                     x:Name="DebugPageItem"
@@ -528,36 +517,6 @@ Title="{x:Static props:NavStrings.Nav_SettingsWindow_Title}"
                     </ui:NavigationViewItem.MenuItems>
                 </ui:NavigationViewItem>
 
-                <ui:NavigationViewItemHeader Content="{x:Static props:NavStrings.Nav_PluginSettings}"/>
-                <ui:NavigationViewItem
-                    x:Name="PluginItem"
-                    Content="{x:Static props:NavStrings.Nav_Plugins}"
-                    SelectsOnInvoked="False"
-                    ToolTipService.ToolTip="{x:Static props:NavStrings.Settings_Plugins}">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Puzzle}"/>
-                    </ui:NavigationViewItem.Icon>
-                    <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem
-                            x:Name="PluginInstalledItem"
-                            Content="{x:Static props:PluginStrings.Market_TabInstalled}"
-                            Tag="PluginPage"
-                            ToolTipService.ToolTip="{x:Static props:NavStrings.Settings_Plugins}">
-                            <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.CheckMark}"/>
-                            </ui:NavigationViewItem.Icon>
-                        </ui:NavigationViewItem>
-                        <ui:NavigationViewItem
-                            x:Name="PluginMarketplaceItem"
-                            Content="{x:Static props:PluginStrings.Market_Title}"
-                            Tag="PluginMarketplacePage"
-                            ToolTipService.ToolTip="{x:Static props:PluginStrings.Market_Title}">
-                            <ui:NavigationViewItem.Icon>
-                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Globe}"/>
-                            </ui:NavigationViewItem.Icon>
-                        </ui:NavigationViewItem>
-                    </ui:NavigationViewItem.MenuItems>
-                </ui:NavigationViewItem>
             </ui:NavigationView.MenuItems>
 
             <ui:NavigationView.FooterMenuItems>

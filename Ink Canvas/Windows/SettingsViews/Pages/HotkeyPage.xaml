@@ -153,11 +153,6 @@
                                    Description="{x:Static props:HotkeyStrings.Hotkey_ScreenshotDesc}"
                                    DefaultKey="C"
                                    DefaultModifiers="Alt" />
-                    <hk:HotkeyItem x:Name="QuickDrawHotkey"
-                                   Title="{x:Static props:HotkeyStrings.Hotkey_QuickDraw}"
-                                   Description="{x:Static props:HotkeyStrings.Hotkey_QuickDrawDesc}"
-                                   DefaultKey="K"
-                                   DefaultModifiers="Alt" />
                     <hk:HotkeyItem x:Name="HideHotkey"
                                    Title="{x:Static props:FloatingBarStrings.FloatingBar_Hide}"
                                    Description="{x:Static props:HotkeyStrings.Hotkey_HideDesc}"

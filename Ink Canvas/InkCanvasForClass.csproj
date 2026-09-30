@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Ink_Canvas</RootNamespace>
     <AssemblyName>InkCanvasForClass</AssemblyName>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
@@ -30,7 +30,7 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU;x86;x64</Platforms>
-    <LangVersion>10</LangVersion>
+    <LangVersion>14</LangVersion>
     <NoWarn>$(NoWarn);CA1416;NU1701;MSB3270;CS8012;NETSDK1138;CS9269</NoWarn>
     <!-- PolySharp (传递依赖，经 Vortice→SharpGen.Runtime 引入) 在 .NET 10 SDK 下与既有的
          UnscopedRefAttribute 定义冲突 (CS0101/CS0579)。该 polyfill 类型已由其他来源提供，
@@ -77,11 +77,7 @@
     <PackageProjectUrl>https://inkcanvasforclass.github.io</PackageProjectUrl>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
-  <!-- ARM64 平台：.NET 6 在 ARM64 上 JIT 成本相对 x64 高 30%，
-       启用 Tiered Compilation + PGO 让循环/分支预测迅速收敛；
-       Release 启用 ReadyToRun Composite 把多程序集合并为单一 R2R 映像，
-       冷启动时间比纯 JIT 快 30%+。ARM 设备一般不预装 .NET 6，
-       单文件+自包含发布时这些属性同时生效。 -->
+  <!-- ARM64 发布保留分层编译、PGO 和 ReadyToRun。 -->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>full</DebugType>
@@ -133,26 +129,17 @@
     </PackageReference>
     <PackageReference Include="MicrosoftOfficeCore" Version="15.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
-    <PackageReference Include="Microsoft.International.Converters.PinYinConverter" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualBasic" Version="10.3.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.11" />
-    <PackageReference Include="System.Composition.AttributedModel" Version="10.0.11" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="System.Management" Version="10.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <!-- UInk 1.0 规范：主文件为 MessagePack 对象流（Header/HeaderExtension/Canvas/Ink/Shape/Media），由 UInk/ 下的读写器使用 -->
     <PackageReference Include="MessagePack" Version="3.1.8" />
     <PackageReference Include="NHotkey.Wpf" Version="4.0.0" />
     <PackageReference Include="OSVersionExt" Version="4.1.0" />
-    <!-- PDFsharp 6.1.x 是最后一个以 net6.0 为目标框架的版本；用于插件「背景 + 墨迹」导出 PDF -->
-    <PackageReference Include="PDFsharp" Version="6.2.4" />
     <!-- AForge.Imaging / AForge.Math 仅用于照片校正（Grayscale/CannyEdgeDetector/BlobCounter/QuadrilateralTransformation）；摄像头采集已切换到 DirectShow（DirectShowLib） -->
     <PackageReference Include="AForge.Imaging" Version="2.2.5" />
     <PackageReference Include="AForge.Math" Version="2.2.5" />
-    <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="WebDav.Client" Version="2.9.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
@@ -164,7 +151,6 @@
     <PackageReference Include="JerryShaw.WPFMediaKit" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\InkCanvas.PluginSdk\InkCanvas.PluginSdk.csproj" />
     <ProjectReference Include="..\InkCanvas.Controls\InkCanvas.Controls.csproj" />
     <ProjectReference Include="..\InkCanvas.PPTAgent.Contracts\InkCanvas.PPTAgent.Contracts.csproj" />
     <ProjectReference Include="..\InkCanvas.IACoreHelper\InkCanvas.IACoreHelper.csproj">
@@ -221,10 +207,6 @@
       <Private>False</Private>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\TimerDownNotice.wav" />
-    <None Include="Resources\ProgressiveAudio.wav" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\IACore\IACore.dll" />
@@ -293,9 +275,6 @@
     <Resource Include="Resources\Icons-Fluent\ic_fluent_settings_24_regular.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_timer_24_regular.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Icons-Fluent\ic_fluent_delete_24_regular.png" />
   </ItemGroup>
   <ItemGroup>
@@ -323,10 +302,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons-Fluent\ic_fluent_edit_24_regular.png" />
-  </ItemGroup>
-<ItemGroup>
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_people_money_24_regular.png" />
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_person_money_24_regular.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons-Fluent\ic_fluent_scale_fit_24_regular.png" />
@@ -469,9 +444,6 @@
     <Resource Include="Resources\new-icons\zoom.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_person_money_24_regular-light.png" />
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_people_money_24_regular-light.png" />
-    <Resource Include="Resources\Icons-Fluent\ic_fluent_timer_24_regular-light.png" />
     <Resource Include="Resources\new-icons\blackboard-light.png" />
     <Resource Include="Resources\new-icons\end-slides-show-light.png" />
     <Resource Include="Resources\new-icons\chevron-left-light.png" />

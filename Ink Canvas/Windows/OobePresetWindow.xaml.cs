@@ -183,10 +183,6 @@ namespace Ink_Canvas.Windows
             settings.PowerPointSettings.PowerPointSupport = true;
             settings.PowerPointSettings.IsAutoSaveStrokesInPowerPoint = true;
             settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint = true;
-            settings.PowerPointSettings.EnablePPTTimeCapsule = true;
-            settings.PowerPointSettings.PPTTimeCapsulePosition = 1;
-            settings.PowerPointSettings.PPTTimeCapsuleOpacity = 1.0;
-            settings.PowerPointSettings.PPTTimeCapsuleScale = 1.0;
             settings.PowerPointSettings.PPTLinkMode = PPTLinkMode.Agent;
             settings.PowerPointSettings.ShowPPTButton = true;
             settings.PowerPointSettings.PPTButtonsDisplayOption = 2222;
@@ -211,9 +207,6 @@ namespace Ink_Canvas.Windows
             settings.Automation.IsSaveScreenshotsInDateFolders = false;
             if (settings.Automation.FloatingWindowInterceptor != null)
                 settings.Automation.FloatingWindowInterceptor.IsEnabled = false;
-
-            // 随机点名
-            settings.RandSettings.ShowRandomAndSingleDraw = true;
 
             // 高级
             settings.Advanced.IsLogEnabled = true;
@@ -257,7 +250,6 @@ namespace Ink_Canvas.Windows
             settings.PowerPointSettings.PowerPointSupport = true;
             settings.PowerPointSettings.IsAutoSaveStrokesInPowerPoint = true;
             settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint = true;
-            settings.PowerPointSettings.EnablePPTTimeCapsule = false;
 
             // 自动化
             settings.Automation.IsAutoFoldInPPTSlideShow = false;
@@ -266,9 +258,6 @@ namespace Ink_Canvas.Windows
             settings.Automation.IsSaveScreenshotsInDateFolders = false;
             if (settings.Automation.FloatingWindowInterceptor != null)
                 settings.Automation.FloatingWindowInterceptor.IsEnabled = false;
-
-            // 随机点名
-            settings.RandSettings.ShowRandomAndSingleDraw = true;
 
             // 高级
             settings.Advanced.IsLogEnabled = true;

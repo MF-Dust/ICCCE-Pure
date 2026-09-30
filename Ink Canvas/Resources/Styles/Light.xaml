@@ -6,16 +6,6 @@
     <SolidColorBrush x:Key="FloatBarForeground" Color="Black" />
     <Color x:Key="FloatBarForegroundColor">#FF000000</Color>
 
-    <SolidColorBrush x:Key="QuickDrawFloatingButtonBackground" Color="#CCFFFFFF"/>
-    <SolidColorBrush x:Key="QuickDrawFloatingButtonBorderBrush" Color="#33000000"/>
-    <SolidColorBrush x:Key="QuickDrawFloatingButtonIconForeground" Color="#FF000000"/>
-
-    <!-- 快抽窗口主题颜色 -->
-    <SolidColorBrush x:Key="QuickDrawWindowBackground" Color="#FFFFFFFF"/>
-    <SolidColorBrush x:Key="QuickDrawWindowBorderBrush" Color="#FFE0E0E0"/>
-    <SolidColorBrush x:Key="QuickDrawWindowTitleForeground" Color="#FF333333"/>
-    <SolidColorBrush x:Key="QuickDrawWindowDigitForeground" Color="#FF333333"/>
-
     <SolidColorBrush x:Key="SettingsPageForeground" Color="Black" />
     <SolidColorBrush x:Key="SettingsPageAnnotationForeground" Color="#666666" />
     <SolidColorBrush x:Key="SettingsPageBorderBrush" Opacity="0.8" Color="Black" />
@@ -61,9 +51,6 @@
     <SolidColorBrush x:Key="HistoryWindowTextSecondaryBrush" Color="#6b7280"/>
     
     <!-- 快速面板图标资源 -->
-    <BitmapImage x:Key="QuickPanelPersonMoneyIcon" UriSource="/Resources/Icons-Fluent/ic_fluent_person_money_24_regular.png"/>
-    <BitmapImage x:Key="QuickPanelPeopleMoneyIcon" UriSource="/Resources/Icons-Fluent/ic_fluent_people_money_24_regular.png"/>
-    <BitmapImage x:Key="QuickPanelTimerIcon" UriSource="/Resources/Icons-Fluent/ic_fluent_timer_24_regular.png"/>
     
     <!-- 墨迹选中栏图标资源 -->
     <BitmapImage x:Key="StrokeSelectionCloneIcon" UriSource="/Resources/Icons-Fluent/ic_fluent_copy_24_regular.png"/>
@@ -100,44 +87,6 @@
     <BitmapImage x:Key="GeoIconCylinder" UriSource="/Resources/Icons-png/geo-icons/cylinder.png"/>
     <BitmapImage x:Key="GeoIconCone" UriSource="/Resources/Icons-png/geo-icons/cone.png"/>
     
-    <!-- 点名窗口主题颜色 -->
-    <SolidColorBrush x:Key="RandWindowBackground" Color="#F0F3F9"/>
-    <SolidColorBrush x:Key="RandWindowBorderBrush" Color="#0066BF"/>
-    <SolidColorBrush x:Key="RandWindowTextForeground" Color="Black"/>
-    <SolidColorBrush x:Key="RandWindowButtonBackground" Color="#FBFBFD"/>
-    <SolidColorBrush x:Key="RandWindowButtonForeground" Color="Black"/>
-    <SolidColorBrush x:Key="RandWindowPrimaryButtonBackground" Color="#0066BF"/>
-    <SolidColorBrush x:Key="RandWindowPrimaryButtonForeground" Color="White"/>
-    <SolidColorBrush x:Key="RandWindowSecondaryButtonBackground" Color="#00B894"/>
-    <SolidColorBrush x:Key="RandWindowSecondaryButtonForeground" Color="White"/>
-    <SolidColorBrush x:Key="RandWindowCloseButtonBackground" Color="#E32A34"/>
-    <SolidColorBrush x:Key="RandWindowCloseButtonForeground" Color="White"/>
-    
-    
-    <!-- 倒计时窗口主题颜色 -->
-    <SolidColorBrush x:Key="TimerWindowBackground" Color="#F0F3F9"/>
-    <SolidColorBrush x:Key="TimerWindowBorderBrush" Color="#0066BF"/>
-    <SolidColorBrush x:Key="TimerWindowTextForeground" Color="#5B5D5F"/>
-    <SolidColorBrush x:Key="TimerWindowButtonBackground" Color="#FBFBFD"/>
-    <SolidColorBrush x:Key="TimerWindowButtonForeground" Color="Black"/>
-    <SolidColorBrush x:Key="TimerWindowPrimaryButtonBackground" Color="#0066BF"/>
-    <SolidColorBrush x:Key="TimerWindowPrimaryButtonForeground" Color="White"/>
-    <SolidColorBrush x:Key="TimerWindowStopTimeBackground" Color="#E8EAF0"/>
-    <SolidColorBrush x:Key="TimerWindowStopTimeForeground" Color="Black"/>
-    
-    <!-- 倒计时窗口时钟图标 -->
-    <BitmapImage x:Key="TimerWindowClockIcon" UriSource="/Resources/Icons-Fluent/ic_fluent_timer_24_regular.png"/>
-    
-    <!-- 倒计时窗口主题颜色 -->
-    <SolidColorBrush x:Key="NewTimerWindowBackground" Color="White"/>
-    <SolidColorBrush x:Key="NewTimerWindowBorderBrush" Color="#E0E0E0"/>
-    <SolidColorBrush x:Key="NewTimerWindowTextForeground" Color="#333333"/>
-    <SolidColorBrush x:Key="NewTimerWindowButtonBackground" Color="#F0F0F0"/>
-    <SolidColorBrush x:Key="NewTimerWindowButtonForeground" Color="#666666"/>
-    <SolidColorBrush x:Key="NewTimerWindowDigitForeground" Color="#333333"/>
-    <SolidColorBrush x:Key="NewTimerWindowTitleForeground" Color="#333333"/>
-    <SolidColorBrush x:Key="NewTimerWindowPrimaryButtonBackground" Color="#4CAF50"/>
-    <SolidColorBrush x:Key="NewTimerWindowPrimaryButtonForeground" Color="White"/>
     
     <!-- 说明书窗口主题颜色 -->
     <SolidColorBrush x:Key="OperatingGuideWindowBackground" Color="#F0F3F9"/>

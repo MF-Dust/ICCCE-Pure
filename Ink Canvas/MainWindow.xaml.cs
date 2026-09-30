@@ -103,10 +103,6 @@ namespace Ink_Canvas
 
         internal ToolbarHost ToolbarHost { get; private set; }
 
-        // Board-prefixed buttons: originally XAML auto-generated fields, now delegated to BoardToolsPopupContent
-        internal ToolMenuButton BoardTimerToolBtn => BoardToolsPopupContent?.TimerBtn;
-        internal ToolMenuButton BoardRandomDrawToolBtn => BoardToolsPopupContent?.RandomDrawBtn;
-        internal ToolMenuButton BoardSingleDrawToolBtn => BoardToolsPopupContent?.SingleDrawBtn;
         internal ToolMenuButton BoardSaveToolBtn => BoardToolsPopupContent?.SaveBtn;
         internal ToolMenuButton BoardOpenToolBtn => BoardToolsPopupContent?.OpenBtn;
         internal ToolMenuButton BoardReplayToolBtn => BoardToolsPopupContent?.ReplayBtn;
@@ -116,10 +112,6 @@ namespace Ink_Canvas
         internal ToolMenuButton BoardManualToolBtn => BoardToolsPopupContent?.ManualBtn;
         internal ToolMenuButton BoardSettingsToolBtn => BoardToolsPopupContent?.SettingsBtn;
 
-        // Non-Board buttons: originally XAML auto-generated fields, now delegated to MainToolsPopupContent
-        internal ToolMenuButton TimerToolBtn => MainToolsPopupContent?.TimerBtn;
-        internal ToolMenuButton RandomDrawToolBtn => MainToolsPopupContent?.RandomDrawBtn;
-        internal ToolMenuButton SingleDrawToolBtn => MainToolsPopupContent?.SingleDrawBtn;
         internal ToolMenuButton SaveToolBtn => MainToolsPopupContent?.SaveBtn;
         internal ToolMenuButton OpenToolBtn => MainToolsPopupContent?.OpenBtn;
         internal ToolMenuButton ReplayToolBtn => MainToolsPopupContent?.ReplayBtn;
@@ -195,12 +187,6 @@ namespace Ink_Canvas
         {
             if (content == null) return;
 
-            if (content.TimerBtn != null)
-                content.TimerBtn.ButtonMouseUp += ImageCountdownTimer_MouseUp;
-            if (content.RandomDrawBtn != null)
-                content.RandomDrawBtn.ButtonMouseUp += SymbolIconRand_MouseUp;
-            if (content.SingleDrawBtn != null)
-                content.SingleDrawBtn.ButtonMouseUp += SymbolIconRandOne_MouseUp;
             if (content.SaveBtn != null)
             {
                 content.SaveBtn.ButtonMouseDown += Border_MouseDown;
@@ -1352,7 +1338,6 @@ namespace Ink_Canvas
             var inkCanvas1 = sender as InkCanvas;
             if (inkCanvas1 == null) return;
 
-            NotifyPluginPenModeChanged(inkCanvas1.EditingMode);
 
             if (IsCurrentPageFrozen && IsFreezeMutatingMode(inkCanvas1.EditingMode))
             {
@@ -1445,24 +1430,6 @@ namespace Ink_Canvas
             }
         }
 
-        /// <summary>
-        /// 供插件全屏服务调用的入口：进入/退出全屏（包装 FullScreenHelper，保存/恢复窗口状态）。
-        /// </summary>
-        internal void SetPluginFullScreen(bool isFullScreen)
-        {
-            try
-            {
-                if (isFullScreen == isFullScreenApplied) return;
-                if (isFullScreen) Helpers.FullScreenHelper.StartFullScreen(this);
-                else Helpers.FullScreenHelper.EndFullScreen(this);
-                isFullScreenApplied = isFullScreen;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"插件切换全屏失败: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
         public string _lastAppliedProfileName;
         private bool isLoaded;
         private bool forcePointEraser;
@@ -1479,9 +1446,9 @@ namespace Ink_Canvas
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             loadPenCanvas();
-            // 工具栏插件化按钮先注入到容器，确保 LoadSettings 内部对 Cursor_Icon / Pen_Icon 等的访问非空。
+            // 工具栏按钮先注入到容器，确保 LoadSettings 内部对 Cursor_Icon / Pen_Icon 等的访问非空。
             // Settings.Toolbar 此时尚为默认值（全部可见），与旧 XAML 行为一致。
-            InitializeToolbarPlugins();
+            InitializeToolbars();
             // 初始化 Popup 管理器（置顶 + 拖动跟随）。最快模式下延迟到首帧之后。
             if (!App.IsFastestStartupMode)
             {
@@ -1591,9 +1558,6 @@ namespace Ink_Canvas
             {
                 UnFoldFloatingBar_MouseUp(new object(), null);
             }
-
-            // 显示快抽悬浮按钮
-            ShowQuickDrawFloatingButton();
 
             // 液态玻璃浮动栏：延迟到首帧之后再起，避免启动瞬间截到自己的窗口
             Dispatcher.BeginInvoke(new Action(RestoreLiquidGlassBarOnStartup), DispatcherPriority.ContextIdle);
@@ -1734,7 +1698,6 @@ namespace Ink_Canvas
         private bool _allowCloseAfterExitVerification;
         private bool _isExitVerificationInProgress;
         private bool _forceCloseFromExitOrRestartButton;
-        private bool _exitApplicationRequested;
 
         /// <summary>
         /// 处理主窗口的关闭流程：记录关闭事件，按需进行退出密码验证或多次确认并据此取消或允许关闭。
@@ -1784,14 +1747,6 @@ namespace Ink_Canvas
                     CloseWhiteboardImmediately();
                     LogHelper.WriteLogToFile("Ink Canvas closing converted to exit whiteboard", LogHelper.LogType.Event);
                     return;
-                }
-
-                try
-                {
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile($"关闭快抽悬浮按钮时出错: {ex.Message}", LogHelper.LogType.Error);
                 }
 
                 try
@@ -1912,8 +1867,6 @@ namespace Ink_Canvas
 
             try
             {
-                PPTTimeCapsule?.Dispose();
-
                 // 清理视频展台资源
                 if (_cameraService != null)
                 {
@@ -1976,10 +1929,10 @@ namespace Ink_Canvas
             // 检查是否有待安装的更新
             CheckPendingUpdates();
 
-            if (_exitApplicationRequested && Application.Current != null)
-            {
-                Application.Current.Shutdown();
-            }
+            if (_isReloadingForLanguageChange) return;
+
+            App.IsAppExitByUser = true;
+            Application.Current?.Shutdown();
         }
 
         private void CheckPendingUpdates()
@@ -2565,8 +2518,6 @@ namespace Ink_Canvas
             WindowSettingsHelper.ApplyAlwaysOnTop(this);
             _popupManager?.OnTopmostSettingChanged();
 
-            // 通知插件窗口置顶状态变化（以实际应用后的 Topmost 为准）。
-            NotifyPluginTopMostChanged(Topmost);
         }
 
         private void StartTopmostMaintenance()
@@ -2974,14 +2925,7 @@ namespace Ink_Canvas
             }
         }
 
-        /// <summary>旧的帧率 ComboBox 事件处理器（已废弃）。
-        /// XAML 已移除 BoothFramerateComboBox，此方法保留以兼容代码中可能的事件订阅。</summary>
-        private void BoothFramerateComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            // 已废弃：单 ComboBox 直接选中 (W, H, FPS) 组合
-        }
-
-        /// <summary>在 _cameraService.AvailableCameras 中查找 CurrentCamera 的索引；找不到返回 -1。</summary>
+        /// <summary>在可用摄像头中查找当前摄像头；找不到返回 -1。</summary>
         private int FindCurrentCameraIndex()
         {
             if (_cameraService?.AvailableCameras == null || _cameraService.CurrentCamera == null)
@@ -3002,7 +2946,6 @@ namespace Ink_Canvas
         private bool _isBoothComboBoxUpdating;
 
         #endregion
-
 
         private void ToggleSwitchEnableInkToShape_Toggled(object sender, RoutedEventArgs e)
         {
@@ -3066,86 +3009,6 @@ namespace Ink_Canvas
             }
         }
 
-        private void ToggleSwitchEnablePPTTimeCapsule_Toggled(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (!isLoaded) return;
-                var toggle = sender as ToggleSwitch;
-                Settings.PowerPointSettings.EnablePPTTimeCapsule = toggle != null && toggle.IsOn;
-                SaveSettingsToFile();
-
-                // 如果当前在PPT放映模式，需要立即更新时间胶囊和快捷面板的显示状态
-                if (IsInPPTPresentationMode)
-                {
-                    UpdatePPTTimeCapsuleVisibility();
-                    UpdatePPTQuickPanelVisibility();
-                }
-
-                LogHelper.WriteLogToFile($"PPT时间显示胶囊已{(Settings.PowerPointSettings.EnablePPTTimeCapsule ? "启用" : "禁用")}", LogHelper.LogType.Event);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"切换PPT时间显示胶囊时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        private void ComboBoxPPTTimeCapsulePosition_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            try
-            {
-                if (!isLoaded) return;
-                var comboBox = sender as System.Windows.Controls.ComboBox;
-                if (comboBox != null)
-                {
-                    Settings.PowerPointSettings.PPTTimeCapsulePosition = comboBox.SelectedIndex;
-                    SaveSettingsToFile();
-
-                    if (IsInPPTPresentationMode)
-                    {
-                        UpdatePPTTimeCapsulePosition();
-                    }
-
-                    LogHelper.WriteLogToFile($"PPT时间胶囊位置已更改为: {comboBox.SelectedIndex}", LogHelper.LogType.Event);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"更改PPT时间胶囊位置时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 更新PPT时间胶囊的显示状态
-        /// </summary>
-        public void UpdatePPTTimeCapsuleVisibility()
-        {
-            try
-            {
-                if (PPTTimeCapsuleContainer == null || PPTTimeCapsule == null) return;
-
-                // 外部演示源（插件把自己的文档接入放映模式，如 PDF）不显示时间胶囊：
-                // 它没有 PPT 会话，时间胶囊内部依赖 PPTManager 的演示信息，且对 PDF 阅读无意义。
-                if (Settings.PowerPointSettings.EnablePPTTimeCapsule &&
-                    IsInPPTPresentationMode &&
-                    !IsExternalPresentationActive)
-                {
-                    PPTTimeCapsuleContainer.Visibility = Visibility.Visible;
-                    UpdatePPTTimeCapsulePosition();
-                    UpdatePPTTimeCapsuleOpacity();
-                    UpdatePPTTimeCapsuleScale();
-                }
-                else
-                {
-                    PPTTimeCapsuleContainer.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"更新PPT时间胶囊显示状态时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
         /// <summary>
         /// 更新PPT快捷面板的显示状态
         /// </summary>
@@ -3156,8 +3019,7 @@ namespace Ink_Canvas
                 if (PPTQuickPanelContainer == null || PPTQuickPanel == null) return;
 
                 // 仅在 PPT 模式下且用户开启“PPT 放映时显示快速面板”时显示
-                // 外部演示源不显示 PPT 快捷面板，理由同时间胶囊。
-                bool inSlideShow = IsInPPTPresentationMode && !IsExternalPresentationActive;
+                bool inSlideShow = IsInPPTPresentationMode;
                 bool showQuickPanel = Settings.PowerPointSettings.ShowPPTSidebarByDefault;
                 if (inSlideShow && showQuickPanel)
                 {
@@ -3175,123 +3037,6 @@ namespace Ink_Canvas
                 LogHelper.WriteLogToFile($"更新PPT快捷面板显示状态时出错: {ex.Message}", LogHelper.LogType.Error);
             }
         }
-
-        /// <summary>
-        /// 更新PPT时间胶囊的位置
-        /// </summary>
-        public void UpdatePPTTimeCapsulePosition()
-        {
-            try
-            {
-                if (PPTTimeCapsuleContainer == null) return;
-
-                int position = Settings.PowerPointSettings.PPTTimeCapsulePosition;
-                // 0-左上角, 1-右上角, 2-顶部居中
-                switch (position)
-                {
-                    case 0: // 左上角
-                        PPTTimeCapsuleContainer.HorizontalAlignment = HorizontalAlignment.Left;
-                        PPTTimeCapsuleContainer.VerticalAlignment = VerticalAlignment.Top;
-                        PPTTimeCapsuleContainer.Margin = new Thickness(20, 20, 0, 0);
-                        PPTTimeCapsuleContainer.RenderTransformOrigin = new Point(0, 0);
-                        break;
-                    case 1: // 右上角
-                        PPTTimeCapsuleContainer.HorizontalAlignment = HorizontalAlignment.Right;
-                        PPTTimeCapsuleContainer.VerticalAlignment = VerticalAlignment.Top;
-                        PPTTimeCapsuleContainer.Margin = new Thickness(0, 20, 20, 0);
-                        PPTTimeCapsuleContainer.RenderTransformOrigin = new Point(1, 0);
-                        break;
-                    case 2: // 顶部居中
-                        PPTTimeCapsuleContainer.HorizontalAlignment = HorizontalAlignment.Center;
-                        PPTTimeCapsuleContainer.VerticalAlignment = VerticalAlignment.Top;
-                        PPTTimeCapsuleContainer.Margin = new Thickness(0, 20, 0, 0);
-                        PPTTimeCapsuleContainer.RenderTransformOrigin = new Point(0.5, 0);
-                        break;
-                }
-
-                // 应用拖拽偏移
-                if (PPTTimeCapsule != null)
-                {
-                    PPTTimeCapsule.ApplyDragOffset(
-                        Settings.PowerPointSettings.PPTTimeCapsuleOffsetX,
-                        Settings.PowerPointSettings.PPTTimeCapsuleOffsetY);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"更新PPT时间胶囊位置时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 更新PPT时间胶囊的透明度
-        /// </summary>
-        public void UpdatePPTTimeCapsuleOpacity()
-        {
-            try
-            {
-                if (PPTTimeCapsuleContainer == null) return;
-                PPTTimeCapsuleContainer.Opacity = Settings.PowerPointSettings.PPTTimeCapsuleOpacity;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"更新PPT时间胶囊透明度时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 更新PPT时间胶囊的大小
-        /// </summary>
-        public void UpdatePPTTimeCapsuleScale()
-        {
-            try
-            {
-                if (PPTTimeCapsuleScaleTransform == null) return;
-                double scale = Settings.PowerPointSettings.PPTTimeCapsuleScale;
-                PPTTimeCapsuleScaleTransform.ScaleX = scale;
-                PPTTimeCapsuleScaleTransform.ScaleY = scale;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"更新PPT时间胶囊大小时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 保存PPT时间胶囊拖拽偏移量
-        /// </summary>
-        public void SavePPTTimeCapsuleOffset(double offsetX, double offsetY)
-        {
-            try
-            {
-                Settings.PowerPointSettings.PPTTimeCapsuleOffsetX = offsetX;
-                Settings.PowerPointSettings.PPTTimeCapsuleOffsetY = offsetY;
-                SaveSettingsToFile();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"保存PPT时间胶囊位置偏移时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 重置PPT时间胶囊拖拽偏移量
-        /// </summary>
-        public void ResetPPTTimeCapsuleOffset()
-        {
-            try
-            {
-                Settings.PowerPointSettings.PPTTimeCapsuleOffsetX = 0;
-                Settings.PowerPointSettings.PPTTimeCapsuleOffsetY = 0;
-                PPTTimeCapsule?.ResetDragOffset();
-                SaveSettingsToFile();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"重置PPT时间胶囊位置时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
 
         /// <summary>
         /// 处理命令行参数中的文件路径
@@ -3585,61 +3330,10 @@ namespace Ink_Canvas
 
         #region UIA置顶功能
 
-        /// <summary>
-        /// 应用UIA置顶功能
-        /// </summary>
         public void ApplyUIAccessTopMost()
         {
             WindowSettingsHelper.ApplyUIAccessTopMost(this);
         }
-
-        internal void OpenQuickDrawFromHotkey()
-        {
-            try
-            {
-                if (Settings?.RandSettings?.EnableQuickDraw != true)
-                    return;
-
-                if (Settings.RandSettings.QuickDrawExternalCaller &&
-                    QuickDrawWindow.TryLaunchExternalCaller())
-                    return;
-
-                var quickDrawWindow = new QuickDrawWindow();
-                quickDrawWindow.Owner = this;
-                quickDrawWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"打开快抽窗口失败: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 显示快抽悬浮按钮
-        /// </summary>
-        public void ShowQuickDrawFloatingButton()
-        {
-            try
-            {
-                var quickDrawButton = FindName("QuickDrawFloatingButton") as Controls.QuickDrawFloatingButtonControl;
-                if (quickDrawButton == null) return;
-
-                // 检查设置是否启用快抽功能
-                if (Settings?.RandSettings?.EnableQuickDraw == true)
-                {
-                    quickDrawButton.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    quickDrawButton.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"显示快抽悬浮按钮失败: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
-
 
         #endregion
     }

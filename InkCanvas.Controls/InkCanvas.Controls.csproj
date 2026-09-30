@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <RootNamespace>Ink_Canvas.Controls</RootNamespace>
     <AssemblyName>InkCanvas.Controls</AssemblyName>
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <LangVersion>10</LangVersion>
+    <LangVersion>14</LangVersion>
     <NoWarn>CA1416;CS1591</NoWarn>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -18,8 +18,8 @@
   <PropertyGroup>
     <PackageId>InkCanvas.Controls</PackageId>
     <Authors>InkCanvasForClass</Authors>
-    <Description>InkCanvas 墨迹白板（ICC-CE）插件共用 WPF 控件库：工具栏按钮、颜色选择、设置卡片等，供插件 UI 与宿主视觉风格保持一致。</Description>
-    <PackageTags>wpf;controls;whiteboard;plugin;inkcanvas</PackageTags>
+    <Description>InkCanvas 屏幕批注 WPF 控件库：工具栏按钮、颜色选择和设置卡片。</Description>
+    <PackageTags>wpf;controls;whiteboard;inkcanvas</PackageTags>
     <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/InkCanvasForClass/community</PackageProjectUrl>
     <RepositoryUrl>https://github.com/InkCanvasForClass/community</RepositoryUrl>
@@ -38,7 +38,7 @@
   <ItemGroup>
     <PackageReference Include="iNKORE.UI.WPF.Modern" Version="0.10.2.1" />
     <PackageReference Include="iNKORE.UI.WPF" Version="1.2.8" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.401" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

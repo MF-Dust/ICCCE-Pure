@@ -240,7 +240,6 @@ namespace Ink_Canvas.Properties
             dict["Btn_HistoryRollback"] = ("BtnStrings", "HistoryRollback");
             dict["Btn_ManualUpdate"] = ("BtnStrings", "ManualUpdate");
             dict["Btn_OpenNewSettings"] = ("BtnStrings", "OpenNewSettings");
-            dict["Btn_OpenPluginManager"] = ("BtnStrings", "OpenPluginManager");
             dict["Btn_Reset"] = ("BtnStrings", "Reset");
             dict["Btn_Restart"] = ("BtnStrings", "Restart");
             dict["Btn_Rollback"] = ("BtnStrings", "Rollback");
@@ -530,7 +529,6 @@ namespace Ink_Canvas.Properties
             dict["Home_ExitApp"] = ("HomeStrings", "Home_ExitApp");
             dict["Home_InkRecognitionSettings"] = ("HomeStrings", "Home_InkRecognitionSettings");
             dict["Home_MainUI"] = ("HomeStrings", "Home_MainUI");
-            dict["Home_PluginSettings"] = ("HomeStrings", "Home_PluginSettings");
             dict["Home_PPTSettings"] = ("HomeStrings", "Home_PPTSettings");
             dict["Home_Privacy"] = ("HomeStrings", "Home_Privacy");
             dict["Home_PrivacySettings"] = ("HomeStrings", "Home_PrivacySettings");
@@ -649,14 +647,6 @@ namespace Ink_Canvas.Properties
             dict["Nav_Advanced_Settings"] = ("NavStrings", "Nav_Advanced_Settings");
             dict["Nav_Automation_Settings"] = ("NavStrings", "Nav_Automation_Settings");
             dict["Nav_FriendlyLinks"] = ("NavStrings", "Nav_FriendlyLinks");
-            dict["Nav_Plugins"] = ("NavStrings", "Nav_Plugins");
-            dict["Plugin_Title"] = ("PluginStrings", "Plugin_Title");
-            dict["Plugin_Loading"] = ("PluginStrings", "Plugin_Loading");
-            dict["Plugin_LoadedCount"] = ("PluginStrings", "Plugin_LoadedCount");
-            dict["Plugin_NoPlugins"] = ("PluginStrings", "Plugin_NoPlugins");
-            dict["Plugin_LoadError"] = ("PluginStrings", "Plugin_LoadError");
-            dict["Plugin_Author"] = ("PluginStrings", "Plugin_Author");
-            dict["Plugin_Settings"] = ("PluginStrings", "Plugin_Settings");
             dict["Nav_PPT_Settings"] = ("NavStrings", "Nav_PPT_Settings");
             dict["Nav_Shortcuts"] = ("NavStrings", "Nav_Shortcuts");
             dict["Nav_Startup"] = ("NavStrings", "Nav_Startup");
@@ -892,7 +882,6 @@ namespace Ink_Canvas.Properties
             dict["Settings_Nav_Hotkey_Tooltip"] = ("NavStrings", "Settings_Nav_Hotkey_Tooltip");
             dict["Settings_Nav_Security"] = ("NavStrings", "Settings_Nav_Security");
             dict["Settings_Nav_Security_Tooltip"] = ("NavStrings", "Settings_Nav_Security_Tooltip");
-            dict["Settings_Plugins"] = ("NavStrings", "Settings_Plugins");
             dict["Settings_Title"] = ("NavStrings", "Settings_Title");
             dict["Nav_SettingsWindow_Title"] = ("NavStrings", "Nav_SettingsWindow_Title");
             dict["Nav_AppSettings"] = ("NavStrings", "Nav_AppSettings");
@@ -918,13 +907,10 @@ namespace Ink_Canvas.Properties
             dict["Nav_PPT_Tooltip"] = ("NavStrings", "Nav_PPT_Tooltip");
             dict["Nav_Update_Tooltip"] = ("NavStrings", "Nav_Update_Tooltip");
             dict["Nav_RandomDraw_Tooltip"] = ("NavStrings", "Nav_RandomDraw_Tooltip");
-            dict["Nav_PluginSettings"] = ("NavStrings", "Nav_PluginSettings");
             dict["Nav_AboutInkCanvas"] = ("NavStrings", "Nav_AboutInkCanvas");
             dict["Nav_NavigateError"] = ("NavStrings", "Nav_NavigateError");
             dict["Nav_Error"] = ("NavStrings", "Nav_Error");
-            dict["Nav_PluginSettingsFormat"] = ("NavStrings", "Nav_PluginSettingsFormat");
             dict["Nav_IndexBuildFailed"] = ("NavStrings", "Nav_IndexBuildFailed");
-            dict["Nav_LoadPluginSettingsFailed"] = ("NavStrings", "Nav_LoadPluginSettingsFailed");
             dict["Nav_PreloadPageFailed"] = ("NavStrings", "Nav_PreloadPageFailed");
             dict["Nav_PreloadPagesFailed"] = ("NavStrings", "Nav_PreloadPagesFailed");
             dict["Settings_Description"] = ("NavStrings", "Settings_Description");
@@ -1025,9 +1011,6 @@ namespace Ink_Canvas.Properties
             dict["Storage_OpenAppFolder"] = ("StorageStrings", "Storage_OpenAppFolder");
             dict["Storage_Other_Desc"] = ("StorageStrings", "Storage_Other_Desc");
             dict["Storage_PathBrowse"] = ("StorageStrings", "Storage_PathBrowse");
-            dict["Storage_Plugins_Desc"] = ("StorageStrings", "Storage_Plugins_Desc");
-            dict["Storage_Plugins_Header"] = ("StorageStrings", "Storage_Plugins_Header");
-            dict["Storage_Plugins_Hint"] = ("StorageStrings", "Storage_Plugins_Hint");
             dict["Storage_Refresh"] = ("StorageStrings", "Storage_Refresh");
             dict["Storage_SaveAsXml"] = ("StorageStrings", "Storage_SaveAsXml");
             dict["Storage_SaveFullPageStrokes"] = ("StorageStrings", "Storage_SaveFullPageStrokes");
@@ -1403,7 +1386,6 @@ namespace Ink_Canvas.Properties
                 NotificationStrings.Culture = value;
                 PerformanceStrings.Culture = value;
                 PPTStrings.Culture = value;
-                PluginStrings.Culture = value;
                 RandomStrings.Culture = value;
                 SecurityStrings.Culture = value;
                 StartupStrings.Culture = value;
@@ -1451,7 +1433,6 @@ namespace Ink_Canvas.Properties
                 "NavStrings" => NavStrings.GetString(key),
                 "NotificationStrings" => NotificationStrings.GetString(key),
                 "PPTStrings" => PPTStrings.GetString(key),
-                "PluginStrings" => PluginStrings.GetString(key),
                 "RandomStrings" => RandomStrings.GetString(key),
                 "SecurityStrings" => SecurityStrings.GetString(key),
                 "StartupStrings" => StartupStrings.GetString(key),

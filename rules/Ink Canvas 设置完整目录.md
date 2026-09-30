@@ -101,9 +101,7 @@
 │   │   │   ├── Button: 上传自定义 + Button: 管理自定义
 │   │   │   ├── SettingsCard: 黑板缩放比例 → Slider
 │   │   │   ├── LabeledSettingsCard: 画板模式显示时间 → ToggleSwitch
-│   │   │   ├── LabeledSettingsCard: 使用24小时制 → ToggleSwitch
-│   │   │   ├── LabeledSettingsCard: 画板模式显示鸡汤 → ToggleSwitch
-│   │   │   ├── SettingsCard: 鸡汤来源 → ComboBox + Button
+│   │   │   └── LabeledSettingsCard: 使用24小时制 → ToggleSwitch
 │   │   └── TextBlock "浮动栏按钮"
 │   │       ├── LabeledSettingsCard: 使用旧版浮动栏 UI → ToggleSwitch
 │   │       └── SettingsCard: 浮动栏按钮 → Clickable
@@ -222,11 +220,6 @@
 │   ├── TextBlock "PPT设置"
 │   │   ├── LabeledSettingsCard: 双指手势 → ToggleSwitch
 │   │   ├── LabeledSettingsCard: 手势翻页 → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 时间胶囊 → ToggleSwitch
-│   │   ├── SettingsCard: 时间胶囊位置 → ComboBox
-│   │   ├── SettingsCard: 时间胶囊透明度 → Slider
-│   │   ├── SettingsCard: 时间胶囊缩放 → Slider
-│   │   ├── SettingsCard: 时间胶囊重置位置 → Button
 │   │   └── LabeledSettingsCard: 放映时显示快捷面板 → ToggleSwitch
 │   ├── TextBlock "自动截图"
 │   │   ├── LabeledSettingsCard: 自动截图 → ToggleSwitch
@@ -302,8 +295,6 @@
 │   │       ├── SettingsCard: 备份 → TextBlock + Button: 清理
 │   │       ├── SettingsExpander: 自定义文件（默认展开）
 │   │       │   └── SettingsCard: 自定义文件说明
-│   │       ├── SettingsExpander: 插件（默认展开）
-│   │       │   └── SettingsCard: 插件说明
 │   │       ├── SettingsCard: 自动更新 → TextBlock + Button: 清理
 │   │       └── SettingsCard: 其他 → TextBlock
 │   └── 备份与还原
@@ -496,32 +487,6 @@
 │   └── (工作流编辑器 - 选择工作流时显示)
 │       └── TextBlock "自定义自动化规则"
 │           └── SettingsCard: 创建自定义的触发器→条件→行动规则 → Clickable
-├── 点名与计时器
-│   ├── TextBlock "随机点名"
-│   │   ├── LabeledSettingsCard: 显示编辑名单按钮 → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 启用随机和单人抽取 → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 启用快速抽取 → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 快抽调用所选外部点名 → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 使用外部调用 → ToggleSwitch
-│   │   ├── SettingsCard: 外部调用类型 → ComboBox
-│   │   ├── SettingsCard: 单次关闭延迟 → Slider
-│   │   └── SettingsCard: 单次最大人数 → Slider
-│   ├── TextBlock "背景设置"
-│   │   └── SettingsCard: 背景选择 → Button × 2 + ComboBox
-│   ├── TextBlock "新 UI"
-│   │   ├── LabeledSettingsCard: 使用新点名 UI → ToggleSwitch
-│   │   ├── LabeledSettingsCard: 避免重复抽取 → ToggleSwitch
-│   │   ├── SettingsCard: 历史记录数 → Slider
-│   │   └── SettingsCard: 权重 → Slider
-│   └── TextBlock "计时器"
-│       ├── SettingsCard: 计时器样式 → ComboBox
-│       ├── LabeledSettingsCard: 超时正计时 → ToggleSwitch
-│       ├── LabeledSettingsCard: 超时高亮 → ToggleSwitch
-│       ├── SettingsCard: 音量 → Slider
-│       ├── SettingsCard: 自定义提示音 → Button × 2
-│       ├── LabeledSettingsCard: 渐进提醒 → ToggleSwitch
-│       ├── SettingsCard: 渐进提醒音量 → Slider
-│       └── SettingsCard: 渐进提醒自定义音 → Button × 2
 ├── Debug
 │   ├── TextBlock "Debug"
 │   │   └── LabeledSettingsCard: 显示控制台 → ToggleSwitch
@@ -536,15 +501,6 @@
 │   └── 浮动栏主题市场 (FloatingBarThemeMarketPage)
 │       ├── Button: 刷新 + Button: 打开主题文件夹 + ProgressBar（加载条）
 │       └── ItemsControl: 市场主题列表（动态，含 安装 按钮）
-├── ── 插件设置 ──
-├── 插件
-│   ├── TextBlock "无"
-│   │   ├── Border: 插件数量状态
-│   │   └── StackPanel: 插件容器（动态加载）
-│   └── （插件设置页面动态加载 → PluginSettingsPage）
-├── 插件市场 (PluginMarketplacePage)
-│   ├── 左栏：搜索框 + 按钮（刷新/打开插件文件夹/管理源/本地安装）+ 源/镜像 ComboBox + 插件 ListView
-│   └── 右栏：插件详情（图标/名称/版本/作者/下载量/星标、安装/更新/应用重启按钮、依赖列表、说明文档）
 ├── ── 底部 ──
 ├── 友情链接
 │   └── TextBlock "无"

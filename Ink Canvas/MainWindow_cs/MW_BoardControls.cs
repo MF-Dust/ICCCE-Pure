@@ -43,25 +43,11 @@ namespace Ink_Canvas
             {
                 if (_currentWhiteboardIndex == value) return;
                 _currentWhiteboardIndex = value;
-                RaisePluginEvent(PluginWhiteboardPageChanged, _currentWhiteboardIndex, WhiteboardTotalCount, nameof(PluginWhiteboardPageChanged));
             }
         }
 
-        private int _whiteboardTotalCount = 1;
-
-        /// <summary>
-        /// 白板页面总数
-        /// </summary>
-        internal int WhiteboardTotalCount
-        {
-            get => _whiteboardTotalCount;
-            set
-            {
-                if (_whiteboardTotalCount == value) return;
-                _whiteboardTotalCount = value;
-                RaisePluginEvent(PluginWhiteboardPageChanged, CurrentWhiteboardIndex, _whiteboardTotalCount, nameof(PluginWhiteboardPageChanged));
-            }
-        }
+        /// <summary>白板页面总数。</summary>
+        internal int WhiteboardTotalCount { get; set; } = 1;
 
         /// <summary>
         /// 存储每个白板页面的时间机器历史记录

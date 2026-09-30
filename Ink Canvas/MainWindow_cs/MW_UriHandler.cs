@@ -106,15 +106,6 @@ namespace Ink_Canvas
                         if (isFloatingBarFolded)
                             this.Visibility = Settings.Automation.ThoroughlyHideWhenFolded ? Visibility.Hidden : Visibility.Visible;
                         return;
-                    case "randone":
-                        SymbolIconRandOne_MouseUp(null, null);
-                        return;
-                    case "rand":
-                        SymbolIconRand_MouseUp(null, null);
-                        return;
-                    case "timer":
-                        ImageCountdownTimer_MouseUp(null, null);
-                        return;
                     case "whiteboard":
                     case "board":
                         ImageBlackboard_MouseUp(null, null);
@@ -267,12 +258,6 @@ namespace Ink_Canvas
                 if (pathLower == "settings" || pathLower.StartsWith("settings/"))
                 {
                     HandleUriSettingsNavigation(uri);
-                    return;
-                }
-
-                if (pathLower.StartsWith("plugin/"))
-                {
-                    HandlePluginUriNavigation(uri, pathLower);
                     return;
                 }
 
@@ -510,28 +495,7 @@ namespace Ink_Canvas
         }
 
         /// <summary>
-        /// 把 <c>icc://plugin/&lt;pluginId&gt;/&lt;subPath&gt;?&lt;query&gt;</c> 派发给注册的插件 URI 处理器。
         /// 未处理（插件未注册/未加载/处理器返回 false）时仅写日志，不弹通知。
         /// </summary>
-        private void HandlePluginUriNavigation(string uri, string pathLower)
-        {
-            try
-            {
-                string rest = pathLower.Substring("plugin/".Length); // <pluginId>/<subPath> 或 <pluginId>
-                string[] segs = rest.Split(new[] { '/' }, 2, StringSplitOptions.None);
-                string pluginId = segs[0];
-                string subPath = segs.Length > 1 ? segs[1] : "";
-
-                bool handled = Plugins.PluginManager.Instance.TryDispatchUri(pluginId, subPath, uri);
-                if (!handled)
-                {
-                    LogHelper.WriteLogToFile($"插件 URI 未被处理: {uri}（插件 {pluginId} 未注册处理器或处理器返回 false）", LogHelper.LogType.Warning);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"派发插件 URI 失败: {ex.Message}", LogHelper.LogType.Error);
-            }
-        }
     }
 }

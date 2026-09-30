@@ -1,5 +1,21 @@
 # ICC-CE 代码贡献规范
 
+## 构建环境 / Build environment
+
+- 主程序及 WPF 库使用 .NET 10 SDK，运行需要 Windows 10 19041+ 和 .NET Desktop Runtime 10。
+- IACoreHelper 和 PowerPoint VSTO 外接程序保留 .NET Framework 4.7.2；PPT 通信契约保留 netstandard2.0。
+- 构建与保存/自动保存回归检查：
+  ```bash
+  dotnet build "Ink Canvas.sln" -c Release
+  dotnet run --project InkCanvas.Core.Tests -c Release
+  ```
+- 在交互式 Windows 桌面验证窗口加载、配置重载与正常关闭：
+  ```bash
+  dotnet run --project InkCanvas.Core.Tests -c Release -- --window-smoke
+  ```
+  此检查使用临时配置和真实主窗口，跳过应用启动时的文件关联注册与更新检查，不替代触摸笔和 PowerPoint 实机测试。
+- `InkCanvas.NativeInk.Tests` 对应未启用的实验墨迹管线。现有 `PredictionHorizonStaysWithinAdaptiveBounds` 检查在 .NET 6/10 下均失败；修改该管线时需单独运行并检查结果。
+
 ## 中文版
 
 ### 一、关于人工编写测试代码的要求

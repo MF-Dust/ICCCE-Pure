@@ -51,7 +51,6 @@ namespace Ink_Canvas
             HideSubPanelsImmediately();
             WaterMarkTime.Visibility = Visibility.Collapsed;
             WaterMarkDate.Visibility = Visibility.Collapsed;
-            BlackBoardWaterMark.Visibility = Visibility.Collapsed;
             ICCWaterMarkDark.Visibility = Visibility.Collapsed;
             ICCWaterMarkWhite.Visibility = Visibility.Collapsed;
             SwitchBackground(null, null);

@@ -1108,7 +1108,6 @@ namespace Ink_Canvas
             // 让原生湿墨路由把双指判为手势（CanvasGesture）而非墨迹——否则第二指会在
             // 宿主双指手势设置关闭时被当成墨迹画出来。单指书写时 ActiveTouchCount=1，
             // 不受影响（DecidePen 要求 >=2 才进 CanvasGesture）。
-            if (_pluginCanvasGestureHandler != null) return true;
 
             if (IsInPPTPresentationMode)
                 return Settings.PowerPointSettings.IsEnableTwoFingerGestureInPresentationMode
@@ -1425,8 +1424,6 @@ namespace Ink_Canvas
             TryAddElementExclusion(list, FindName("BorderImageSelectionControl") as FrameworkElement, dpi, windowTopLeftScreen);
             TryAddElementExclusion(list, FindName("BorderPdfPageSidebar") as FrameworkElement, dpi, windowTopLeftScreen);
             TryAddElementExclusion(list, FindName("ImageSelectionOverlay") as FrameworkElement, dpi, windowTopLeftScreen);
-            TryAddElementExclusion(list, FindName("QuickDrawFloatingButton") as FrameworkElement, dpi, windowTopLeftScreen);
-            TryAddElementExclusion(list, FindName("PPTTimeCapsuleContainer") as FrameworkElement, dpi, windowTopLeftScreen);
             TryAddElementExclusion(list, EraserOverlayCanvas, dpi, windowTopLeftScreen);
             return list;
         }

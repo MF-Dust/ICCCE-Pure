@@ -1,4 +1,3 @@
-using Ink_Canvas.Plugins;
 using Ink_Canvas.Properties;
 using iNKORE.UI.WPF.Modern.Common.IconKeys;
 using System;
@@ -22,7 +21,7 @@ namespace Ink_Canvas.Controls.Toolbar.FloatingToolbar.Items
 
         // 显式声明为 virtual，确保派生类的 override 能正确映射到接口成员
         // （接口默认实现 DIM 在间接继承时不会自动映射到派生类的新声明）
-        public virtual IReadOnlyList<PluginToolbarSettingInfo> CustomSettings => null;
+        public virtual IReadOnlyList<ToolbarSettingInfo> CustomSettings => null;
         public virtual Func<FrameworkElement> CustomSettingsPanelFactory => null;
 
         public string DisplayName => Strings.GetString(LocalizationKey) ?? LocalizationKey;

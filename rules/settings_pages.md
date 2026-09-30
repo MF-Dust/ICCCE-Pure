@@ -42,20 +42,16 @@
 │   ├── 外观 (BoardAppearancePage)
 │   └── 菜单 (BoardMenuPage)
 ├── 自动化 (AutomationWorkflowPage)
-├── 点名与计时器 (RandomDrawPage)
 ├── Debug (DebugPage，硬编码)
 ├── ── 浮动栏主题 ──（分隔符，Theme_FloatingBarThemesTitle）
 │   ├── 浮动栏主题 (FloatingBarThemePage)
 │   └── 浮动栏主题市场 (FloatingBarThemeMarketPage)
-├── ── 插件设置 ──（分隔符，Nav_PluginSettings）
-│   ├── 插件 (PluginPage)
-│   └── 插件市场 (PluginMarketplacePage)
 ├── ── 底部 ──（FooterMenuItems）
 ├── 友情链接 (FriendlyLinksPage)
 └── 关于 Ink Canvas (AboutPage)
 ```
 
-> 注意：`WhiteboardTipsPage`、`PPTPageFlipPreviewPage` 已注册在 `_pageTypes` 中但**没有导航项**，由其它页面内部跳转，勿在导航树里找它们。
+> 注意：`PPTPageFlipPreviewPage` 已注册在 `_pageTypes` 中但**没有导航项**，由其它页面内部跳转，勿在导航树里找它。
 
 ## 导航栏文字
 
@@ -98,14 +94,9 @@
 | Nav_BoardAppearance | 外观(白板) |
 | Nav_BoardMenu | 菜单(白板) |
 | AutomationStrings.Automation_Title | 自动化 |
-| RandomStrings.Random_Title | 点名与计时器 |
 | (硬编码) "Debug" | Debug |
 | Theme_FloatingBarThemesTitle | 浮动栏主题（分隔符标题） |
 | Theme_FloatingBarThemeMarketTitle | 浮动栏主题市场 |
-| Nav_PluginSettings | 插件设置(分隔符) |
-| Nav_Plugins | 插件 |
-| PluginStrings.Market_TabInstalled | 已安装 |
-| PluginStrings.Market_Title | 插件市场 |
 | Nav_FriendlyLinks | 友情链接 |
 | Nav_AboutInkCanvas | 关于 Ink Canvas |
 
@@ -122,7 +113,7 @@
 _pageTypes = new Dictionary<string, Type>
 {
     { "CanvasPage", typeof(CanvasPage) },
-    { "PluginPage", typeof(PluginPage) },
+    { "HomePage", typeof(HomePage) },
     // ... 见下方完整映射
 };
 ```
@@ -135,9 +126,8 @@ _pageTypes = new Dictionary<string, Type>
 
 - `_pageTypes` — Tag → 页面 Type（构造函数初始化，**唯一注册点**）
 - `_pages` — Tag → 页面实例缓存（`NavigateToPage` 时 `Activator.CreateInstance` 创建并缓存，重复导航复用实例）
-- `_pluginPages` — Tag → `PluginInfo`（插件设置页用；`NavigateToPage(tag, pluginInfo)` 会把 `CurrentPlugin` 塞给 `PluginSettingsPage`）
 
-### 完整映射（40 项）
+### 完整映射（35 项）
 
 ```csharp
 // SettingsWindow.xaml.cs 构造函数内，_pageTypes = new Dictionary<string, Type> { ... }
@@ -158,7 +148,6 @@ _pageTypes = new Dictionary<string, Type>
 { "BoardToolbarPage", typeof(BoardToolbarPage) },
 { "BoardAppearancePage", typeof(BoardAppearancePage) },
 { "BoardMenuPage", typeof(BoardMenuPage) },
-{ "WhiteboardTipsPage", typeof(WhiteboardTipsPage) },
 { "UpdatePage", typeof(UpdatePage) },
 { "NotificationPage", typeof(NotificationPage) },
 { "AnnouncementCenterPage", typeof(AnnouncementCenterPage) },
@@ -169,7 +158,6 @@ _pageTypes = new Dictionary<string, Type>
 { "CloudStoragePage", typeof(CloudStoragePage) },
 { "AutomationWorkflowPage", typeof(AutomationWorkflowPage) },
 { "PowerPointPage", typeof(PowerPointPage) },
-{ "RandomDrawPage", typeof(RandomDrawPage) },
 { "CanvasPage", typeof(CanvasPage) },
 { "InkRecognitionPage", typeof(InkRecognitionPage) },
 { "PerformancePage", typeof(PerformancePage) },
@@ -177,9 +165,6 @@ _pageTypes = new Dictionary<string, Type>
 { "FriendlyLinksPage", typeof(FriendlyLinksPage) },
 { "AboutPage", typeof(AboutPage) },
 { "Settings", typeof(SettingsPage) },
-{ "PluginPage", typeof(PluginPage) },
-{ "PluginSettingsPage", typeof(PluginSettingsPage) },
-{ "PluginMarketplacePage", typeof(PluginMarketplacePage) },
 { "PPTPageFlipPreviewPage", typeof(PPTPageFlipPreviewPage) },
 ```
 
@@ -195,7 +180,6 @@ _pageTypes = new Dictionary<string, Type>
 
 - `ParseUriCommand`：解析 `icc:` 前缀，host + path 转小写后作为命令
 - `icc://settings[ /<PageTag>][?key=<JsonKey>]` → `HandleUriSettingsNavigation`，例如 `icc://settings/CanvasPage?key=inkFadeSpeedMultiplier`
-- `icc://plugin/<pluginId>/<subPath>?<query>` → `HandlePluginUriNavigation`（见 plugin_sdk.md）
 
 ### 打开设置窗口流程
 

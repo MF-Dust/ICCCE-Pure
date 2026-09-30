@@ -36,33 +36,32 @@ dotnet build "Ink Canvas.sln" -c Debug -p:Platform=x64
 
 ```powershell
 dotnet build "InkCanvas.Controls\InkCanvas.Controls.csproj"
-dotnet build "InkCanvas.PluginSdk\InkCanvas.PluginSdk.csproj"
 dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 ```
 
 ## 项目列表
 
-### 解决方案内（7 个）
+### 解决方案内（8 个）
 
 | 项目 | csproj 路径 | 目标框架 | sln 平台映射 |
 | --- | --- | --- | --- |
-| InkCanvasForClass（主应用） | `Ink Canvas/InkCanvasForClass.csproj` | net6.0-windows10.0.19041.0 | `Debug\|x64` → `Debug\|x64`；`Release\|x64` → `Release\|Any CPU` |
-| InkCanvas.Controls | `InkCanvas.Controls/InkCanvas.Controls.csproj` | net6.0-windows10.0.19041.0 | 全部 Any CPU |
-| InkCanvas.PluginSdk | `InkCanvas.PluginSdk/InkCanvas.PluginSdk.csproj` | net6.0-windows10.0.19041.0 | 全部 Any CPU |
-| InkCanvas.SettingsTreeView | `InkCanvas.SettingsTreeView/InkCanvas.SettingsTreeView.csproj` | net6.0-windows10.0.19041.0 | 全部 Any CPU |
+| InkCanvasForClass（主应用） | `Ink Canvas/InkCanvasForClass.csproj` | net10.0-windows10.0.19041.0 | `Debug\|x64` → `Debug\|x64`；`Release\|x64` → `Release\|Any CPU` |
+| InkCanvas.Controls | `InkCanvas.Controls/InkCanvas.Controls.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
+| InkCanvas.SettingsTreeView | `InkCanvas.SettingsTreeView/InkCanvas.SettingsTreeView.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 | InkCanvas.PptAgent.Contracts | `InkCanvas.PPTAgent.Contracts/InkCanvas.PptAgent.Contracts.csproj` | netstandard2.0 | 全部 Any CPU |
 | InkCanvas.IACoreHelper | `InkCanvas.IACoreHelper/InkCanvas.IACoreHelper.csproj` | net472 | **所有配置一律映射到 x86** |
-| InkCanvas.LiquidGlassMagHost | `InkCanvas.LiquidGlassMagHost/InkCanvas.LiquidGlassMagHost.csproj` | net6.0-windows10.0.19041.0 | 真·多平台：AnyCPU/ARM→x64，ARM64→ARM64，x86→x86 |
+| InkCanvas.LiquidGlassMagHost | `InkCanvas.LiquidGlassMagHost/InkCanvas.LiquidGlassMagHost.csproj` | net10.0-windows10.0.19041.0 | 真·多平台：AnyCPU/ARM→x64，ARM64→ARM64，x86→x86 |
+| InkCanvas.NativeInk.Tests | `InkCanvas.NativeInk.Tests/InkCanvas.NativeInk.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
+| InkCanvas.Core.Tests | `InkCanvas.Core.Tests/InkCanvas.Core.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 
 > 注意目录名与项目名不一致：`InkCanvas.PptAgent.Contracts` 位于 `InkCanvas.PPTAgent.Contracts/`。
 > `Ink Canvas/InkCanvasForClass_*_wpftmp.csproj`、`InkCanvas.Controls/*_wpftmp.csproj` 是 WPF 编译中间产物，**不是真实项目，不要改**。
 
-### 解决方案外（2 个）
+### 解决方案外（1 个）
 
 | 项目 | csproj 路径 | 目标框架 | 说明 |
 | --- | --- | --- | --- |
 | InkCanvas.PowerPointAddIn | `InkCanvas.PowerPointAddIn/InkCanvas.PowerPointAddIn.csproj` | net472（VSTO） | 单独用 MSBuild 编译，见上文命令 2 |
-| InkCanvas.NativeInk.Tests | `InkCanvas.NativeInk.Tests/InkCanvas.NativeInk.Tests.csproj` | net6.0-windows10.0.19041.0 | 原生墨迹手动验证程序，按需单独编译 |
 
 ## 主项目 MSBuild 目标（改动构建流程前必读）
 

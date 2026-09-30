@@ -52,9 +52,7 @@ namespace Ink_Canvas
                     int currentSlide = _pptManager.GetCurrentSlideNumber();
                     for (int i = 1; i <= totalSlides; i++)
                     {
-                        var strokes = _singlePPTInkManager?.LoadSlideStrokes(i);
-                        if ((strokes == null || strokes.Count == 0) && i == currentSlide)
-                            strokes = inkCanvas.Strokes.Clone();
+                        var strokes = GetPptStrokesForSave(i, currentSlide);
                         pages.Add(new UInkPageInput
                         {
                             Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid,
@@ -68,11 +66,7 @@ namespace Ink_Canvas
                 {
                     for (int i = 1; i <= WhiteboardTotalCount; i++)
                     {
-                        var strokes = TimeMachineHistories[i] != null
-                            ? ApplyHistoriesToNewStrokeCollection(TimeMachineHistories[i])
-                            : new StrokeCollection();
-                        if (strokes.Count == 0 && i == CurrentWhiteboardIndex)
-                            strokes = inkCanvas.Strokes.Clone();
+                        var strokes = GetWhiteboardStrokesForSave(i);
                         pages.Add(new UInkPageInput
                         {
                             Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid,

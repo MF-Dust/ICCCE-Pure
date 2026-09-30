@@ -285,7 +285,6 @@ namespace Ink_Canvas.Helpers
                 // 功能快捷键
                 RegisterHotkey("DrawLine", Key.L, ModifierKeys.Alt, () => _mainWindow.DrawLineFromHotkey());
                 RegisterHotkey("Screenshot", Key.C, ModifierKeys.Alt, () => _mainWindow.SaveScreenShotToDesktop());
-                RegisterHotkey("QuickDraw", Key.K, ModifierKeys.Alt, () => _mainWindow.OpenQuickDrawFromHotkey());
                 RegisterHotkey("Hide", Key.V, ModifierKeys.Alt, () => _mainWindow.SymbolIconEmoji_MouseUp(null, null));
 
                 // 退出快捷键
@@ -1067,7 +1066,6 @@ namespace Ink_Canvas.Helpers
                     new HotkeyConfigItem { Name = "Pen5", Key = Key.D5, Modifiers = ModifierKeys.Alt },
                     new HotkeyConfigItem { Name = "DrawLine", Key = Key.L, Modifiers = ModifierKeys.Alt },
                     new HotkeyConfigItem { Name = "Screenshot", Key = Key.C, Modifiers = ModifierKeys.Alt },
-                    new HotkeyConfigItem { Name = "QuickDraw", Key = Key.K, Modifiers = ModifierKeys.Alt },
                     new HotkeyConfigItem { Name = "Hide", Key = Key.V, Modifiers = ModifierKeys.Alt },
                     new HotkeyConfigItem { Name = "Exit", Key = Key.Escape, Modifiers = ModifierKeys.None }
                 });
@@ -1144,14 +1142,6 @@ namespace Ink_Canvas.Helpers
                     {
                         LogHelper.WriteLogToFile($"注册快捷键 {hotkeyConfig.Name} 时出错: {ex.Message}", LogHelper.LogType.Error);
                     }
-                }
-
-                // 旧版 HotkeyConfig.json 无「快抽」项时补注册默认组合，避免升级后无快捷键
-                if (successCount > 0 && !IsHotkeyRegistered("QuickDraw"))
-                {
-                    var quickDrawAction = GetActionByName("QuickDraw");
-                    if (quickDrawAction != null && RegisterHotkey("QuickDraw", Key.K, ModifierKeys.Alt, quickDrawAction))
-                        successCount++;
                 }
 
                 if (successCount > 0)
@@ -1264,8 +1254,6 @@ namespace Ink_Canvas.Helpers
                         return () => _mainWindow.DrawLineFromHotkey();
                     case "Screenshot":
                         return () => _mainWindow.SaveScreenShotToDesktop();
-                    case "QuickDraw":
-                        return () => _mainWindow.OpenQuickDrawFromHotkey();
                     case "Hide":
                         return () => _mainWindow.SymbolIconEmoji_MouseUp(null, null);
                     case "Exit":

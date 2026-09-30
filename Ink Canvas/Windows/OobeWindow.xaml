@@ -127,12 +127,7 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Sync}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemLuckyRandom" Content="{x:Static props:RandomStrings.Random_Title}" Tag="step6">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.People}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemAdvanced" Content="{x:Static props:OobeStrings.Oobe_NavAdvanced}" Tag="step7">
+                <ui:NavigationViewItem x:Name="NavItemAdvanced" Content="{x:Static props:OobeStrings.Oobe_NavAdvanced}" Tag="step6">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}" />
                     </ui:NavigationViewItem.Icon>
@@ -466,11 +461,6 @@
                                                                   Icon="{x:Static ui:SegoeFluentIcons.Camera}"
                                                                   SwitchName="ToggleSwitchPPTAutoSaveScreenshots" />
 
-                                    <controls:LabeledSettingsCard x:Name="CardPPTTimeCapsule"
-                                                                  Header="{x:Static props:OobeStrings.Oobe_EnableTimeCapsule}"
-                                                                  Description="{x:Static props:OobeStrings.Oobe_EnableTimeCapsuleDesc}"
-                                                                  Icon="{x:Static ui:SegoeFluentIcons.QuietHours}"
-                                                                  SwitchName="ToggleSwitchPPTTimeCapsule" />
                                 </ikw:SimpleStackPanel>
 
                                 <!-- 步骤 6: 自动化 + 截图 -->
@@ -512,20 +502,7 @@
                                                                   SwitchName="ToggleSwitchSaveScreenshotsInDateFolders" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 7: 随机点名 -->
-                                <ikw:SimpleStackPanel x:Name="StepLuckyRandomPanel"
-                                                      Spacing="{StaticResource SettingsCardSpacing}"
-                                                      Visibility="Collapsed">
-                                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                                               Text="{x:Static props:RandomStrings.Random_Title}" />
-
-                                    <controls:LabeledSettingsCard x:Name="CardShowRandomAndSingleDraw"
-                                                                  Header="{x:Static props:OobeStrings.Oobe_ShowRollCallButtons}"
-                                                                  Icon="{x:Static ui:SegoeFluentIcons.People}"
-                                                                  SwitchName="ToggleSwitchShowRandomAndSingleDraw" />
-                                </ikw:SimpleStackPanel>
-
-                                <!-- 步骤 8: 高级 -->
+                                <!-- 步骤 7: 高级 -->
                                 <ikw:SimpleStackPanel x:Name="StepAdvancedPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">

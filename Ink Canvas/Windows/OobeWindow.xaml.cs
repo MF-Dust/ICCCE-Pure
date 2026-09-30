@@ -24,10 +24,10 @@ namespace Ink_Canvas.Windows
     {
         private readonly Settings _settings;
 
-        // 视图状态: -1 = 欢迎; 0..7 = 步骤; 8 = 完成
+        // 视图状态: -1 = 欢迎; 0..6 = 步骤; 7 = 完成
         private const int WelcomeIndex = -1;
-        private const int FinishIndex = 8;
-        private const int StepCount = 8;
+        private const int FinishIndex = 7;
+        private const int StepCount = 7;
         private const int MaxStepIndex = StepCount - 1;
 
         private int _currentStep = WelcomeIndex;
@@ -57,7 +57,6 @@ namespace Ink_Canvas.Windows
                 StepAppearancePanel,
                 StepPPTPanel,
                 StepAutomationPanel,
-                StepLuckyRandomPanel,
                 StepAdvancedPanel,
             };
 
@@ -69,7 +68,6 @@ namespace Ink_Canvas.Windows
                 NavItemAppearance,
                 NavItemPPT,
                 NavItemAutomation,
-                NavItemLuckyRandom,
                 NavItemAdvanced,
             };
 
@@ -151,7 +149,6 @@ namespace Ink_Canvas.Windows
                     CardPPTSupport.IsOn = _settings.PowerPointSettings.PowerPointSupport;
                     CardPPTAutoSaveStrokes.IsOn = _settings.PowerPointSettings.IsAutoSaveStrokesInPowerPoint;
                     CardPPTAutoSaveScreenshots.IsOn = _settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint;
-                    CardPPTTimeCapsule.IsOn = _settings.PowerPointSettings.EnablePPTTimeCapsule;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -168,15 +165,6 @@ namespace Ink_Canvas.Windows
                     }
                     CardAutoSaveStrokesAtClear.IsOn = _settings.Automation.IsAutoSaveScreenshotAtClear;
                     CardSaveScreenshotsInDateFolders.IsOn = _settings.Automation.IsSaveScreenshotsInDateFolders;
-                }
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-
-            try
-            {
-                if (_settings.RandSettings != null)
-                {
-                    CardShowRandomAndSingleDraw.IsOn = _settings.RandSettings.ShowRandomAndSingleDraw;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -264,7 +252,6 @@ namespace Ink_Canvas.Windows
                     _settings.PowerPointSettings.PowerPointSupport = CardPPTSupport.IsOn;
                     _settings.PowerPointSettings.IsAutoSaveStrokesInPowerPoint = CardPPTAutoSaveStrokes.IsOn;
                     _settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint = CardPPTAutoSaveScreenshots.IsOn;
-                    _settings.PowerPointSettings.EnablePPTTimeCapsule = CardPPTTimeCapsule.IsOn;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -281,15 +268,6 @@ namespace Ink_Canvas.Windows
                     {
                         _settings.Automation.FloatingWindowInterceptor.IsEnabled = CardFloatingWindowInterceptor.IsOn;
                     }
-                }
-            }
-            catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-
-            try
-            {
-                if (_settings.RandSettings != null)
-                {
-                    _settings.RandSettings.ShowRandomAndSingleDraw = CardShowRandomAndSingleDraw.IsOn;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -666,10 +644,6 @@ namespace Ink_Canvas.Windows
                     subtitle = Properties.OobeStrings.Oobe_Step6Subtitle;
                     break;
                 case 6:
-                    title = RandomStrings.Random_Title;
-                    subtitle = Properties.OobeStrings.Oobe_Step7Subtitle;
-                    break;
-                case 7:
                     title = Properties.OobeStrings.Oobe_Step8Title;
                     subtitle = Properties.OobeStrings.Oobe_Step8Subtitle;
                     break;

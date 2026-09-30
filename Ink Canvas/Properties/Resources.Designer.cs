@@ -13,7 +13,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.IO;
 using System.Resources;
 using System.Runtime.CompilerServices;
 
@@ -66,22 +65,5 @@ namespace Ink_Canvas.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static UnmanagedMemoryStream TimerDownNotice {
-            get {
-                return ResourceManager.GetStream("TimerDownNotice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-        /// </summary>
-        internal static UnmanagedMemoryStream ProgressiveAudio {
-            get {
-                return ResourceManager.GetStream("ProgressiveAudio", resourceCulture);
-            }
-        }
     }
 }

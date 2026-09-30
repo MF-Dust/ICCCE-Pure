@@ -191,7 +191,6 @@ namespace Ink_Canvas
                             e.Stroke.StylusPoints[random.Next(0, e.Stroke.StylusPoints.Count - 1)].ToPoint(),
                             e.Stroke.StylusPoints[random.Next(0, e.Stroke.StylusPoints.Count - 1)].ToPoint());
 
-                        RandWindow.randSeed = (int)(_speed * 100000 * 1000);
                     }
                 }
                 catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }

@@ -52,7 +52,9 @@ namespace Ink_Canvas
                 {
                     try
                     {
-                        string text = App.CachedSettingsJson ?? File.ReadAllText(App.RootPath + settingsFileName);
+                        string text = isStartup && App.CachedSettingsJson != null
+                            ? App.CachedSettingsJson
+                            : File.ReadAllText(App.RootPath + settingsFileName);
                         Settings = JsonConvert.DeserializeObject<Settings>(text);
 
                         if (Settings != null)
@@ -148,9 +150,6 @@ namespace Ink_Canvas
             {
                 LogHelper.WriteLogToFile(ex.ToString(), LogHelper.LogType.Error);
             }
-
-            // Migrate legacy chicken soup source setting to new multi-source format
-            SettingsManager.MigrateChickenSoupSettings();
 
             try
             {
@@ -412,7 +411,6 @@ namespace Ink_Canvas
                     GridBackgroundCover.Background = new SolidColorBrush(Color.FromRgb(234, 235, 237));
                     WaterMarkTime.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
                     WaterMarkDate.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
-                    BlackBoardWaterMark.Foreground = new SolidColorBrush(Color.FromRgb(22, 41, 36));
                     isUselightThemeColor = false;
                 }
                 else
@@ -420,7 +418,6 @@ namespace Ink_Canvas
                     GridBackgroundCover.Background = new SolidColorBrush(Color.FromRgb(22, 41, 36));
                     WaterMarkTime.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
                     WaterMarkDate.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
-                    BlackBoardWaterMark.Foreground = new SolidColorBrush(Color.FromRgb(234, 235, 237));
                     isUselightThemeColor = true;
                 }
 
@@ -579,19 +576,6 @@ namespace Ink_Canvas
                 Settings.InkToShape = new InkToShape();
             }
 
-            // RandSettings - UI initialization (settings loading moved to RandomDrawPage)
-            if (Settings.RandSettings != null)
-            {
-                if (BoardRandomDrawToolBtn != null)
-                    BoardRandomDrawToolBtn.Visibility = Settings.RandSettings.ShowRandomAndSingleDraw ? Visibility.Visible : Visibility.Collapsed;
-                if (BoardSingleDrawToolBtn != null)
-                    BoardSingleDrawToolBtn.Visibility = Settings.RandSettings.ShowRandomAndSingleDraw ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else
-            {
-                Settings.RandSettings = new RandSettings();
-            }
-
             // ModeSettings
             if (Settings.ModeSettings == null)
             {
@@ -627,6 +611,7 @@ namespace Ink_Canvas
                 Settings.Automation = new Automation();
             }
 
+            UpdateAutoSaveStrokesTimer();
             RefreshFloatingBarScreenFollowState();
 
             Dispatcher.BeginInvoke(new Action(() =>

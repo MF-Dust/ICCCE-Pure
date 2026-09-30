@@ -77,7 +77,6 @@
                                     <ColumnDefinition x:Name="BarInkCol" Width="0*"/>
                                     <ColumnDefinition x:Name="BarBackupsCol" Width="0*"/>
                                     <ColumnDefinition x:Name="BarCustomCol" Width="0*"/>
-                                    <ColumnDefinition x:Name="BarPluginsCol" Width="0*"/>
                                     <ColumnDefinition x:Name="BarUpdateCol" Width="0*"/>
                                     <ColumnDefinition x:Name="BarThemeCol" Width="0*"/>
                                     <ColumnDefinition x:Name="BarOtherCol" Width="0*"/>
@@ -116,10 +115,6 @@
                             <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
                                 <Border Width="10" Height="10" CornerRadius="2" Background="#EC4899"/>
                                 <TextBlock Text="{x:Static props:StorageStrings.Storage_Legend_Custom}" FontSize="12"/>
-                            </ikw:SimpleStackPanel>
-                            <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                <Border Width="10" Height="10" CornerRadius="2" Background="#06B6D4"/>
-                                <TextBlock Text="{x:Static props:StorageStrings.Storage_Plugins_Header}" FontSize="12"/>
                             </ikw:SimpleStackPanel>
                             <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
                                 <Border Width="10" Height="10" CornerRadius="2" Background="#EF4444"/>
@@ -209,20 +204,6 @@
                     <TextBlock x:Name="CustomSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     <ui:SettingsExpander.Items>
                         <ui:SettingsCard Description="{x:Static props:StorageStrings.Storage_Custom_Hint}"/>
-                    </ui:SettingsExpander.Items>
-                </ui:SettingsExpander>
-
-                <!-- 插件 -->
-                <ui:SettingsExpander x:Name="PluginsExpander"
-                                     Header="{x:Static props:StorageStrings.Storage_Legend_Plugins}"
-                                     Description="{x:Static props:StorageStrings.Storage_Plugins_Desc}"
-                                     IsExpanded="True">
-                    <ui:SettingsExpander.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Puzzle}"/>
-                    </ui:SettingsExpander.HeaderIcon>
-                    <TextBlock x:Name="PluginsSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                    <ui:SettingsExpander.Items>
-                        <ui:SettingsCard Description="{x:Static props:StorageStrings.Storage_Plugins_Hint}"/>
                     </ui:SettingsExpander.Items>
                 </ui:SettingsExpander>
 

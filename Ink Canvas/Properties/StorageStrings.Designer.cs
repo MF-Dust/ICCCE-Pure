@@ -142,8 +142,6 @@ namespace Ink_Canvas.Properties
 
         public static string Storage_Legend_Update => ResourceManager.GetString(nameof(Storage_Legend_Update), _resourceCulture);
 
-        public static string Storage_Legend_Plugins => ResourceManager.GetString(nameof(Storage_Legend_Plugins), _resourceCulture);
-
         public static string Storage_Logs_Desc => ResourceManager.GetString(nameof(Storage_Logs_Desc), _resourceCulture);
 
         public static string Storage_Logs_Header => ResourceManager.GetString(nameof(Storage_Logs_Header), _resourceCulture);
@@ -157,12 +155,6 @@ namespace Ink_Canvas.Properties
         public static string Storage_Other_Desc => ResourceManager.GetString(nameof(Storage_Other_Desc), _resourceCulture);
 
         public static string Storage_PathBrowse => ResourceManager.GetString(nameof(Storage_PathBrowse), _resourceCulture);
-
-        public static string Storage_Plugins_Desc => ResourceManager.GetString(nameof(Storage_Plugins_Desc), _resourceCulture);
-
-        public static string Storage_Plugins_Header => ResourceManager.GetString(nameof(Storage_Plugins_Header), _resourceCulture);
-
-        public static string Storage_Plugins_Hint => ResourceManager.GetString(nameof(Storage_Plugins_Hint), _resourceCulture);
 
         public static string Storage_Refresh => ResourceManager.GetString(nameof(Storage_Refresh), _resourceCulture);
 

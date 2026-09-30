@@ -48,8 +48,6 @@ namespace Ink_Canvas.Properties
 
         public static string Nav_FriendlyLinks => ResourceManager.GetString(nameof(Nav_FriendlyLinks), _resourceCulture);
 
-        public static string Nav_Plugins => ResourceManager.GetString(nameof(Nav_Plugins), _resourceCulture);
-
         public static string Nav_PPT_Settings => ResourceManager.GetString(nameof(Nav_PPT_Settings), _resourceCulture);
 
         public static string Nav_Shortcuts => ResourceManager.GetString(nameof(Nav_Shortcuts), _resourceCulture);
@@ -67,8 +65,6 @@ namespace Ink_Canvas.Properties
         public static string Settings_Nav_Security => ResourceManager.GetString(nameof(Settings_Nav_Security), _resourceCulture);
 
         public static string Settings_Nav_Security_Tooltip => ResourceManager.GetString(nameof(Settings_Nav_Security_Tooltip), _resourceCulture);
-
-        public static string Settings_Plugins => ResourceManager.GetString(nameof(Settings_Plugins), _resourceCulture);
 
         public static string Settings_Title => ResourceManager.GetString(nameof(Settings_Title), _resourceCulture);
 
@@ -166,19 +162,13 @@ namespace Ink_Canvas.Properties
 
         public static string Nav_RandomDraw_Tooltip => ResourceManager.GetString(nameof(Nav_RandomDraw_Tooltip), _resourceCulture);
 
-        public static string Nav_PluginSettings => ResourceManager.GetString(nameof(Nav_PluginSettings), _resourceCulture);
-
         public static string Nav_AboutInkCanvas => ResourceManager.GetString(nameof(Nav_AboutInkCanvas), _resourceCulture);
 
         public static string Nav_NavigateError => ResourceManager.GetString(nameof(Nav_NavigateError), _resourceCulture);
 
         public static string Nav_Error => ResourceManager.GetString(nameof(Nav_Error), _resourceCulture);
 
-        public static string Nav_PluginSettingsFormat => ResourceManager.GetString(nameof(Nav_PluginSettingsFormat), _resourceCulture);
-
         public static string Nav_IndexBuildFailed => ResourceManager.GetString(nameof(Nav_IndexBuildFailed), _resourceCulture);
-
-        public static string Nav_LoadPluginSettingsFailed => ResourceManager.GetString(nameof(Nav_LoadPluginSettingsFailed), _resourceCulture);
 
         public static string Nav_PreloadPageFailed => ResourceManager.GetString(nameof(Nav_PreloadPageFailed), _resourceCulture);
 

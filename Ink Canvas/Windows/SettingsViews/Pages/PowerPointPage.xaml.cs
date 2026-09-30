@@ -67,8 +67,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
             CardEnableTwoFingerGestureInPresentationMode.IsOn = ppt.IsEnableTwoFingerGestureInPresentationMode;
             CardEnableFingerGestureSlideShowControl.IsOn = ppt.IsEnableFingerGestureSlideShowControl;
-            CardEnablePPTTimeCapsule.IsOn = ppt.EnablePPTTimeCapsule;
-            ComboBoxPPTTimeCapsulePosition.SelectedIndex = ppt.PPTTimeCapsulePosition;
             CardShowPPTSidebarByDefault.IsOn = ppt.ShowPPTSidebarByDefault;
             CardShowPPTModePrompt.IsOn = ppt.ShowPPTModePrompt;
 
@@ -270,56 +268,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             if (!_isLoaded) return;
             SettingsManager.Settings.PowerPointSettings.IsEnableFingerGestureSlideShowControl = CardEnableFingerGestureSlideShowControl.IsOn;
             SettingsManager.SaveSettingsToFile();
-        }
-
-        private void ToggleSwitchEnablePPTTimeCapsule_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            SettingsManager.Settings.PowerPointSettings.EnablePPTTimeCapsule = CardEnablePPTTimeCapsule.IsOn;
-            SettingsManager.SaveSettingsToFile();
-            SettingsActionHub.OnPPTTimeCapsuleChanged();
-        }
-
-        private void ComboBoxPPTTimeCapsulePosition_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!_isLoaded || ComboBoxPPTTimeCapsulePosition == null) return;
-            SettingsManager.Settings.PowerPointSettings.PPTTimeCapsulePosition = ComboBoxPPTTimeCapsulePosition.SelectedIndex;
-            SettingsManager.SaveSettingsToFile();
-            SettingsActionHub.OnPPTTimeCapsulePositionChanged();
-        }
-
-        private void SliderPPTTimeCapsuleOpacity_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!_isLoaded || SliderPPTTimeCapsuleOpacity == null) return;
-            var val = Math.Round(SliderPPTTimeCapsuleOpacity.Value, 2);
-            if (SliderPPTTimeCapsuleOpacity.Value != val)
-            {
-                SliderPPTTimeCapsuleOpacity.Value = val;
-                return;
-            }
-            SettingsManager.Settings.PowerPointSettings.PPTTimeCapsuleOpacity = val;
-            SettingsManager.SaveSettingsToFile();
-            SettingsActionHub.OnPPTTimeCapsuleOpacityChanged();
-        }
-
-        private void SliderPPTTimeCapsuleScale_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!_isLoaded || SliderPPTTimeCapsuleScale == null) return;
-            var val = Math.Round(SliderPPTTimeCapsuleScale.Value, 1);
-            if (SliderPPTTimeCapsuleScale.Value != val)
-            {
-                SliderPPTTimeCapsuleScale.Value = val;
-                return;
-            }
-            SettingsManager.Settings.PowerPointSettings.PPTTimeCapsuleScale = val;
-            SettingsManager.SaveSettingsToFile();
-            SettingsActionHub.OnPPTTimeCapsuleScaleChanged();
-        }
-
-        private void ButtonResetPPTTimeCapsulePosition_Click(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            SettingsActionHub.OnResetPPTTimeCapsulePosition();
         }
 
         #endregion
