@@ -44,14 +44,6 @@ namespace Ink_Canvas.Properties
 
         public static string DevelopersLabel => ResourceManager.GetString(nameof(DevelopersLabel), _resourceCulture);
 
-        public static string DeviceIdLabel => ResourceManager.GetString(nameof(DeviceIdLabel), _resourceCulture);
-
-        public static string DeviceInfo => ResourceManager.GetString(nameof(DeviceInfo), _resourceCulture);
-
-        public static string DeviceInfo_Loading => ResourceManager.GetString(nameof(DeviceInfo_Loading), _resourceCulture);
-
-        public static string LaunchCountLabel => ResourceManager.GetString(nameof(LaunchCountLabel), _resourceCulture);
-
         public static string LicenseBody => ResourceManager.GetString(nameof(LicenseBody), _resourceCulture);
 
         public static string LicenseTitle => ResourceManager.GetString(nameof(LicenseTitle), _resourceCulture);
@@ -60,62 +52,11 @@ namespace Ink_Canvas.Properties
 
         public static string PhigrosCr => ResourceManager.GetString(nameof(PhigrosCr), _resourceCulture);
 
-        public static string PrivacyAgreement => ResourceManager.GetString(nameof(PrivacyAgreement), _resourceCulture);
-
-        public static string PrivacyAndTelemetry => ResourceManager.GetString(nameof(PrivacyAndTelemetry), _resourceCulture);
-
-        public static string RefreshDeviceInfo => ResourceManager.GetString(nameof(RefreshDeviceInfo), _resourceCulture);
-
-        public static string Telemetry_Basic => ResourceManager.GetString(nameof(Telemetry_Basic), _resourceCulture);
-
-        public static string Telemetry_Off => ResourceManager.GetString(nameof(Telemetry_Off), _resourceCulture);
-
-        public static string Telemetry_Optional => ResourceManager.GetString(nameof(Telemetry_Optional), _resourceCulture);
-
-        public static string TelemetryLabel => ResourceManager.GetString(nameof(TelemetryLabel), _resourceCulture);
-
         public static string ThanksContributors => ResourceManager.GetString(nameof(ThanksContributors), _resourceCulture);
 
         public static string Title => ResourceManager.GetString(nameof(Title), _resourceCulture);
 
-        public static string TotalUsageLabel => ResourceManager.GetString(nameof(TotalUsageLabel), _resourceCulture);
-
-        public static string UpdatePriorityLabel => ResourceManager.GetString(nameof(UpdatePriorityLabel), _resourceCulture);
-
-        public static string UsageFrequencyLabel => ResourceManager.GetString(nameof(UsageFrequencyLabel), _resourceCulture);
-
         public static string VersionLabel => ResourceManager.GetString(nameof(VersionLabel), _resourceCulture);
 
-        public static string DeviceInfo_Failed => ResourceManager.GetString(nameof(DeviceInfo_Failed), _resourceCulture);
-
-        public static string Unknown => ResourceManager.GetString(nameof(Unknown), _resourceCulture);
-
-        public static string UpdatePriority_High => ResourceManager.GetString(nameof(UpdatePriority_High), _resourceCulture);
-
-        public static string UpdatePriority_Low => ResourceManager.GetString(nameof(UpdatePriority_Low), _resourceCulture);
-
-        public static string UpdatePriority_Medium => ResourceManager.GetString(nameof(UpdatePriority_Medium), _resourceCulture);
-
-        public static string UsageFrequency_High => ResourceManager.GetString(nameof(UsageFrequency_High), _resourceCulture);
-
-        public static string UsageFrequency_Low => ResourceManager.GetString(nameof(UsageFrequency_Low), _resourceCulture);
-
-        public static string UsageFrequency_Medium => ResourceManager.GetString(nameof(UsageFrequency_Medium), _resourceCulture);
-
-        public static string Privacy_ConfirmDisableTelemetry_Message => ResourceManager.GetString(nameof(Privacy_ConfirmDisableTelemetry_Message), _resourceCulture);
-
-        public static string Privacy_ConfirmDisableTelemetry_Title => ResourceManager.GetString(nameof(Privacy_ConfirmDisableTelemetry_Title), _resourceCulture);
-
-        public static string Privacy_PrivacyAgreementRequired_Message => ResourceManager.GetString(nameof(Privacy_PrivacyAgreementRequired_Message), _resourceCulture);
-
-        public static string Privacy_PrivacyAgreementRequired_Title => ResourceManager.GetString(nameof(Privacy_PrivacyAgreementRequired_Title), _resourceCulture);
-
-        public static string Privacy_PrivacyFileNotFound_Message => ResourceManager.GetString(nameof(Privacy_PrivacyFileNotFound_Message), _resourceCulture);
-
-        public static string Privacy_PrivacyFileNotFound_Title => ResourceManager.GetString(nameof(Privacy_PrivacyFileNotFound_Title), _resourceCulture);
-
-        public static string Privacy_ConfirmRevokePrivacy_Message => ResourceManager.GetString(nameof(Privacy_ConfirmRevokePrivacy_Message), _resourceCulture);
-
-        public static string Privacy_ConfirmRevokePrivacy_Title => ResourceManager.GetString(nameof(Privacy_ConfirmRevokePrivacy_Title), _resourceCulture);
     }
 }

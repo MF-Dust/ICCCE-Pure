@@ -50,20 +50,6 @@
                 </ui:SettingsExpander.Items>
             </ui:SettingsExpander>
 
-            <ui:SettingsExpander x:Name="ExpanderDevice"
-                             Header="{x:Static props:FeedbackStrings.Page1_DeviceInfo}"
-                             Description="{x:Static props:FeedbackStrings.Page1_DeviceInfoDesc}">
-                <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Devices2}"/>
-                </ui:SettingsExpander.HeaderIcon>
-                <ui:SettingsExpander.Items>
-                    <ui:SettingsCard ContentAlignment="Left">
-                        <CheckBox x:Name="CheckDeviceId" IsChecked="False"
-                                  Content="{x:Static props:FeedbackStrings.Page1_DeviceId}"/>
-                    </ui:SettingsCard>
-                </ui:SettingsExpander.Items>
-            </ui:SettingsExpander>
-
             <ui:SettingsExpander x:Name="ExpanderConfiguration"
                              Header="{x:Static props:FeedbackStrings.Page1_Config}"
                              Description="{x:Static props:FeedbackStrings.Page1_ConfigDesc}">

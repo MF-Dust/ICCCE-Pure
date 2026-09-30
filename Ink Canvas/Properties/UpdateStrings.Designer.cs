@@ -180,12 +180,5 @@ namespace Ink_Canvas.Properties
 
         public static string Btn_OK => ResourceManager.GetString(nameof(Btn_OK), _resourceCulture);
 
-        public static string Channel_PrivacyRequired => ResourceManager.GetString(nameof(Channel_PrivacyRequired), _resourceCulture);
-
-        public static string Channel_PrivacyRequiredTitle => ResourceManager.GetString(nameof(Channel_PrivacyRequiredTitle), _resourceCulture);
-
-        public static string Channel_TelemetryRequired => ResourceManager.GetString(nameof(Channel_TelemetryRequired), _resourceCulture);
-
-        public static string Channel_TelemetryRequiredTitle => ResourceManager.GetString(nameof(Channel_TelemetryRequiredTitle), _resourceCulture);
     }
 }

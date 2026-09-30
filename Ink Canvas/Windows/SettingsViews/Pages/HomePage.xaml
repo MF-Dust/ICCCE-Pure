@@ -76,13 +76,6 @@
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 
-                    <ui:SettingsCard Header="{x:Static props:HomeStrings.Home_Privacy}" Description="{x:Static props:HomeStrings.Home_PrivacySettings}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="PrivacyPage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Shield}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-
                     <ui:SettingsCard Header="{x:Static props:NavStrings.Settings_Nav_Security}" Description="{x:Static props:NavStrings.Settings_Nav_Security_Tooltip}"
                         IsClickEnabled="True" Click="QuickNavCard_Click" Tag="SecurityPage">
                         <ui:SettingsCard.HeaderIcon>
@@ -94,22 +87,6 @@
                         IsClickEnabled="True" Click="QuickNavCard_Click" Tag="AdvancedPage">
                         <ui:SettingsCard.HeaderIcon>
                             <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-
-                    <ui:SettingsCard Header="{x:Static props:NavStrings.Nav_Performance}" Description="{x:Static props:HomeStrings.Home_PerformanceSettings}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="PerformancePage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.SpeedHigh}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-                    
-                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                        Text="{x:Static props:HomeStrings.Home_MainUI}" />
-                    <ui:SettingsCard Header="{x:Static props:HomeStrings.Home_Window}" Description="{x:Static props:HomeStrings.Home_WindowSettings}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="WindowPage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Pinned}" />
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 
@@ -191,13 +168,6 @@
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 
-                    <ui:SettingsCard Header="{x:Static props:AnnouncementStrings.CenterTitle}" Description="{x:Static props:AnnouncementStrings.CenterHint}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="AnnouncementCenterPage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.BulletedList}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-
                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
                         Text="{x:Static props:NotificationStrings.Type_Other}" />
                     <ui:SettingsCard Header="{x:Static props:AdvancedStrings.Experimental}" Description="{x:Static props:AdvancedStrings.Experimental}"
@@ -218,13 +188,6 @@
                         IsClickEnabled="True" Click="QuickNavCard_Click" Tag="BackupPage">
                         <ui:SettingsCard.HeaderIcon>
                             <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Sync}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-
-                    <ui:SettingsCard Header="{x:Static props:CloudStorageStrings.CloudStorage_Manage}" Description="{x:Static props:HomeStrings.Home_CloudStorageSettings}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="CloudStoragePage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Cloud}" />
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 
@@ -262,15 +225,6 @@
                         IsClickEnabled="True" Click="QuickNavCard_Click" Tag="DebugPage">
                         <ui:SettingsCard.HeaderIcon>
                             <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.DeveloperTools}" />
-                        </ui:SettingsCard.HeaderIcon>
-                    </ui:SettingsCard>
-
-                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                        Text="{x:Static props:NavStrings.Nav_FriendlyLinks}" />
-                    <ui:SettingsCard Header="{x:Static props:NavStrings.Nav_FriendlyLinks}" Description="{x:Static props:HomeStrings.Home_FriendlyLinks}"
-                        IsClickEnabled="True" Click="QuickNavCard_Click" Tag="FriendlyLinksPage">
-                        <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}" />
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 

@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using MessageBox = iNKORE.UI.WPF.Modern.Controls.MessageBox;
 
 namespace Ink_Canvas.Windows.SettingsViews.Pages
@@ -35,7 +34,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         }
 
         private bool _isLoaded;
-        private bool _isChangingUpdateChannelInternally;
         private bool _isChangingUpdatePackageArchInternally;
 
         private UpdateUiState _state = UpdateUiState.Idle;
@@ -275,10 +273,8 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private async void UpdateChannelSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_isLoaded) return;
-            if (_isChangingUpdateChannelInternally) return;
             if (!(UpdateChannelSelector.SelectedItem is ComboBoxItem cbi) || cbi.Tag == null) return;
 
-            var oldChannel = SettingsManager.Settings.Startup.UpdateChannel;
             string channel = cbi.Tag.ToString();
             UpdateChannel newChannel = channel == "Beta" ? UpdateChannel.Beta
                 : channel == "Preview" ? UpdateChannel.Preview
@@ -287,49 +283,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             if (SettingsManager.Settings.Startup.UpdateChannel == newChannel)
                 return;
 
-            bool isTestChannel = newChannel == UpdateChannel.Preview || newChannel == UpdateChannel.Beta;
-
-            if (isTestChannel && !SettingsManager.Settings.Startup.HasAcceptedTelemetryPrivacy)
-            {
-                MessageBox.Show(
-                    UpdateStrings.Channel_PrivacyRequired,
-                    UpdateStrings.Channel_PrivacyRequiredTitle,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
-
-                SettingsManager.Settings.Startup.UpdateChannel = oldChannel;
-                RevertChannelSelection(oldChannel);
-                SettingsManager.SaveSettingsToFile();
-                LogHelper.WriteLogToFile("Settings | User not accepted privacy, reverted update channel");
-                return;
-            }
-
-            if (isTestChannel && SettingsManager.Settings.Startup.TelemetryUploadLevel == TelemetryUploadLevel.None)
-            {
-                var result = MessageBox.Show(
-                    UpdateStrings.Channel_TelemetryRequired,
-                    UpdateStrings.Channel_TelemetryRequiredTitle,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    SettingsManager.Settings.Startup.TelemetryUploadLevel = TelemetryUploadLevel.Basic;
-                    SettingsManager.SaveSettingsToFile();
-                    LogHelper.WriteLogToFile("Settings | Telemetry enabled (Basic) for preview/beta update channel");
-                }
-                else
-                {
-                    SettingsManager.Settings.Startup.UpdateChannel = oldChannel;
-                    RevertChannelSelection(oldChannel);
-                    SettingsManager.SaveSettingsToFile();
-                    LogHelper.WriteLogToFile("Settings | User declined telemetry, reverted update channel");
-                    return;
-                }
-            }
-
             SettingsManager.Settings.Startup.UpdateChannel = newChannel;
-            DeviceIdentifier.UpdateUsageChannel(newChannel);
             LogHelper.WriteLogToFile($"Settings | Update channel changed to {SettingsManager.Settings.Startup.UpdateChannel}");
             SettingsManager.SaveSettingsToFile();
 
@@ -346,31 +300,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
                 SettingsActionHub.OnUpdateChannelChanged();
             }
-        }
-
-        private void RevertChannelSelection(UpdateChannel targetChannel)
-        {
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                _isChangingUpdateChannelInternally = true;
-                try
-                {
-                    string targetTag = targetChannel.ToString();
-                    foreach (var item in UpdateChannelSelector.Items)
-                    {
-                        if (item is ComboBoxItem cbi && cbi.Tag != null &&
-                            string.Equals(cbi.Tag.ToString(), targetTag, StringComparison.OrdinalIgnoreCase))
-                        {
-                            UpdateChannelSelector.SelectedItem = cbi;
-                            break;
-                        }
-                    }
-                }
-                finally
-                {
-                    _isChangingUpdateChannelInternally = false;
-                }
-            }), DispatcherPriority.Normal);
         }
 
         #endregion

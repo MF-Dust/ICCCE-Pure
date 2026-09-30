@@ -87,23 +87,11 @@
   <data name="DictationDoNotDisturbWhiteboardHint" xml:space="preserve">
     <value>Suppress dynamic notifications, legacy notifications, and Windows toasts in whiteboard or blackboard mode.</value>
   </data>
-  <data name="EnableAnnouncements" xml:space="preserve">
-    <value>Enable announcements</value>
-  </data>
-  <data name="EnableAnnouncementsHint" xml:space="preserve">
-    <value>Fetch announcements after startup and receive realtime announcement pushes.</value>
-  </data>
   <data name="EnableDynamic" xml:space="preserve">
     <value>Enable dynamic notifications</value>
   </data>
   <data name="EnableDynamicHint" xml:space="preserve">
-    <value>Use a top pill notification for announcements, updates, and local messages.</value>
-  </data>
-  <data name="EnableForcePopup" xml:space="preserve">
-    <value>Enable important announcement popups</value>
-  </data>
-  <data name="EnableForcePopupHint" xml:space="preserve">
-    <value>Important announcements can open expanded by default while remaining dismissible.</value>
+    <value>Show updates and local messages in a top capsule notification.</value>
   </data>
   <data name="EnableWindowsToast" xml:space="preserve">
     <value>Enable Windows system notifications</value>
@@ -121,7 +109,7 @@
     <value>Seconds before important messages close automatically.</value>
   </data>
   <data name="NavTooltip" xml:space="preserve">
-    <value>Announcement, message reminder, and dynamic notification settings</value>
+    <value>Message reminders and dynamic notification settings</value>
   </data>
   <data name="NewVersion" xml:space="preserve">
     <value>New version available: {0}</value>
@@ -150,17 +138,8 @@
   <data name="PlacementFloatingBarAbove" xml:space="preserve">
     <value>Above floating toolbar</value>
   </data>
-  <data name="Provider_Announcement" xml:space="preserve">
-    <value>Announcement provider</value>
-  </data>
-  <data name="Provider_AnnouncementDesc" xml:space="preserve">
-    <value>Fetch remote announcements and receive realtime pushes.</value>
-  </data>
   <data name="Provider_Disabled" xml:space="preserve">
     <value>Disabled</value>
-  </data>
-  <data name="Provider_HttpOnly" xml:space="preserve">
-    <value>HTTP polling available, realtime push unavailable</value>
   </data>
   <data name="Provider_Local" xml:space="preserve">
     <value>Local message provider</value>
@@ -168,23 +147,8 @@
   <data name="Provider_LocalDesc" xml:space="preserve">
     <value>Receives app internal prompts, errors, and plugin messages.</value>
   </data>
-  <data name="Provider_NoToken" xml:space="preserve">
-    <value>Token not configured</value>
-  </data>
-  <data name="Provider_Reconnecting" xml:space="preserve">
-    <value>Reconnecting</value>
-  </data>
   <data name="Provider_Running" xml:space="preserve">
     <value>Running</value>
-  </data>
-  <data name="Provider_Starting" xml:space="preserve">
-    <value>Starting</value>
-  </data>
-  <data name="Provider_Stopped" xml:space="preserve">
-    <value>Stopped</value>
-  </data>
-  <data name="Provider_WaitingRestart" xml:space="preserve">
-    <value>Takes effect on next startup</value>
   </data>
   <data name="Provider_WindowsToast" xml:space="preserve">
     <value>Windows system notifications</value>
@@ -196,7 +160,7 @@
     <value>Reminder provider management</value>
   </data>
   <data name="ProviderManagementHint" xml:space="preserve">
-    <value>View enabled and runtime status for announcement, local message, and system notification providers.</value>
+    <value>Manage local message and Windows notification providers.</value>
   </data>
   <data name="ProviderRefresh" xml:space="preserve">
     <value>Refresh status</value>
@@ -263,8 +227,5 @@
   </data>
   <data name="ViewDetails" xml:space="preserve">
     <value>View details</value>
-  </data>
-  <data name="ViewHistory" xml:space="preserve">
-    <value>View history</value>
   </data>
 </root>

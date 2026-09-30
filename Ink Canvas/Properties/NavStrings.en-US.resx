@@ -51,9 +51,6 @@
   <data name="Nav_Automation_Settings" xml:space="preserve">
     <value>Automation</value>
   </data>
-  <data name="Nav_FriendlyLinks" xml:space="preserve">
-    <value>Sponsor &amp; friendly links</value>
-  </data>
   <data name="Nav_Plugins" xml:space="preserve">
     <value>Plugins</value>
   </data>
@@ -146,12 +143,6 @@
   </data>
   <data name="Nav_Basic_Tooltip" xml:space="preserve">
     <value>Basic settings</value>
-  </data>
-  <data name="Nav_Privacy" xml:space="preserve">
-    <value>Privacy</value>
-  </data>
-  <data name="Nav_Privacy_Tooltip" xml:space="preserve">
-    <value>Privacy &amp; telemetry settings</value>
   </data>
   <data name="Nav_MainInterface" xml:space="preserve">
     <value>Main Interface</value>
@@ -260,12 +251,6 @@
   </data>
   <data name="Settings_Description" xml:space="preserve">
     <value>This is the settings page</value>
-  </data>
-  <data name="Nav_Performance" xml:space="preserve">
-    <value>Performance</value>
-  </data>
-  <data name="Nav_Performance_Tooltip" xml:space="preserve">
-    <value>Performance monitoring and device evaluation</value>
   </data>
   <data name="Menu_AddedItems" xml:space="preserve">
     <value>Added menu items</value>

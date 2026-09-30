@@ -18,17 +18,16 @@ namespace Ink_Canvas.Windows
 {
     /// <summary>
     /// 首次启动体验(OOBE)窗口。使用 iNKORE.UI.WPF.Modern 的 NavigationView 作为左侧导航,
-    /// 引导用户依次完成欢迎页、8 个配置步骤与完成摘要页。
+    /// 引导用户依次完成欢迎页、6 个配置步骤与完成摘要页。
     /// </summary>
     public partial class OobeWindow : Window
     {
         private readonly Settings _settings;
 
-        // 视图状态: -1 = 欢迎; 0..6 = 步骤; 7 = 完成
+        // 视图状态: -1 = 欢迎; 0..5 = 步骤; 6 = 完成
         private const int WelcomeIndex = -1;
-        private const int FinishIndex = 7;
-        private const int StepCount = 7;
-        private const int MaxStepIndex = StepCount - 1;
+        private const int StepCount = 6;
+        private const int FinishIndex = StepCount;
 
         private int _currentStep = WelcomeIndex;
         private bool _suppressNavSelection;
@@ -51,7 +50,6 @@ namespace Ink_Canvas.Windows
 
             _stepPanels = new FrameworkElement[]
             {
-                StepTelemetryPanel,
                 StepCanvasPanel,
                 StepGesturesPanel,
                 StepAppearancePanel,
@@ -62,7 +60,6 @@ namespace Ink_Canvas.Windows
 
             _navItems = new[]
             {
-                NavItemTelemetry,
                 NavItemCanvas,
                 NavItemGestures,
                 NavItemAppearance,
@@ -84,13 +81,11 @@ namespace Ink_Canvas.Windows
             {
                 if (_settings.Startup != null)
                 {
-                    ComboBoxTelemetryUploadLevel.SelectedIndex = (int)_settings.Startup.TelemetryUploadLevel;
                     CardFoldAtStartup.IsOn = _settings.Startup.IsFoldAtStartup;
                     CardAutoUpdate.IsOn = _settings.Startup.IsAutoUpdate;
                     int crashAction = _settings.Startup.CrashAction;
                     if (crashAction < 0 || crashAction > 2) crashAction = 0;
                     ComboBoxCrashAction.SelectedIndex = crashAction;
-                    CheckBoxPrivacyAccepted.IsChecked = _settings.Startup.HasAcceptedTelemetryPrivacy;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -185,15 +180,11 @@ namespace Ink_Canvas.Windows
             {
                 if (_settings.Startup != null)
                 {
-                    int level = ComboBoxTelemetryUploadLevel.SelectedIndex;
-                    if (level < 0) level = 0;
-                    _settings.Startup.TelemetryUploadLevel = (TelemetryUploadLevel)level;
                     _settings.Startup.IsFoldAtStartup = CardFoldAtStartup.IsOn;
                     _settings.Startup.IsAutoUpdate = CardAutoUpdate.IsOn;
                     int crashAction = ComboBoxCrashAction.SelectedIndex;
                     if (crashAction < 0 || crashAction > 2) crashAction = 0;
                     _settings.Startup.CrashAction = crashAction;
-                    _settings.Startup.HasAcceptedTelemetryPrivacy = CheckBoxPrivacyAccepted.IsChecked == true;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
@@ -405,44 +396,6 @@ namespace Ink_Canvas.Windows
             }
         }
 
-        private void CheckBoxPrivacyAccepted_Changed(object sender, RoutedEventArgs e)
-        {
-            UpdateConfirmEnabled();
-        }
-
-        private bool _privacyDialogShown;
-
-        private void HyperlinkPrivacy_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            if (_privacyDialogShown) return;
-            _privacyDialogShown = true;
-            try
-            {
-                var dialog = new PrivacyAgreementWindow { Owner = this };
-                bool? result = dialog.ShowDialog();
-                if (result == true && dialog.UserAccepted)
-                {
-                    CheckBoxPrivacyAccepted.IsChecked = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
-            finally
-            {
-                Dispatcher.BeginInvoke(new Action(() => _privacyDialogShown = false),
-                    System.Windows.Threading.DispatcherPriority.Background);
-            }
-        }
-
-        private void UpdateConfirmEnabled()
-        {
-            if (BtnConfirm == null) return;
-            BtnConfirm.IsEnabled = true;
-        }
-
         #endregion
 
         #region 高DPI/多屏自适应窗口控制
@@ -596,8 +549,6 @@ namespace Ink_Canvas.Windows
                     BtnConfirmIcon.Icon = SegoeFluentIcons.ChevronRight;
                 }
 
-                UpdateConfirmEnabled();
-
                 if (!instant && animateDirection != 0)
                 {
                     AnimateContentSlide(animateDirection);
@@ -620,30 +571,26 @@ namespace Ink_Canvas.Windows
             switch (step)
             {
                 case 0:
-                    title = Properties.OobeStrings.Oobe_Step1Title;
-                    subtitle = Properties.OobeStrings.Oobe_Step1Subtitle;
-                    break;
-                case 1:
                     title = Properties.OobeStrings.Oobe_Step2Title;
                     subtitle = Properties.OobeStrings.Oobe_Step2Subtitle;
                     break;
-                case 2:
+                case 1:
                     title = Properties.OobeStrings.Oobe_Step3Title;
                     subtitle = Properties.OobeStrings.Oobe_Step3Subtitle;
                     break;
-                case 3:
+                case 2:
                     title = ThemeStrings.Theme_GroupTitle;
                     subtitle = Properties.OobeStrings.Oobe_Step4Subtitle;
                     break;
-                case 4:
+                case 3:
                     title = Properties.OobeStrings.Oobe_Step5Title;
                     subtitle = Properties.OobeStrings.Oobe_Step5Subtitle;
                     break;
-                case 5:
+                case 4:
                     title = Properties.OobeStrings.Oobe_Step6Title;
                     subtitle = Properties.OobeStrings.Oobe_Step6Subtitle;
                     break;
-                case 6:
+                case 5:
                     title = Properties.OobeStrings.Oobe_Step8Title;
                     subtitle = Properties.OobeStrings.Oobe_Step8Subtitle;
                     break;
@@ -660,14 +607,6 @@ namespace Ink_Canvas.Windows
         {
             FinishSummaryHost.Children.Clear();
 
-            string telemetryText;
-            switch (ComboBoxTelemetryUploadLevel.SelectedIndex)
-            {
-                case 0: telemetryText = Properties.OobeStrings.Oobe_TelemetryNone; break;
-                case 1: telemetryText = Properties.OobeStrings.Oobe_TelemetryBasic; break;
-                default: telemetryText = Properties.OobeStrings.Oobe_TelemetryOptional; break;
-            }
-
             string themeText;
             string backdropText = GetSelectedComboBoxContent(ComboBoxWindowBackdrop, ThemeStrings.Theme_WindowBackdrop_None);
             switch (ComboBoxTheme.SelectedIndex)
@@ -677,7 +616,6 @@ namespace Ink_Canvas.Windows
                 default: themeText = ThemeStrings.Theme_System; break;
             }
 
-            AddSummaryRow(SegoeFluentIcons.Shield, Properties.OobeStrings.Oobe_SummaryTelemetryLevel, telemetryText);
             AddSummaryRow(SegoeFluentIcons.Sync, UpdateStrings.Header_AutoUpdate, BoolText(CardAutoUpdate.IsOn));
             AddSummaryRow(SegoeFluentIcons.Personalize, Properties.OobeStrings.Oobe_SummaryAppTheme, themeText);
             AddSummaryRow(SegoeFluentIcons.FullScreen, ThemeStrings.Theme_WindowBackdrop, backdropText);

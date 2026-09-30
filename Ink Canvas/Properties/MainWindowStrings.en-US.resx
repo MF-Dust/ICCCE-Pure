@@ -705,12 +705,6 @@ Please check if the update was successful.</value>
   <data name="Main_Screenshot_DefaultHint" xml:space="preserve">
     <value>Drag to select an area; right-click or double-click to select the full screen; confirm after freehand drawing</value>
   </data>
-  <data name="Main_Privacy_FileNotFound" xml:space="preserve">
-    <value>Privacy policy file not found (privacy.txt).</value>
-  </data>
-  <data name="Main_Privacy_ReadError" xml:space="preserve">
-    <value>Error reading privacy policy file.</value>
-  </data>
   <data name="Main_App_RestartLoopDetected" xml:space="preserve">
     <value>The app has restarted 5 times in a row. Auto-restart stopped. Please contact the developer or check your system environment.</value>
   </data>

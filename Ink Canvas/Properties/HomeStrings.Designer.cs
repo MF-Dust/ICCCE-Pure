@@ -54,17 +54,11 @@ namespace Ink_Canvas.Properties
 
         public static string Home_CanvasSettings => ResourceManager.GetString(nameof(Home_CanvasSettings), _resourceCulture);
 
-        public static string Home_CloudStorageSettings => ResourceManager.GetString(nameof(Home_CloudStorageSettings), _resourceCulture);
-
         public static string Home_InkRecognitionSettings => ResourceManager.GetString(nameof(Home_InkRecognitionSettings), _resourceCulture);
 
         public static string Home_MainUI => ResourceManager.GetString(nameof(Home_MainUI), _resourceCulture);
 
         public static string Home_PPTSettings => ResourceManager.GetString(nameof(Home_PPTSettings), _resourceCulture);
-
-        public static string Home_Privacy => ResourceManager.GetString(nameof(Home_Privacy), _resourceCulture);
-
-        public static string Home_PrivacySettings => ResourceManager.GetString(nameof(Home_PrivacySettings), _resourceCulture);
 
         public static string Home_RandomAndTimer => ResourceManager.GetString(nameof(Home_RandomAndTimer), _resourceCulture);
 
@@ -82,13 +76,9 @@ namespace Ink_Canvas.Properties
 
         public static string Home_ClockSettings => ResourceManager.GetString(nameof(Home_ClockSettings), _resourceCulture);
 
-        public static string Home_PerformanceSettings => ResourceManager.GetString(nameof(Home_PerformanceSettings), _resourceCulture);
-
         public static string Home_BackupSettings => ResourceManager.GetString(nameof(Home_BackupSettings), _resourceCulture);
 
         public static string Home_BoardSettings => ResourceManager.GetString(nameof(Home_BoardSettings), _resourceCulture);
-
-        public static string Home_FriendlyLinks => ResourceManager.GetString(nameof(Home_FriendlyLinks), _resourceCulture);
 
         public static string Splash_Starting => ResourceManager.GetString(nameof(Splash_Starting), _resourceCulture);
     }

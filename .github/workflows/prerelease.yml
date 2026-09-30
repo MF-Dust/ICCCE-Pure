@@ -237,7 +237,6 @@ jobs:
 
       - name: Build or publish app (Release)
         env:
-          DLASS_TELEMETRY_TOKEN: ${{ secrets.DLASS_TELEMETRY_TOKEN }}
         run: |
           $runtimeIdentifier = if ("${{ matrix.architecture }}" -eq "AnyCPU") { "win-x64" } else { "win-x86" }
           $publishDir = "artifacts/publish/${{ matrix.architecture }}"

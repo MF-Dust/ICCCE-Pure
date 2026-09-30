@@ -73,7 +73,6 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 | `CopyIACoreHelper` | AfterTargets=Build，`PublishSingleFile != true` | 复制 IACore helper exe 到主输出目录 |
 | `CopyLiquidGlassMagHost` | AfterTargets=Build | 复制 MagHost exe 到主输出目录 |
 | `CopyIACoreHelperToPublishDirectory` / `CopyLiquidGlassMagHostToPublishDirectory` | AfterTargets=Publish，`PublishSingleFile == true` | 单文件发布时的对应复制 |
-| `GenerateTelemetryToken` / `CleanTelemetryToken` | BeforeTargets=PrepareResources | 仅当环境变量 `DLASS_TELEMETRY_TOKEN` 非空时注入 |
 | `SetAssemblyInformationalVersion` | AfterTargets=GetBuildVersion | 配合 Nerdbank.GitVersioning 写版本号 |
 
 **Copy target 的平台陷阱**（csproj 内原注释）：

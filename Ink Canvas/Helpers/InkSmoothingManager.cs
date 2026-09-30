@@ -15,7 +15,6 @@ namespace Ink_Canvas.Helpers
     {
         private readonly AsyncAdvancedBezierSmoothing _asyncSmoothing;
         private readonly HardwareAcceleratedInkProcessor _hardwareProcessor;
-        private readonly InkSmoothingPerformanceMonitor _performanceMonitor;
         private readonly InkSmoothingConfig _config;
         private readonly Dispatcher _uiDispatcher;
         private bool _disposed;
@@ -26,8 +25,6 @@ namespace Ink_Canvas.Helpers
             _config = InkSmoothingConfig.FromSettings();
             _config.ApplyQualitySettings();
 
-            _performanceMonitor = new InkSmoothingPerformanceMonitor();
-
             _asyncSmoothing = new AsyncAdvancedBezierSmoothing(uiDispatcher)
             {
                 SmoothingStrength = _config.SmoothingStrength,
@@ -36,8 +33,7 @@ namespace Ink_Canvas.Helpers
                 UseHardwareAcceleration = _config.UseHardwareAcceleration,
                 MaxConcurrentTasks = _config.MaxConcurrentTasks,
                 UseAdaptiveInterpolation = _config.UseAdaptiveInterpolation,
-                CurveTension = _config.CurveTension,
-                PerformanceMonitor = _performanceMonitor
+                CurveTension = _config.CurveTension
             };
 
             _hardwareProcessor = new HardwareAcceleratedInkProcessor();
@@ -79,7 +75,6 @@ namespace Ink_Canvas.Helpers
             if (originalStroke == null || originalStroke.StylusPoints.Count < 2)
                 return originalStroke;
 
-            var stopwatch = Stopwatch.StartNew();
             Stroke result = originalStroke;
 
             try
@@ -115,13 +110,6 @@ namespace Ink_Canvas.Helpers
                 Debug.WriteLine($"墨迹平滑失败: {ex.Message}");
                 result = originalStroke;
             }
-            finally
-            {
-                stopwatch.Stop();
-                if (!_config.UseAsyncProcessing)
-                    _performanceMonitor.RecordProcessingTime(stopwatch.Elapsed);
-                PerformanceMonitorHelper.UpdateSmoothingStats(GetDetailedStats());
-            }
 
             return result;
         }
@@ -134,7 +122,6 @@ namespace Ink_Canvas.Helpers
             if (originalStroke == null || originalStroke.StylusPoints.Count < 2)
                 return originalStroke;
 
-            var stopwatch = Stopwatch.StartNew();
             Stroke result;
 
             try
@@ -185,12 +172,6 @@ namespace Ink_Canvas.Helpers
                 Debug.WriteLine($"同步墨迹平滑失败: {ex.Message}");
                 result = originalStroke;
             }
-            finally
-            {
-                stopwatch.Stop();
-                _performanceMonitor.RecordProcessingTime(stopwatch.Elapsed);
-                PerformanceMonitorHelper.UpdateSmoothingStats(GetDetailedStats());
-            }
 
             return result;
         }
@@ -210,59 +191,6 @@ namespace Ink_Canvas.Helpers
             _asyncSmoothing.MaxConcurrentTasks = newConfig.MaxConcurrentTasks;
             _asyncSmoothing.UseAdaptiveInterpolation = newConfig.UseAdaptiveInterpolation;
             _asyncSmoothing.CurveTension = newConfig.CurveTension;
-        }
-
-        /// <summary>
-        /// 获取性能统计信息
-        /// </summary>
-        public string GetPerformanceStats()
-        {
-            return $"平均处理时间: {_performanceMonitor.GetAverageProcessingTimeMs():F2}ms, " +
-                   $"最大处理时间: {_performanceMonitor.GetMaxProcessingTimeMs():F2}ms, " +
-                   $"样本数: {_performanceMonitor.GetSampleCount()}";
-        }
-
-        /// <summary>
-        /// 获取性能监控器实例（供外部读取详细统计）
-        /// </summary>
-        public InkSmoothingPerformanceMonitor PerformanceMonitor => _performanceMonitor;
-
-        public void ResetPerformanceStats()
-        {
-            _performanceMonitor.Reset();
-            PerformanceMonitorHelper.UpdateSmoothingStats(GetDetailedStats());
-        }
-
-        /// <summary>
-        /// 获取详细的墨迹纠正性能统计
-        /// </summary>
-        public InkSmoothingDetailedStats GetDetailedStats()
-        {
-            return new InkSmoothingDetailedStats
-            {
-                SampleCount = _performanceMonitor.GetSampleCount(),
-                AvgTotalMs = _performanceMonitor.GetAverageProcessingTimeMs(),
-                MaxTotalMs = _performanceMonitor.GetMaxProcessingTimeMs(),
-                AvgBezierMs = _performanceMonitor.GetAverageBezierTimeMs(),
-                AvgResampleMs = _performanceMonitor.GetAverageResampleTimeMs(),
-                AvgSemaphoreWaitMs = _performanceMonitor.GetAverageSemaphoreWaitMs(),
-                MaxSemaphoreWaitMs = _performanceMonitor.GetMaxSemaphoreWaitMs(),
-                AvgThreadPoolQueueMs = _performanceMonitor.GetAverageThreadPoolQueueMs(),
-                MaxThreadPoolQueueMs = _performanceMonitor.GetMaxThreadPoolQueueMs(),
-                AvgComputeMs = _performanceMonitor.GetAverageComputeMs(),
-                MaxComputeMs = _performanceMonitor.GetMaxComputeMs(),
-                AvgPointCopyMs = _performanceMonitor.GetAveragePointCopyMs(),
-                MaxPointCopyMs = _performanceMonitor.GetMaxPointCopyMs(),
-                AvgStrokeConstructionMs = _performanceMonitor.GetAverageStrokeConstructionMs(),
-                MaxStrokeConstructionMs = _performanceMonitor.GetMaxStrokeConstructionMs(),
-                AvgDispatcherWaitMs = _performanceMonitor.GetAverageDispatcherWaitMs(),
-                MaxDispatcherWaitMs = _performanceMonitor.GetMaxDispatcherWaitMs(),
-                AvgUiCallbackMs = _performanceMonitor.GetAverageUiCallbackMs(),
-                MaxUiCallbackMs = _performanceMonitor.GetMaxUiCallbackMs(),
-                AvgInputPoints = _performanceMonitor.GetAverageInputPointCount(),
-                AvgOutputPoints = _performanceMonitor.GetAverageOutputPointCount(),
-                Samples = _performanceMonitor.GetSamples()
-            };
         }
 
         /// <summary>
@@ -363,35 +291,5 @@ namespace Ink_Canvas.Helpers
         public TimeSpan ProcessingTime { get; set; }
         public bool WasAsync { get; set; }
         public bool UsedHardwareAcceleration { get; set; }
-    }
-
-    /// <summary>
-    /// 墨迹纠正详细性能统计
-    /// </summary>
-    public class InkSmoothingDetailedStats
-    {
-        public int SampleCount { get; set; }
-        public double AvgTotalMs { get; set; }
-        public double MaxTotalMs { get; set; }
-        public double AvgBezierMs { get; set; }
-        public double AvgResampleMs { get; set; }
-        public double AvgSemaphoreWaitMs { get; set; }
-        public double MaxSemaphoreWaitMs { get; set; }
-        public double AvgThreadPoolQueueMs { get; set; }
-        public double MaxThreadPoolQueueMs { get; set; }
-        public double AvgComputeMs { get; set; }
-        public double MaxComputeMs { get; set; }
-        public double AvgPointCopyMs { get; set; }
-        public double MaxPointCopyMs { get; set; }
-        public double AvgStrokeConstructionMs { get; set; }
-        public double MaxStrokeConstructionMs { get; set; }
-        public double AvgDispatcherWaitMs { get; set; }
-        public double MaxDispatcherWaitMs { get; set; }
-        public double AvgUiCallbackMs { get; set; }
-        public double MaxUiCallbackMs { get; set; }
-        public double AvgInputPoints { get; set; }
-        public double AvgOutputPoints { get; set; }
-        public System.Collections.Generic.List<InkSmoothingPipelineSample> Samples { get; set; }
-            = new System.Collections.Generic.List<InkSmoothingPipelineSample>();
     }
 }

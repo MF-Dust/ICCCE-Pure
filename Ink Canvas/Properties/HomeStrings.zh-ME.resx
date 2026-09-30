@@ -60,9 +60,6 @@
   <data name="Home_CanvasSettings" xml:space="preserve">
     <value>画板调教</value>
   </data>
-  <data name="Home_CloudStorageSettings" xml:space="preserve">
-    <value>Dlass 与 WebDav 上云调教</value>
-  </data>
   <data name="Home_InkRecognitionSettings" xml:space="preserve">
     <value>墨迹纠正调教</value>
   </data>
@@ -74,12 +71,6 @@
   </data>
   <data name="Home_PPTSettings" xml:space="preserve">
     <value>PPT 联动调教</value>
-  </data>
-  <data name="Home_Privacy" xml:space="preserve">
-    <value>小秘密</value>
-  </data>
-  <data name="Home_PrivacySettings" xml:space="preserve">
-    <value>小秘密与遥测调教</value>
   </data>
   <data name="Home_RandomAndTimer" xml:space="preserve">
     <value>天选之人与倒计时</value>
@@ -105,17 +96,11 @@
   <data name="Home_ClockSettings" xml:space="preserve">
     <value>小闹钟显示调教</value>
   </data>
-  <data name="Home_PerformanceSettings" xml:space="preserve">
-    <value>性能监控与 pp 体检</value>
-  </data>
   <data name="Home_BackupSettings" xml:space="preserve">
     <value>设置与数据存档</value>
   </data>
   <data name="Home_BoardSettings" xml:space="preserve">
     <value>白板装备栏与外观调教</value>
-  </data>
-  <data name="Home_FriendlyLinks" xml:space="preserve">
-    <value>氪金与友军</value>
   </data>
   <data name="Splash_Starting" xml:space="preserve">
     <value>正在召唤 Ink Canvas，请稍等一下下...</value>

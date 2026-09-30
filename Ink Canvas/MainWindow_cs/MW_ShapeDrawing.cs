@@ -2664,7 +2664,7 @@ namespace Ink_Canvas
                 CancelPauseStraightenTimer(MouseRealtimeStrokeId);
                 InitializeRealtimeBrushTipStateFromPoint(MouseRealtimeStrokeId, p);
                 var sv = GetStrokeVisual(MouseRealtimeStrokeId);
-                RealtimeInkPerformanceMonitor.BeginStroke(sv, RealtimeInkInputKind.Mouse);
+                RealtimeInkFrameScheduler.BeginStrokeSession();
                 TryAppendRealtimeVelocityBrushTipPoint(sv, MouseRealtimeStrokeId, p);
                 RealtimeInkFrameScheduler.RequestRedraw(sv);
             }
@@ -2799,7 +2799,7 @@ namespace Ink_Canvas
                     TouchDownPointsList.Remove(MouseRealtimeStrokeId);
                     CleanupRealtimeBrushTipState(MouseRealtimeStrokeId);
                     CancelPauseStraightenTimer(MouseRealtimeStrokeId);
-                    RealtimeInkPerformanceMonitor.EndStroke(sv);
+                    RealtimeInkFrameScheduler.EndStrokeSession();
                     _isMouseRealtimeInking = false;
                 }
             }

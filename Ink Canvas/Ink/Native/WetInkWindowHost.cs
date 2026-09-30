@@ -40,7 +40,6 @@ namespace Ink_Canvas.Ink.Native
         private readonly AutoResetEvent _workEvent = new AutoResetEvent(false);
         private readonly ManualResetEventSlim _threadReady = new ManualResetEventSlim(false);
         private readonly object _targetSync = new object();
-        private readonly Dictionary<long, long> _telemetryLastRealTimestampBySession = new Dictionary<long, long>();
 
         private IntPtr _ownerHwnd;
         private IntPtr _overlayHwnd;
@@ -318,106 +317,14 @@ namespace Ink_Canvas.Ink.Native
             }
 
             WetInkApplyResult result;
-            var applyStartTicks = System.Diagnostics.Stopwatch.GetTimestamp();
             try
             {
                 result = _renderer.Apply(batch);
-                // 新湿墨实时渲染完成一帧：沿用 NativePointerInputSource 提供的微秒时间戳，
-                // 仅按本次提交相对上次已提交快照真正新增的 delta 样本计算 earliest/latest，
-                // 避免把整笔首点误当作当前帧的最早样本。
-                long earliestSampleAtTicks = 0L;
-                long latestSampleAtTicks = 0L;
-                if (batch != null && batch.OrderedItems.Count > 0)
-                {
-                    long earliestMicroseconds = long.MaxValue;
-                    long latestMicroseconds = 0;
-                    for (var i = 0; i < batch.OrderedItems.Count; i++)
-                    {
-                        var item = batch.OrderedItems[i];
-                        if (item.Kind == WetInkMailboxItemKind.Boundary)
-                        {
-                            var command = item.BoundaryCommand;
-                            if (command.Kind == WetInkBoundaryCommandKind.BeginStroke)
-                            {
-                                _telemetryLastRealTimestampBySession.Remove(command.SessionId);
-                            }
-                            else if (command.Kind == WetInkBoundaryCommandKind.CancelStroke
-                                || command.Kind == WetInkBoundaryCommandKind.RetireStroke
-                                || command.Kind == WetInkBoundaryCommandKind.Reset
-                                || command.Kind == WetInkBoundaryCommandKind.Shutdown)
-                            {
-                                _telemetryLastRealTimestampBySession.Remove(command.SessionId);
-                            }
-                            continue;
-                        }
-
-                        var snapshot = item.RenderSnapshot;
-                        var realPoints = snapshot?.RealPoints;
-                        if (realPoints == null || realPoints.Count == 0)
-                            continue;
-
-                        _telemetryLastRealTimestampBySession.TryGetValue(snapshot.SessionId, out var lastCommittedMicroseconds);
-                        long sessionEarliestDelta = long.MaxValue;
-                        long sessionLatestDelta = 0;
-                        for (var j = 0; j < realPoints.Count; j++)
-                        {
-                            var timestampMicroseconds = realPoints[j].TimestampMicroseconds;
-                            if (timestampMicroseconds <= lastCommittedMicroseconds)
-                                continue;
-                            if (timestampMicroseconds < sessionEarliestDelta)
-                                sessionEarliestDelta = timestampMicroseconds;
-                            if (timestampMicroseconds > sessionLatestDelta)
-                                sessionLatestDelta = timestampMicroseconds;
-                        }
-
-                        var currentLastMicroseconds = realPoints[realPoints.Count - 1].TimestampMicroseconds;
-                        _telemetryLastRealTimestampBySession[snapshot.SessionId] = currentLastMicroseconds;
-
-                        if (sessionEarliestDelta == long.MaxValue)
-                            continue;
-                        if (sessionEarliestDelta < earliestMicroseconds)
-                            earliestMicroseconds = sessionEarliestDelta;
-                        if (sessionLatestDelta > latestMicroseconds)
-                            latestMicroseconds = sessionLatestDelta;
-                    }
-
-                    if (earliestMicroseconds != long.MaxValue)
-                        earliestSampleAtTicks = earliestMicroseconds * Stopwatch.Frequency / 1_000_000L;
-                    if (latestMicroseconds > 0)
-                        latestSampleAtTicks = latestMicroseconds * Stopwatch.Frequency / 1_000_000L;
-                }
-                InkPerformanceMonitor.RecordFrame(new InkFrameSample
-                {
-                    EarliestSampleAtTicks = earliestSampleAtTicks,
-                    LatestSampleAtTicks = latestSampleAtTicks,
-                    SubmittedAtTicks = Stopwatch.GetTimestamp()
-                });
             }
             catch (Exception ex)
             {
                 result = WetInkApplyResult.Failed(ex);
             }
-
-            // 记录 Apply 耗时（毫秒）+ 本批样本数/session 数，供 RealtimeInkDebugLive.json 输出。
-            try
-            {
-                var applyElapsedMs = (System.Diagnostics.Stopwatch.GetTimestamp() - applyStartTicks) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
-                var sampleCount = batch?.OrderedItems?.Count ?? 0;
-                var sessionCount = batch?.RenderSnapshots?.Count ?? 0;
-                NativeInkPerfProbe.RecordApply(applyElapsedMs, sampleCount, sessionCount);
-
-                // Render 端按 inputKind 累计 redraw：Snapshot 不携带 InputKind，
-                // 兜底按 Mouse 桶（多数场景都是 Mouse/Touch Ink）。inputKind 精确分桶
-                // 靠 UI 线程 RecordInputEvent 拿到 batch.InputKind。
-                NativeInkPerfProbe.RecordRedraw(2, applyElapsedMs, forceRedraw: false, committed: false);
-            }
-            catch
-            {
-                // never throw from the probe path
-            }
-
-            // 实时刷新 Live JSON（Debug log 开启时），让用户能看到 new 帧的 nativeWetInk 指标。
-            Helpers.RealtimeInkPerformanceMonitor.TickLiveStatus();
 
             HandleApplyResult(result);
         }

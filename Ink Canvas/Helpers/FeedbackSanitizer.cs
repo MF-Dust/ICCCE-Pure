@@ -7,7 +7,7 @@ namespace Ink_Canvas.Helpers
     /// 反馈数据脱敏处理器。
     /// 对上传到 pastebin 的 JSON 数据进行脱敏，移除敏感配置。
     /// 脱敏规则：
-    /// - 设备 ID：保留原样
+    /// - 设备 ID：移除
     /// - WebDAV 配置（URL、用户名、密码、根目录）：完全移除
     /// - DlassSettings 的 token 和 API 地址：移除
     /// - 密码哈希/盐值：移除
@@ -24,14 +24,14 @@ namespace Ink_Canvas.Helpers
             "passwordEnabled", "passwordSalt", "passwordHash",
             "requirePasswordOnExit", "requirePasswordOnEnterSettings",
             "requirePasswordOnResetConfig", "requirePasswordOnModifyOrClearNameList",
-            "hasAcceptedTelemetryPrivacy", "telemetryUploadLevel"
+            "hasAcceptedTelemetryPrivacy", "telemetryUploadLevel", "deviceId"
         };
 
         /// <summary>
         /// 将 Settings 对象序列化为脱敏后的 JSON。
-        /// 设备 ID 保留原样，移除 WebDAV、token、密码等敏感字段。
+        /// 移除设备 ID、WebDAV、token、密码等敏感字段。
         /// </summary>
-        public static string BuildSanitizedSettingsJson(Settings settings, string deviceId)
+        public static string BuildSanitizedSettingsJson(Settings settings)
         {
             if (settings == null)
                 return "{}";
@@ -43,9 +43,6 @@ namespace Ink_Canvas.Helpers
 
                 // 递归移除敏感字段
                 SanitizeToken(json);
-
-                // 添加设备 ID（原样，不脱敏）
-                json["deviceId"] = deviceId ?? "";
 
                 // 格式化输出
                 return json.ToString(Formatting.Indented);

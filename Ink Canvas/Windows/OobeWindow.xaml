@@ -97,37 +97,32 @@
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItemSeparator />
-                <ui:NavigationViewItem x:Name="NavItemTelemetry" Content="{x:Static props:OobeStrings.Oobe_NavTelemetry}" Tag="step0">
-                    <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Shield}" />
-                    </ui:NavigationViewItem.Icon>
-                </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemCanvas" Content="{x:Static props:OobeStrings.Oobe_NavCanvas}" Tag="step1">
+                <ui:NavigationViewItem x:Name="NavItemCanvas" Content="{x:Static props:OobeStrings.Oobe_NavCanvas}" Tag="step0">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemGestures" Content="{x:Static props:OobeStrings.Oobe_NavGestures}" Tag="step2">
+                <ui:NavigationViewItem x:Name="NavItemGestures" Content="{x:Static props:OobeStrings.Oobe_NavGestures}" Tag="step1">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemAppearance" Content="{x:Static props:ThemeStrings.Theme_GroupTitle}" Tag="step3">
+                <ui:NavigationViewItem x:Name="NavItemAppearance" Content="{x:Static props:ThemeStrings.Theme_GroupTitle}" Tag="step2">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Personalize}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemPPT" Content="{x:Static props:OobeStrings.Oobe_NavPPT}" Tag="step4">
+                <ui:NavigationViewItem x:Name="NavItemPPT" Content="{x:Static props:OobeStrings.Oobe_NavPPT}" Tag="step3">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Slideshow}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemAutomation" Content="{x:Static props:OobeStrings.Oobe_NavAutomation}" Tag="step5">
+                <ui:NavigationViewItem x:Name="NavItemAutomation" Content="{x:Static props:OobeStrings.Oobe_NavAutomation}" Tag="step4">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Sync}" />
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <ui:NavigationViewItem x:Name="NavItemAdvanced" Content="{x:Static props:OobeStrings.Oobe_NavAdvanced}" Tag="step6">
+                <ui:NavigationViewItem x:Name="NavItemAdvanced" Content="{x:Static props:OobeStrings.Oobe_NavAdvanced}" Tag="step5">
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}" />
                     </ui:NavigationViewItem.Icon>
@@ -209,7 +204,7 @@
                         </ikw:SimpleStackPanel>
                     </Grid>
 
-                    <!-- 步骤页 (8 个) -->
+                    <!-- 步骤页 (6 个) -->
                     <ScrollViewer x:Name="StepScrollViewer"
                                   Visibility="Collapsed"
                                   PanningMode="VerticalFirst"
@@ -228,86 +223,19 @@
                                 <ikw:SimpleStackPanel Margin="0,0,0,8" Spacing="2">
                                     <TextBlock x:Name="StepIndicatorText"
                                                Style="{DynamicResource CaptionTextBlockStyle}"
-                                               Opacity="0.7"
-                                               Text="步骤 1 / 8" />
+                                               Opacity="0.7" />
                                     <TextBlock x:Name="StepTitleText"
                                                Style="{DynamicResource TitleTextBlockStyle}"
-                                               Text="{x:Static props:OobeStrings.Oobe_Step1Title}" />
+                                               Text="{x:Static props:OobeStrings.Oobe_Step2Title}" />
                                     <TextBlock x:Name="StepSubtitleText"
                                                Style="{DynamicResource BodyTextBlockStyle}"
                                                Margin="0,2,0,0"
                                                Opacity="0.85"
                                                TextWrapping="Wrap"
-                                               Text="{x:Static props:OobeStrings.Oobe_Step1Subtitle}" />
+                                               Text="{x:Static props:OobeStrings.Oobe_Step2Subtitle}" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 1: 启动与隐私 -->
-                                <ikw:SimpleStackPanel x:Name="StepTelemetryPanel"
-                                                      Spacing="{StaticResource SettingsCardSpacing}">
-                                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                                               Text="{x:Static props:OobeStrings.Oobe_PrivacyTitle}" />
-
-                                    <ui:SettingsExpander Header="{x:Static props:OobeStrings.Oobe_PrivacyTitle}"
-                                                         Description="{x:Static props:OobeStrings.Oobe_PrivacyDesc}"
-                                                         IsExpanded="True">
-                                        <ui:SettingsExpander.HeaderIcon>
-                                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Shield}" />
-                                        </ui:SettingsExpander.HeaderIcon>
-                                        <ui:SettingsExpander.Items>
-                                            <ui:SettingsCard ContentAlignment="Left">
-                                                <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-                                                    <CheckBox x:Name="CheckBoxPrivacyAccepted"
-                                                              VerticalAlignment="Center"
-                                                              Checked="CheckBoxPrivacyAccepted_Changed"
-                                                              Unchecked="CheckBoxPrivacyAccepted_Changed"
-                                                              Content="{x:Static props:OobeStrings.Oobe_AgreePrivacy}" />
-                                                    <ui:HyperlinkButton Content="{x:Static props:OobeStrings.Oobe_PrivacyPolicy}"
-                                                                        Padding="4,0"
-                                                                        VerticalAlignment="Center"
-                                                                        Click="HyperlinkPrivacy_Click" />
-                                                </ikw:SimpleStackPanel>
-                                            </ui:SettingsCard>
-                                            <ui:SettingsCard Header="{x:Static props:OobeStrings.Oobe_TelemetryLevel}"
-                                                             Description="{x:Static props:OobeStrings.Oobe_TelemetryLevelDesc}">
-                                                <ComboBox x:Name="ComboBoxTelemetryUploadLevel">
-                                                    <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_TelemetryNone}" />
-                                                    <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_TelemetryBasic}" />
-                                                    <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_TelemetryOptional}" />
-                                                </ComboBox>
-                                            </ui:SettingsCard>
-                                        </ui:SettingsExpander.Items>
-                                    </ui:SettingsExpander>
-
-                                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
-                                               Margin="1,18,0,6"
-                                               Text="{x:Static props:OobeStrings.Oobe_StartupCrashTitle}" />
-
-                                    <controls:LabeledSettingsCard x:Name="CardFoldAtStartup"
-                                                                  Header="{x:Static props:OobeStrings.Oobe_FoldAtStartup}"
-                                                                  Description="{x:Static props:OobeStrings.Oobe_FoldAtStartupDesc}"
-                                                                  Icon="{x:Static ui:SegoeFluentIcons.ChevronLeft}"
-                                                                  SwitchName="ToggleSwitchFoldAtStartup" />
-
-                                    <controls:LabeledSettingsCard x:Name="CardAutoUpdate"
-                                                                  Header="{x:Static props:UpdateStrings.Header_AutoUpdate}"
-                                                                  Description="{x:Static props:OobeStrings.Oobe_AutoUpdate}"
-                                                                  Icon="{x:Static ui:SegoeFluentIcons.Sync}"
-                                                                  SwitchName="ToggleSwitchAutoUpdate" />
-
-                                    <ui:SettingsCard Header="{x:Static props:OobeStrings.Oobe_CrashAction}"
-                                                     Description="{x:Static props:OobeStrings.Oobe_CrashActionDesc}">
-                                        <ui:SettingsCard.HeaderIcon>
-                                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Warning}" />
-                                        </ui:SettingsCard.HeaderIcon>
-                                        <ComboBox x:Name="ComboBoxCrashAction">
-                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashSilentRestart}" />
-                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashNoAction}" />
-                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashShowDialog}" />
-                                        </ComboBox>
-                                    </ui:SettingsCard>
-                                </ikw:SimpleStackPanel>
-
-                                <!-- 步骤 2: 画板与墨迹(含纠正) -->
+                                <!-- 步骤 1: 画板与墨迹(含纠正) -->
                                 <ikw:SimpleStackPanel x:Name="StepCanvasPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
@@ -343,7 +271,7 @@
                                                                   SwitchName="ToggleSwitchInkToShapeEnabled" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 3: 手势 -->
+                                <!-- 步骤 2: 手势 -->
                                 <ikw:SimpleStackPanel x:Name="StepGesturesPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
@@ -367,7 +295,7 @@
                                                                   SwitchName="ToggleSwitchEnablePalmEraser" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 4: 个性化 -->
+                                <!-- 步骤 3: 个性化 -->
                                 <ikw:SimpleStackPanel x:Name="StepAppearancePanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
@@ -436,7 +364,7 @@
                                                                   SwitchName="ToggleSwitchEnableHotkeysInMouseMode" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 5: PowerPoint -->
+                                <!-- 步骤 4: PowerPoint -->
                                 <ikw:SimpleStackPanel x:Name="StepPPTPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
@@ -463,7 +391,7 @@
 
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 6: 自动化 + 截图 -->
+                                <!-- 步骤 5: 自动化 + 截图 -->
                                 <ikw:SimpleStackPanel x:Name="StepAutomationPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
@@ -502,11 +430,39 @@
                                                                   SwitchName="ToggleSwitchSaveScreenshotsInDateFolders" />
                                 </ikw:SimpleStackPanel>
 
-                                <!-- 步骤 7: 高级 -->
+                                <!-- 步骤 6: 高级与启动 -->
                                 <ikw:SimpleStackPanel x:Name="StepAdvancedPanel"
                                                       Spacing="{StaticResource SettingsCardSpacing}"
                                                       Visibility="Collapsed">
                                     <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
+                                               Text="{x:Static props:OobeStrings.Oobe_StartupCrashTitle}" />
+
+                                    <controls:LabeledSettingsCard x:Name="CardFoldAtStartup"
+                                                                  Header="{x:Static props:OobeStrings.Oobe_FoldAtStartup}"
+                                                                  Description="{x:Static props:OobeStrings.Oobe_FoldAtStartupDesc}"
+                                                                  Icon="{x:Static ui:SegoeFluentIcons.ChevronLeft}"
+                                                                  SwitchName="ToggleSwitchFoldAtStartup" />
+
+                                    <controls:LabeledSettingsCard x:Name="CardAutoUpdate"
+                                                                  Header="{x:Static props:UpdateStrings.Header_AutoUpdate}"
+                                                                  Description="{x:Static props:OobeStrings.Oobe_AutoUpdate}"
+                                                                  Icon="{x:Static ui:SegoeFluentIcons.Sync}"
+                                                                  SwitchName="ToggleSwitchAutoUpdate" />
+
+                                    <ui:SettingsCard Header="{x:Static props:OobeStrings.Oobe_CrashAction}"
+                                                     Description="{x:Static props:OobeStrings.Oobe_CrashActionDesc}">
+                                        <ui:SettingsCard.HeaderIcon>
+                                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Warning}" />
+                                        </ui:SettingsCard.HeaderIcon>
+                                        <ComboBox x:Name="ComboBoxCrashAction">
+                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashSilentRestart}" />
+                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashNoAction}" />
+                                            <ComboBoxItem Content="{x:Static props:OobeStrings.Oobe_CrashShowDialog}" />
+                                        </ComboBox>
+                                    </ui:SettingsCard>
+
+                                    <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"
+                                               Margin="1,18,0,6"
                                                Text="{x:Static props:OobeStrings.Oobe_Step8Title}" />
 
                                     <controls:LabeledSettingsCard x:Name="CardIsLogEnabled"

@@ -254,18 +254,4 @@ Are you sure you want to repair the installation?</value>
   <data name="Btn_OK" xml:space="preserve">
     <value>OK</value>
   </data>
-  <data name="Channel_PrivacyRequired" xml:space="preserve">
-    <value>Before joining the preview/beta channel, please check &quot;I have read and agree to the privacy notice in privacy&quot; on the About page.</value>
-  </data>
-  <data name="Channel_PrivacyRequiredTitle" xml:space="preserve">
-    <value>Privacy agreement required</value>
-  </data>
-  <data name="Channel_TelemetryRequired" xml:space="preserve">
-    <value>Joining the preview/beta channel requires enabling anonymous basic data upload.
-
-Enable anonymous usage data upload now?</value>
-  </data>
-  <data name="Channel_TelemetryRequiredTitle" xml:space="preserve">
-    <value>Anonymous data upload required</value>
-  </data>
 </root>

@@ -57,7 +57,7 @@
     <value>An annotation and whiteboard tool designed for classrooms. The wizard below will help you complete the initial setup. All options can be changed later in Settings.</value>
   </data>
   <data name="Oobe_StepCount" xml:space="preserve">
-    <value>8 steps · About 1 minute</value>
+    <value>6 steps · About 1 minute</value>
   </data>
   <data name="Oobe_StartStepByStep" xml:space="preserve">
     <value>Start step-by-step setup</value>
@@ -67,9 +67,6 @@
   </data>
   <data name="Oobe_NavWelcome" xml:space="preserve">
     <value>Welcome</value>
-  </data>
-  <data name="Oobe_NavTelemetry" xml:space="preserve">
-    <value>Startup &amp; Privacy</value>
   </data>
   <data name="Oobe_NavCanvas" xml:space="preserve">
     <value>Canvas &amp; Ink</value>
@@ -88,39 +85,6 @@
   </data>
   <data name="Oobe_NavFinish" xml:space="preserve">
     <value>Finish</value>
-  </data>
-  <data name="Oobe_Step1Title" xml:space="preserve">
-    <value>Startup &amp; Privacy</value>
-  </data>
-  <data name="Oobe_Step1Subtitle" xml:space="preserve">
-    <value>Telemetry, privacy policy, auto-update, and crash handling.</value>
-  </data>
-  <data name="Oobe_PrivacyTitle" xml:space="preserve">
-    <value>Anonymous Usage Data &amp; Privacy</value>
-  </data>
-  <data name="Oobe_PrivacyDesc" xml:space="preserve">
-    <value>Fully anonymous usage statistics, used only to improve software stability and performance.</value>
-  </data>
-  <data name="Oobe_AgreePrivacy" xml:space="preserve">
-    <value>I have read and agree to the</value>
-  </data>
-  <data name="Oobe_PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
-  </data>
-  <data name="Oobe_TelemetryLevel" xml:space="preserve">
-    <value>Telemetry Level</value>
-  </data>
-  <data name="Oobe_TelemetryLevelDesc" xml:space="preserve">
-    <value>This software does not collect classroom content, student personal information, or identifiable raw ink strokes. See privacy.txt for details.</value>
-  </data>
-  <data name="Oobe_TelemetryNone" xml:space="preserve">
-    <value>Do not upload any anonymous usage data</value>
-  </data>
-  <data name="Oobe_TelemetryBasic" xml:space="preserve">
-    <value>Basic (crash info, version &amp; system info)</value>
-  </data>
-  <data name="Oobe_TelemetryOptional" xml:space="preserve">
-    <value>Optional (feature usage frequency, etc.)</value>
   </data>
   <data name="Oobe_StartupCrashTitle" xml:space="preserve">
     <value>Startup &amp; Crash Handling</value>
@@ -361,9 +325,6 @@
   </data>
   <data name="Oobe_Step8Subtitle" xml:space="preserve">
     <value>Logging and other advanced settings.</value>
-  </data>
-  <data name="Oobe_SummaryTelemetryLevel" xml:space="preserve">
-    <value>Telemetry Level</value>
   </data>
   <data name="Oobe_SummaryAppTheme" xml:space="preserve">
     <value>App Theme</value>

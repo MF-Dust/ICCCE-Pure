@@ -74,7 +74,7 @@ namespace Ink_Canvas
             var path = savePath;
             var hideNotification = isHideNotification;
 
-            _ = Task.Run(async () =>
+            _ = Task.Run(() =>
             {
                 try
                 {
@@ -115,8 +115,6 @@ namespace Ink_Canvas
                         Dispatcher.Invoke(() => ShowNotification(string.Format(Properties.MainWindowStrings.Main_Screenshot_SaveSuccess, path)));
                     }
 
-                    // 使用上传帮助类上传到所有启用的服务
-                    await Helpers.UploadHelper.UploadFileAsync(path);
                 }
                 catch (Exception ex)
                 {
@@ -402,7 +400,6 @@ namespace Ink_Canvas
         /// 4. 确保保存目录存在
         /// 5. 保存为PNG格式
         /// 6. 如果不隐藏通知，显示保存成功通知
-        /// 7. 异步上传截图到Dlass
         /// </remarks>
         private void CaptureAndSaveScreenshot(string savePath, bool isHideNotification)
         {
@@ -440,17 +437,6 @@ namespace Ink_Canvas
                     });
                 });
             }
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    // 使用上传帮助类上传到所有启用的服务
-                    await Helpers.UploadHelper.UploadFileAsync(savePath);
-                }
-                catch (Exception)
-                {
-                }
-            });
         }
 
         /// <summary>

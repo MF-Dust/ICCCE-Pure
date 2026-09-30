@@ -684,12 +684,6 @@
   <data name="Main_Screenshot_DefaultHint" xml:space="preserve">
     <value>拖拽选择区域，右键或双击可全选屏幕；自由绘制松开后需点击确认</value>
   </data>
-  <data name="Main_Privacy_FileNotFound" xml:space="preserve">
-    <value>未找到隐私说明文件（privacy.txt）。</value>
-  </data>
-  <data name="Main_Privacy_ReadError" xml:space="preserve">
-    <value>读取隐私说明文件时出错。</value>
-  </data>
   <data name="Main_App_RestartLoopDetected" xml:space="preserve">
     <value>检测到程序已连续重启 5 次，已停止自动重启。请联系开发者或检查系统环境。</value>
   </data>

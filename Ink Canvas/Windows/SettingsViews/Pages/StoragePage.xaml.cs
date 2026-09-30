@@ -17,7 +17,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private static readonly string[] BackupDirs = { "Backups" };
         private static readonly string[] CustomDirs = { "icons", "backgrounds" };
         private static readonly string[] UpdateDirs = { "AutoUpdate" };
-        private static readonly string[] ThemeDirs = { "FloatingBarThemes" };
         // 视为核心文件的目录（配置 / ppt-agent 联动组件 / 自动化工作流 / .NET 运行时等）
         private static readonly string[] ConfigDirs = { "Configs", "ppt-agent", "Automations", "runtimes" };
 
@@ -29,8 +28,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         };
 
         private long _coreSize, _logsSize, _inkSize, _backupsSize,
-                     _customSize, _updateSize, _otherSize,
-                     _themeSize;
+                     _customSize, _updateSize, _otherSize;
 
         public StoragePage()
         {
@@ -82,7 +80,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private void CalculateSizes()
         {
             _coreSize = _logsSize = _inkSize = _backupsSize =
-                _customSize = _updateSize = _otherSize = _themeSize = 0;
+                _customSize = _updateSize = _otherSize = 0;
 
             string root = App.RootPath;
             if (string.IsNullOrEmpty(root) || !Directory.Exists(root)) return;
@@ -101,8 +99,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                     _backupsSize += size;
                 else if (CustomDirs.Any(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)))
                     _customSize += size;
-                else if (ThemeDirs.Any(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)))
-                    _themeSize += size;
                 else if (UpdateDirs.Any(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)))
                     _updateSize += size;
                 else if (ConfigDirs.Any(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)))
@@ -126,7 +122,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private void UpdateUI()
         {
             long total = _coreSize + _logsSize + _inkSize + _backupsSize
-                       + _customSize + _updateSize + _otherSize + _themeSize;
+                       + _customSize + _updateSize + _otherSize;
 
             TotalSizeTextBlock.Text = FormatSize(total);
 
@@ -137,7 +133,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             CustomSizeText.Text = FormatSize(_customSize);
             UpdateSizeText.Text = FormatSize(_updateSize);
             OtherSizeText.Text = FormatSize(_otherSize);
-            ThemeSizeText.Text = FormatSize(_themeSize);
 
             // 更新柱状图列宽
             if (total > 0)
@@ -149,14 +144,13 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 BarCustomCol.Width = new GridLength(_customSize, GridUnitType.Star);
                 BarUpdateCol.Width = new GridLength(_updateSize, GridUnitType.Star);
                 BarOtherCol.Width = new GridLength(_otherSize, GridUnitType.Star);
-                BarThemeCol.Width = new GridLength(_themeSize, GridUnitType.Star);
             }
             else
             {
                 BarCoreCol.Width = BarLogsCol.Width = BarInkCol.Width =
                     BarBackupsCol.Width = BarCustomCol.Width =
                     BarUpdateCol.Width =
-                    BarOtherCol.Width = BarThemeCol.Width =
+                    BarOtherCol.Width =
                     new GridLength(0, GridUnitType.Star);
             }
 
@@ -189,7 +183,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             CustomSizeText.Text = text;
             UpdateSizeText.Text = text;
             OtherSizeText.Text = text;
-            ThemeSizeText.Text = text;
         }
 
         #region 清理操作
@@ -212,11 +205,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private void BtnCleanUpdate_Click(object sender, RoutedEventArgs e)
         {
             CleanWithConfirm(LocalizationHelper.GetString("Storage_Update_Header"), UpdateDirs, keepRoot: true);
-        }
-
-        private void BtnCleanTheme_Click(object sender, RoutedEventArgs e)
-        {
-            CleanWithConfirm(LocalizationHelper.GetString("Storage_Theme_Header"), ThemeDirs, keepRoot: true);
         }
 
         private async void CleanWithConfirm(string displayName, string[] subDirs, bool keepRoot)

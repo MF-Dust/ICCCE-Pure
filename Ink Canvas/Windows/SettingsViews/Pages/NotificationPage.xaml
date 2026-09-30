@@ -29,27 +29,6 @@
 
                 <TextBlock Text="{x:Static props:NotificationStrings.GroupTitle}" Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" />
 
-                <controls:LabeledSettingsCard x:Name="CardEnableAnnouncements"
-                        Header="{x:Static props:NotificationStrings.EnableAnnouncements}"
-                        Description="{x:Static props:NotificationStrings.EnableAnnouncementsHint}"
-                        Icon="{x:Static ui:SegoeFluentIcons.Message}"
-                        Toggled="ToggleSwitchEnableAnnouncements_Toggled" />
-
-                <controls:LabeledSettingsCard x:Name="CardEnableForcePopup"
-                        Header="{x:Static props:NotificationStrings.EnableForcePopup}"
-                        Description="{x:Static props:NotificationStrings.EnableForcePopupHint}"
-                        Icon="{x:Static ui:SegoeFluentIcons.Warning}"
-                        Toggled="ToggleSwitchEnableForcePopup_Toggled" />
-
-                <ui:SettingsCard Header="{x:Static props:AnnouncementStrings.CenterTitle}"
-                                 Description="{x:Static props:AnnouncementStrings.CenterHint}">
-                    <ui:SettingsCard.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.BulletedList}" />
-                    </ui:SettingsCard.HeaderIcon>
-                    <Button Content="{x:Static props:NotificationStrings.ViewHistory}"
-                            Click="ViewAnnouncementsButton_Click" />
-                </ui:SettingsCard>
-
                 <controls:LabeledSettingsCard x:Name="CardEnableDynamic"
                         Header="{x:Static props:NotificationStrings.EnableDynamic}"
                         Description="{x:Static props:NotificationStrings.EnableDynamicHint}"
@@ -124,7 +103,6 @@
                         <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.POI}" />
                     </ui:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="ComboBoxPlacement"
-                              MinWidth="180"
                               SelectionChanged="ComboBoxPlacement_SelectionChanged">
                         <ComboBoxItem Content="{x:Static props:NotificationStrings.PlacementTopCenter}" Tag="TopCenter" />
                         <ComboBoxItem Content="{x:Static props:NotificationStrings.PlacementTopRight}" Tag="TopRight" />
@@ -140,7 +118,6 @@
                                      FontSize="16" />
                     </ui:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="ComboBoxAnimationMode"
-                              MinWidth="180"
                               SelectionChanged="ComboBoxAnimationMode_SelectionChanged">
                         <ComboBoxItem Content="{x:Static props:NotificationStrings.AnimationOff}" Tag="Off" />
                         <ComboBoxItem Content="{x:Static props:NotificationStrings.AnimationSimple}" Tag="Simple" />

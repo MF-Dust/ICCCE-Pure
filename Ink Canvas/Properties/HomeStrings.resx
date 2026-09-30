@@ -63,9 +63,6 @@
   <data name="Home_CanvasSettings" xml:space="preserve">
     <value>画板设置</value>
   </data>
-  <data name="Home_CloudStorageSettings" xml:space="preserve">
-    <value>Dlass 与 WebDav 上传设置</value>
-  </data>
   <data name="Home_InkRecognitionSettings" xml:space="preserve">
     <value>墨迹纠正设置</value>
   </data>
@@ -77,12 +74,6 @@
   </data>
   <data name="Home_PPTSettings" xml:space="preserve">
     <value>PPT联动设置</value>
-  </data>
-  <data name="Home_Privacy" xml:space="preserve">
-    <value>隐私</value>
-  </data>
-  <data name="Home_PrivacySettings" xml:space="preserve">
-    <value>隐私与遥测设置</value>
   </data>
   <data name="Home_RandomAndTimer" xml:space="preserve">
     <value>点名与计时器</value>
@@ -108,17 +99,11 @@
   <data name="Home_ClockSettings" xml:space="preserve">
     <value>时钟显示设置</value>
   </data>
-  <data name="Home_PerformanceSettings" xml:space="preserve">
-    <value>性能监测与设备评估</value>
-  </data>
   <data name="Home_BackupSettings" xml:space="preserve">
     <value>设置与数据备份</value>
   </data>
   <data name="Home_BoardSettings" xml:space="preserve">
     <value>白板工具栏与外观设置</value>
-  </data>
-  <data name="Home_FriendlyLinks" xml:space="preserve">
-    <value>赞助及友链</value>
   </data>
   <data name="Splash_Starting" xml:space="preserve">
     <value>正在启动 Ink Canvas...</value>

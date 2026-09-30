@@ -330,31 +330,6 @@
   <data name="Theme_FloatingBarBorderColor_Custom" xml:space="preserve">
     <value>自定义</value>
   </data>
-  <data name="Theme_FloatingBarThemeMarketTitle" xml:space="preserve"><value>氪金点</value></data>
-  <data name="Theme_FloatingBarThemeMarketRefresh" xml:space="preserve"><value>蹲新皮</value></data>
-  <data name="Theme_FloatingBarThemeMarketInstall" xml:space="preserve"><value>装备皮肤</value></data>
-
-  <data name="Theme_FloatingBarThemesTitle" xml:space="preserve">
-    <value>装备栏皮肤库</value>
-  </data>
-  <data name="Theme_FloatingBarThemesDescription" xml:space="preserve">
-    <value>皮肤管理大师</value>
-  </data>
-  <data name="Theme_FloatingBarThemesFolder" xml:space="preserve">
-    <value>皮肤管理</value>
-  </data>
-  <data name="Theme_FloatingBarThemesOpenFolder" xml:space="preserve">
-    <value>打开皮肤文件夹</value>
-  </data>
-  <data name="Theme_FloatingBarThemesReload" xml:space="preserve">
-    <value>F5 玩家狂喜</value>
-  </data>
-  <data name="Theme_FloatingBarThemesApply" xml:space="preserve">
-    <value>装备皮肤</value>
-  </data>
-  <data name="Theme_FloatingBarThemesApplyFailed" xml:space="preserve">
-    <value>皮肤文件是不是开挂了</value>
-  </data>
 
   <data name="Theme_WindowBackdrop" xml:space="preserve">
     <value>贴膜师傅上线</value>

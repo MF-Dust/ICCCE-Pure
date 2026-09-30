@@ -1,12 +1,10 @@
 using Ink_Canvas.Helpers;
-using Ink_Canvas.Properties;
 using Ink_Canvas.Windows.FeedbackPages;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace Ink_Canvas.Windows.SettingsViews.Pages
 {
@@ -19,15 +17,10 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
     public partial class AboutPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
-        private DispatcherTimer _usageRefreshTimer;
-        private long _savedTotalSeconds;
-        private DateTime _sessionStartTime;
-
         public AboutPage()
         {
             InitializeComponent();
             Loaded += AboutPage_Loaded;
-            Unloaded += AboutPage_Unloaded;
             InitializeAvatarData();
         }
 
@@ -68,33 +61,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private void AboutPage_Loaded(object sender, RoutedEventArgs e)
         {
             LoadSettings();
-
-            if (_usageRefreshTimer == null)
-            {
-                _usageRefreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-                _usageRefreshTimer.Tick += UsageRefreshTimer_Tick;
-            }
-            _usageRefreshTimer.Start();
-        }
-
-        private void AboutPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            if (_usageRefreshTimer != null)
-            {
-                _usageRefreshTimer.Stop();
-                _usageRefreshTimer.Tick -= UsageRefreshTimer_Tick;
-                _usageRefreshTimer = null;
-            }
-        }
-
-        private void UsageRefreshTimer_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                long currentSessionSeconds = (long)(DateTime.Now - _sessionStartTime).TotalSeconds;
-                TotalUsageTextBlock.Text = DeviceIdentifier.FormatDuration(_savedTotalSeconds + currentSessionSeconds);
-            }
-            catch { }
         }
 
         private void LoadSettings()
@@ -113,7 +79,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                         AppVersionTextBlock.Text += " (" + infoVersion.Substring(lastDotIndex + 1) + ")";
                     }
                 }
-                RefreshDeviceInfo();
             }
             catch (Exception ex)
             {
@@ -134,71 +99,5 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             }
         }
 
-        private void RefreshDeviceInfo_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshDeviceInfo();
-        }
-
-        private void RefreshDeviceInfo()
-        {
-            try
-            {
-                string deviceId = DeviceIdentifier.GetDeviceId();
-                DeviceIdTextBlock.Text = deviceId;
-
-                var usageFrequency = DeviceIdentifier.GetUsageFrequency();
-                string frequencyText;
-                switch (usageFrequency)
-                {
-                    case DeviceIdentifier.UsageFrequency.High:
-                        frequencyText = AboutStrings.UsageFrequency_High;
-                        break;
-                    case DeviceIdentifier.UsageFrequency.Medium:
-                        frequencyText = AboutStrings.UsageFrequency_Medium;
-                        break;
-                    case DeviceIdentifier.UsageFrequency.Low:
-                        frequencyText = AboutStrings.UsageFrequency_Low;
-                        break;
-                    default:
-                        frequencyText = AboutStrings.Unknown;
-                        break;
-                }
-                UsageFrequencyTextBlock.Text = frequencyText;
-
-                var updatePriority = DeviceIdentifier.GetUpdatePriority();
-                string priorityText;
-                switch (updatePriority)
-                {
-                    case DeviceIdentifier.UpdatePriority.High:
-                        priorityText = AboutStrings.UpdatePriority_High;
-                        break;
-                    case DeviceIdentifier.UpdatePriority.Medium:
-                        priorityText = AboutStrings.UpdatePriority_Medium;
-                        break;
-                    case DeviceIdentifier.UpdatePriority.Low:
-                        priorityText = AboutStrings.UpdatePriority_Low;
-                        break;
-                    default:
-                        priorityText = AboutStrings.Unknown;
-                        break;
-                }
-                UpdatePriorityTextBlock.Text = priorityText;
-
-                var (launchCount, totalSeconds, avgSessionSeconds, _) = DeviceIdentifier.GetUsageStats();
-                _savedTotalSeconds = totalSeconds;
-                _sessionStartTime = DateTime.Now;
-                LaunchCountTextBlock.Text = launchCount.ToString();
-                TotalUsageTextBlock.Text = DeviceIdentifier.FormatDuration(totalSeconds);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"刷新设备信息失败: {ex.Message}", LogHelper.LogType.Error);
-                DeviceIdTextBlock.Text = AboutStrings.DeviceInfo_Failed;
-                UsageFrequencyTextBlock.Text = AboutStrings.DeviceInfo_Failed;
-                UpdatePriorityTextBlock.Text = AboutStrings.DeviceInfo_Failed;
-                LaunchCountTextBlock.Text = AboutStrings.DeviceInfo_Failed;
-                TotalUsageTextBlock.Text = AboutStrings.DeviceInfo_Failed;
-            }
-        }
     }
 }

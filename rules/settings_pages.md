@@ -11,10 +11,8 @@
 ├── 通用 (Nav_General)
 │   ├── 基本 (StartupPage)
 │   ├── 时钟 (ClockPage)
-│   ├── 隐私 (PrivacyPage)
 │   ├── 安全 (SecurityPage)
-│   ├── 高级 (AdvancedPage)
-│   └── 性能 (PerformancePage)
+│   └── 高级 (AdvancedPage)
 ├── 主界面 (Nav_MainInterface)
 │   ├── 窗口 (WindowPage)
 │   ├── 个性化 (AppearancePage)
@@ -26,13 +24,11 @@
 ├── PPT联动 (PowerPointPage)
 ├── 更新 (UpdatePage)
 ├── 通知 (NotificationStrings.DefaultTitle)
-│   ├── 通知设置 (NotificationPage)
-│   └── 公告中心 (AnnouncementCenterPage)
+│   └── 通知设置 (NotificationPage)
 ├── 实验性 (ExperimentalPage)
 ├── 存储 (Storage_GroupTitle)
 │   ├── 存储管理 (StoragePage)
-│   ├── 备份与还原 (BackupPage)
-│   └── 云存储 (CloudStoragePage)
+│   └── 备份与还原 (BackupPage)
 ├── 工具栏 (Nav_Toolbar)
 │   ├── 组件 (ToolbarPage)
 │   ├── 外观 (ToolbarAppearancePage)
@@ -43,11 +39,7 @@
 │   └── 菜单 (BoardMenuPage)
 ├── 自动化 (AutomationWorkflowPage)
 ├── Debug (DebugPage，硬编码)
-├── ── 浮动栏主题 ──（分隔符，Theme_FloatingBarThemesTitle）
-│   ├── 浮动栏主题 (FloatingBarThemePage)
-│   └── 浮动栏主题市场 (FloatingBarThemeMarketPage)
 ├── ── 底部 ──（FooterMenuItems）
-├── 友情链接 (FriendlyLinksPage)
 └── 关于 Ink Canvas (AboutPage)
 ```
 
@@ -64,10 +56,8 @@
 | Nav_General | 通用 |
 | Nav_Startup | 基本 |
 | Nav_Clock | 时钟 |
-| Nav_Privacy | 隐私 |
 | Settings_Nav_Security | 安全 |
 | Nav_Advanced | 高级 |
-| Nav_Performance | 性能 |
 | Nav_MainInterface | 主界面 |
 | Nav_Window | 窗口 |
 | Theme_GroupTitle | 个性化 |
@@ -79,12 +69,10 @@
 | NotificationStrings.Type_Update | 更新 |
 | NotificationStrings.DefaultTitle | 通知 |
 | NotificationStrings.SettingsTitle | 通知设置 |
-| AnnouncementStrings.CenterTitle | 公告中心 |
 | AdvancedStrings.Experimental | 实验性 |
 | StorageStrings.Storage_NavTitle | 存储 |
 | StorageStrings.Storage_Title | 存储管理 |
 | StorageStrings.Backup_Title | 备份与还原 |
-| CloudStorageStrings.CloudStorage_Manage | 云存储 |
 | Nav_Toolbar | 工具栏 |
 | Nav_ToolbarComponents | 组件 |
 | Nav_ToolbarAppearance | 外观 |
@@ -95,9 +83,6 @@
 | Nav_BoardMenu | 菜单(白板) |
 | AutomationStrings.Automation_Title | 自动化 |
 | (硬编码) "Debug" | Debug |
-| Theme_FloatingBarThemesTitle | 浮动栏主题（分隔符标题） |
-| Theme_FloatingBarThemeMarketTitle | 浮动栏主题市场 |
-| Nav_FriendlyLinks | 友情链接 |
 | Nav_AboutInkCanvas | 关于 Ink Canvas |
 
 ## 页面类型映射
@@ -106,7 +91,7 @@
 
 ### ⚠️ 页面注册（重要）
 
-只有**一个**字典：`_pageTypes`，在 `SettingsWindow` **构造函数**中初始化（`private readonly Dictionary<string, Type>`，含全部内置页面 + 插件页面）。
+页面映射使用一个 `private readonly Dictionary<string, Type>` 字段 `_pageTypes`。当前代码在**字段声明处初始化，并在构造函数中重新赋值**；新增或删除页面时须同步这两处映射，构造函数赋值后的字典用于导航。
 
 ```csharp
 // SettingsWindow.xaml.cs 构造函数内
@@ -118,23 +103,22 @@ _pageTypes = new Dictionary<string, Type>
 };
 ```
 
-添加新页面：**在 `SettingsWindow.xaml` 加导航项（Tag = 页面名）+ 在 `_pageTypes` 注册**，缺一不可。只注册不加载项则无入口；只加导航项不注册则点击无反应且无报错（`NavigateToPage` 找不到类型只写 Warning 日志）。
+添加新页面：**在 `SettingsWindow.xaml` 加导航项（Tag = 页面名）+ 同步 `_pageTypes` 字段初始化和构造函数赋值中的注册**，缺一不可。只注册不加载项则无入口；只加导航项不注册则点击无反应且无报错（`NavigateToPage` 找不到类型只写 Warning 日志）。
 
-> 旧文档提到的 `_staticPageTypes` 静态字典**已删除**，只有 `_pageTypes` 一个字典，勿再按双字典写。
+> 不存在 `_staticPageTypes`；不要把 `_pageTypes` 的两处赋值误写成两个字典字段。
 
 导航相关字典：
 
-- `_pageTypes` — Tag → 页面 Type（构造函数初始化，**唯一注册点**）
+- `_pageTypes` — Tag → 页面 Type（字段初始化 + 构造函数重新赋值，两处内容须保持一致）
 - `_pages` — Tag → 页面实例缓存（`NavigateToPage` 时 `Activator.CreateInstance` 创建并缓存，重复导航复用实例）
 
-### 完整映射（35 项）
+### 完整映射（28 项）
 
 ```csharp
 // SettingsWindow.xaml.cs 构造函数内，_pageTypes = new Dictionary<string, Type> { ... }
 { "HomePage", typeof(HomePage) },
 { "StartupPage", typeof(StartupPage) },
 { "ClockPage", typeof(ClockPage) },
-{ "PrivacyPage", typeof(PrivacyPage) },
 { "SecurityPage", typeof(SecurityPage) },
 { "WindowPage", typeof(WindowPage) },
 { "AppearancePage", typeof(AppearancePage) },
@@ -142,27 +126,21 @@ _pageTypes = new Dictionary<string, Type>
 { "HotkeyPage", typeof(HotkeyPage) },
 { "ToolbarPage", typeof(ToolbarPage) },
 { "ToolbarAppearancePage", typeof(ToolbarAppearancePage) },
-{ "FloatingBarThemePage", typeof(FloatingBarThemePage) },
-{ "FloatingBarThemeMarketPage", typeof(FloatingBarThemeMarketPage) },
 { "ToolbarMenuPage", typeof(ToolbarMenuPage) },
 { "BoardToolbarPage", typeof(BoardToolbarPage) },
 { "BoardAppearancePage", typeof(BoardAppearancePage) },
 { "BoardMenuPage", typeof(BoardMenuPage) },
 { "UpdatePage", typeof(UpdatePage) },
 { "NotificationPage", typeof(NotificationPage) },
-{ "AnnouncementCenterPage", typeof(AnnouncementCenterPage) },
 { "ExperimentalPage", typeof(ExperimentalPage) },
 { "AdvancedPage", typeof(AdvancedPage) },
 { "StoragePage", typeof(StoragePage) },
 { "BackupPage", typeof(BackupPage) },
-{ "CloudStoragePage", typeof(CloudStoragePage) },
 { "AutomationWorkflowPage", typeof(AutomationWorkflowPage) },
 { "PowerPointPage", typeof(PowerPointPage) },
 { "CanvasPage", typeof(CanvasPage) },
 { "InkRecognitionPage", typeof(InkRecognitionPage) },
-{ "PerformancePage", typeof(PerformancePage) },
 { "DebugPage", typeof(DebugPage) },
-{ "FriendlyLinksPage", typeof(FriendlyLinksPage) },
 { "AboutPage", typeof(AboutPage) },
 { "Settings", typeof(SettingsPage) },
 { "PPTPageFlipPreviewPage", typeof(PPTPageFlipPreviewPage) },
@@ -318,7 +296,7 @@ Settings.Appearance.IsEnableDisPlayNibModeToggler = false;
 1. 在 `Windows/SettingsViews/Pages/` 下创建新的 `.xaml` 和 `.xaml.cs` 文件
 2. 参考现有页面的结构
 3. 在 `SettingsWindow.xaml` 中添加导航入口（使用 `NavStrings` 资源）
-4. 在 `SettingsWindow.xaml.cs` 的 `_pageTypes` 中添加 Tag→Type 映射
+4. 在 `SettingsWindow.xaml.cs` 的 `_pageTypes` 字段初始化和构造函数赋值中同步添加 Tag→Type 映射
 5. 更新 `rules/Ink Canvas 设置完整目录.md`
 
 ### 添加笔工具栏滑块

@@ -63,9 +63,6 @@
   <data name="Home_CanvasSettings" xml:space="preserve">
     <value>Canvas settings</value>
   </data>
-  <data name="Home_CloudStorageSettings" xml:space="preserve">
-    <value>Dlass &amp; WebDav upload settings</value>
-  </data>
   <data name="Home_InkRecognitionSettings" xml:space="preserve">
     <value>Ink correction settings</value>
   </data>
@@ -77,12 +74,6 @@
   </data>
   <data name="Home_PPTSettings" xml:space="preserve">
     <value>PPT integration settings</value>
-  </data>
-  <data name="Home_Privacy" xml:space="preserve">
-    <value>Privacy</value>
-  </data>
-  <data name="Home_PrivacySettings" xml:space="preserve">
-    <value>Privacy &amp; telemetry settings</value>
   </data>
   <data name="Home_RandomAndTimer" xml:space="preserve">
     <value>Random picker &amp; timer</value>
@@ -108,17 +99,11 @@
   <data name="Home_ClockSettings" xml:space="preserve">
     <value>Clock display settings</value>
   </data>
-  <data name="Home_PerformanceSettings" xml:space="preserve">
-    <value>Performance monitoring and device evaluation</value>
-  </data>
   <data name="Home_BackupSettings" xml:space="preserve">
     <value>Settings and data backup</value>
   </data>
   <data name="Home_BoardSettings" xml:space="preserve">
     <value>Board toolbar and appearance settings</value>
-  </data>
-  <data name="Home_FriendlyLinks" xml:space="preserve">
-    <value>Sponsors and friendly links</value>
   </data>
   <data name="Splash_Starting" xml:space="preserve">
     <value>Starting Ink Canvas...</value>

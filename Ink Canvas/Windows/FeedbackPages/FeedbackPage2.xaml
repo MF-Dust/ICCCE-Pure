@@ -35,16 +35,6 @@
                 </ikw:SimpleStackPanel>
             </ui:SettingsCard>
 
-            <ui:SettingsCard Header="{x:Static props:FeedbackStrings.Page2_DeviceInfo}"
-                             Description="{x:Static props:FeedbackStrings.Page2_DeviceInfoDesc}">
-                <ui:SettingsCard.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Devices2}"/>
-                </ui:SettingsCard.HeaderIcon>
-                <ikw:SimpleStackPanel Spacing="8">
-                    <TextBlock x:Name="TextDeviceInfo" Text="" FontSize="14" TextWrapping="Wrap"/>
-                </ikw:SimpleStackPanel>
-            </ui:SettingsCard>
-
             <ui:SettingsCard x:Name="CardConfiguration"
                              Header="{x:Static props:FeedbackStrings.Page2_Config}"
                              Description="{x:Static props:FeedbackStrings.Page2_ConfigDesc}">

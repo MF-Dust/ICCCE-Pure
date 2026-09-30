@@ -84,15 +84,6 @@
   <data name="Page1_NetVersion" xml:space="preserve">
     <value>.NET version</value>
   </data>
-  <data name="Page1_DeviceInfo" xml:space="preserve">
-    <value>Device Information</value>
-  </data>
-  <data name="Page1_DeviceInfoDesc" xml:space="preserve">
-    <value>Select device identity info to include in feedback</value>
-  </data>
-  <data name="Page1_DeviceId" xml:space="preserve">
-    <value>Device ID</value>
-  </data>
   <data name="Page1_Config" xml:space="preserve">
     <value>Software Configuration</value>
   </data>
@@ -120,20 +111,11 @@
   <data name="Page2_SystemInfoDesc" xml:space="preserve">
     <value>System environment info to include in feedback</value>
   </data>
-  <data name="Page2_DeviceInfo" xml:space="preserve">
-    <value>Device Information</value>
-  </data>
-  <data name="Page2_DeviceInfoDesc" xml:space="preserve">
-    <value>Device identity info to include in feedback</value>
-  </data>
   <data name="Page2_Config" xml:space="preserve">
     <value>Software Configuration</value>
   </data>
   <data name="Page2_ConfigDesc" xml:space="preserve">
     <value>Software configuration info to include in feedback</value>
-  </data>
-  <data name="Page2_Exclude" xml:space="preserve">
-    <value>(excluded)</value>
   </data>
   <data name="Page3Title" xml:space="preserve">
     <value>Choose feedback method</value>

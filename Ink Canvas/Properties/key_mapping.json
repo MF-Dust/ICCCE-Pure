@@ -27,10 +27,6 @@
                                      "NewKey":  "RememberLastPageHint",
                                      "Group":  "PPTStrings"
                                  },
-    "About_UsageFrequencyLabel":  {
-                                      "NewKey":  "UsageFrequencyLabel",
-                                      "Group":  "AboutStrings"
-                                  },
     "Theme_QuoteSource_OsuQuotes":  {
                                         "NewKey":  "Theme_QuoteSource_OsuQuotes",
                                         "Group":  "ThemeStrings"
@@ -263,10 +259,6 @@
                                           "NewKey":  "Settings_Nav_Security_Tooltip",
                                           "Group":  "NavStrings"
                                       },
-    "Announcement_CenterHint":  {
-                                    "NewKey":  "CenterHint",
-                                    "Group":  "AnnouncementStrings"
-                                },
     "Automation_SaveFileName_Timestamp":  {
                                               "NewKey":  "Automation_SaveFileName_Timestamp",
                                               "Group":  "AutomationStrings"
@@ -363,10 +355,6 @@
                        "NewKey":  "Tools_Open",
                        "Group":  "FloatingBarStrings"
                    },
-    "FriendlyLinks_Visit":  {
-                                "NewKey":  "FriendlyLinks_Visit",
-                                "Group":  "FriendlyLinksStrings"
-                            },
     "AutoFold_App_SeewoBoard3":  {
                                      "NewKey":  "AutoFold_App_SeewoBoard3",
                                      "Group":  "AutomationStrings"
@@ -507,18 +495,10 @@
                                            "NewKey":  "InkRecog_BlockRectFakePressure",
                                            "Group":  "CanvasStrings"
                                        },
-    "About_Telemetry_Basic":  {
-                                  "NewKey":  "Telemetry_Basic",
-                                  "Group":  "AboutStrings"
-                              },
     "Size_Large":  {
                        "NewKey":  "Size_Large",
                        "Group":  "CommonStrings"
                    },
-    "About_TotalUsageLabel":  {
-                                  "NewKey":  "TotalUsageLabel",
-                                  "Group":  "AboutStrings"
-                              },
     "Nav_PPT":  {
                     "NewKey":  "Nav_PPT",
                     "Group":  "NavStrings"
@@ -555,10 +535,6 @@
                         "NewKey":  "Crash_Title",
                         "Group":  "CrashStrings"
                     },
-    "Notification_ViewHistory":  {
-                                     "NewKey":  "ViewHistory",
-                                     "Group":  "NotificationStrings"
-                                 },
     "Nav_Canvas":  {
                        "NewKey":  "Nav_Canvas",
                        "Group":  "NavStrings"
@@ -735,18 +711,10 @@
                          "NewKey":  "Theme_System",
                          "Group":  "ThemeStrings"
                      },
-    "Announcement_ApiBaseUrlHint":  {
-                                        "NewKey":  "ApiBaseUrlHint",
-                                        "Group":  "AnnouncementStrings"
-                                    },
     "Notification_UrgentDurationHint":  {
                                             "NewKey":  "UrgentDurationHint",
                                             "Group":  "NotificationStrings"
                                         },
-    "Notification_Provider_Reconnecting":  {
-                                               "NewKey":  "Provider_Reconnecting",
-                                               "Group":  "NotificationStrings"
-                                           },
     "Storage_Legend_Backups":  {
                                    "NewKey":  "Storage_Legend_Backups",
                                    "Group":  "StorageStrings"
@@ -795,10 +763,6 @@
                                 "NewKey":  "CameraDevices",
                                 "Group":  "BoothStrings"
                             },
-    "Announcement_ItemCount":  {
-                                   "NewKey":  "ItemCount",
-                                   "Group":  "AnnouncementStrings"
-                               },
     "Backup_Interval":  {
                             "NewKey":  "Backup_Interval",
                             "Group":  "StorageStrings"
@@ -919,10 +883,6 @@
                                    "NewKey":  "PowerPointPanel_Hint_3",
                                    "Group":  "PPTStrings"
                                },
-    "Notification_EnableAnnouncementsHint":  {
-                                                 "NewKey":  "EnableAnnouncementsHint",
-                                                 "Group":  "NotificationStrings"
-                                             },
     "Storage_AutoSaveInterval_5Min":  {
                                           "NewKey":  "Storage_AutoSaveInterval_5Min",
                                           "Group":  "StorageStrings"
@@ -1055,18 +1015,10 @@
                         "NewKey":  "Title",
                         "Group":  "BoothStrings"
                     },
-    "Announcement_ApiBaseUrl":  {
-                                    "NewKey":  "ApiBaseUrl",
-                                    "Group":  "AnnouncementStrings"
-                                },
     "Canvas_RestoreOpacity":  {
                                   "NewKey":  "Canvas_RestoreOpacity",
                                   "Group":  "CanvasStrings"
                               },
-    "Announcement_MarkAllAsRead":  {
-                                       "NewKey":  "MarkAllAsRead",
-                                       "Group":  "AnnouncementStrings"
-                                   },
     "Tray_GroupTitle":  {
                             "NewKey":  "Tray_GroupTitle",
                             "Group":  "WindowStrings"
@@ -1279,10 +1231,6 @@
                                      "NewKey":  "Type_Update",
                                      "Group":  "NotificationStrings"
                                  },
-    "About_UpdatePriorityLabel":  {
-                                      "NewKey":  "UpdatePriorityLabel",
-                                      "Group":  "AboutStrings"
-                                  },
     "GesturesPanel_Hint":  {
                                "NewKey":  "GesturesPanel_Hint",
                                "Group":  "GestureStrings"
@@ -1319,10 +1267,6 @@
                                            "NewKey":  "Provider_Disabled",
                                            "Group":  "NotificationStrings"
                                        },
-    "Announcement_CenterTitle":  {
-                                     "NewKey":  "CenterTitle",
-                                     "Group":  "AnnouncementStrings"
-                                 },
     "Tools_Manual":  {
                          "NewKey":  "Tools_Manual",
                          "Group":  "FloatingBarStrings"
@@ -1391,10 +1335,6 @@
                                 "NewKey":  "Header_SilentUpdate",
                                 "Group":  "UpdateStrings"
                             },
-    "Notification_Provider_NoToken":  {
-                                          "NewKey":  "Provider_NoToken",
-                                          "Group":  "NotificationStrings"
-                                      },
     "AppearancePanel_Hint_15":  {
                                     "NewKey":  "AppearancePanel_Hint_15",
                                     "Group":  "ThemeStrings"
@@ -1579,10 +1519,6 @@
                                     "NewKey":  "Canvas_BrushAutoRestore",
                                     "Group":  "CanvasStrings"
                                 },
-    "About_LaunchCountLabel":  {
-                                   "NewKey":  "LaunchCountLabel",
-                                   "Group":  "AboutStrings"
-                               },
     "Advanced_Experimental":  {
                                   "NewKey":  "Experimental",
                                   "Group":  "AdvancedStrings"
@@ -1675,10 +1611,6 @@
                                    "NewKey":  "Update_PackageArch_X64",
                                    "Group":  "UpdateStrings"
                                },
-    "Notification_EnableForcePopupHint":  {
-                                              "NewKey":  "EnableForcePopupHint",
-                                              "Group":  "NotificationStrings"
-                                          },
     "FloatingInterceptor_App_SeewoBoard5C":  {
                                                  "NewKey":  "FloatingInterceptor_App_SeewoBoard5C",
                                                  "Group":  "AutomationStrings"
@@ -1827,10 +1759,6 @@
                                  "NewKey":  "Theme_ShowRedoButton",
                                  "Group":  "ThemeStrings"
                              },
-    "About_DeviceIdLabel":  {
-                                "NewKey":  "DeviceIdLabel",
-                                "Group":  "AboutStrings"
-                            },
     "AppearancePanel_Hint_17":  {
                                     "NewKey":  "AppearancePanel_Hint_17",
                                     "Group":  "ThemeStrings"
@@ -1843,10 +1771,6 @@
                                         "NewKey":  "Canvas_EraserSize_VerySmall",
                                         "Group":  "CanvasStrings"
                                     },
-    "FriendlyLinks_NamePickerDescription":  {
-                                                "NewKey":  "FriendlyLinks_NamePickerDescription",
-                                                "Group":  "FriendlyLinksStrings"
-                                            },
     "Theme_FloatingBarOpacityInPPTHint":  {
                                               "NewKey":  "Theme_FloatingBarOpacityInPPTHint",
                                               "Group":  "ThemeStrings"
@@ -2119,10 +2043,6 @@
                                   "NewKey":  "Crash_ShowCrashWindow",
                                   "Group":  "CrashStrings"
                               },
-    "About_TelemetryLabel":  {
-                                 "NewKey":  "TelemetryLabel",
-                                 "Group":  "AboutStrings"
-                             },
     "Notification_Provider_WindowsToastDesc":  {
                                                    "NewKey":  "Provider_WindowsToastDesc",
                                                    "Group":  "NotificationStrings"
@@ -2283,10 +2203,6 @@
                                     "NewKey":  "LuckyRandomPanel_Hint_7",
                                     "Group":  "RandomStrings"
                                 },
-    "About_DeviceInfo":  {
-                             "NewKey":  "DeviceInfo",
-                             "Group":  "AboutStrings"
-                         },
     "Canvas_Color_Black":  {
                                "NewKey":  "Canvas_Color_Black",
                                "Group":  "CanvasStrings"
@@ -2299,18 +2215,10 @@
                             "NewKey":  "Msg_UpdateReady",
                             "Group":  "UpdateStrings"
                         },
-    "Announcement_PageTitle":  {
-                                   "NewKey":  "PageTitle",
-                                   "Group":  "AnnouncementStrings"
-                               },
     "Crash_SilentRestart":  {
                                 "NewKey":  "Crash_SilentRestart",
                                 "Group":  "CrashStrings"
                             },
-    "Nav_FriendlyLinks":  {
-                              "NewKey":  "Nav_FriendlyLinks",
-                              "Group":  "NavStrings"
-                          },
     "Board_NewPage":  {
                           "NewKey":  "Board_NewPage",
                           "Group":  "FloatingBarStrings"
@@ -2415,10 +2323,6 @@
                                     "NewKey":  "NavTooltip",
                                     "Group":  "NotificationStrings"
                                 },
-    "Announcement_Token":  {
-                               "NewKey":  "Token",
-                               "Group":  "AnnouncementStrings"
-                           },
     "Storage_Confirm_Second_Body":  {
                                         "NewKey":  "Storage_Confirm_Second_Body",
                                         "Group":  "StorageStrings"
@@ -2559,14 +2463,6 @@
                                   "NewKey":  "AdvancedPanel_Hint_11",
                                   "Group":  "AdvancedStrings"
                               },
-    "About_RefreshDeviceInfo":  {
-                                    "NewKey":  "RefreshDeviceInfo",
-                                    "Group":  "AboutStrings"
-                                },
-    "Notification_Provider_WaitingRestart":  {
-                                                 "NewKey":  "Provider_WaitingRestart",
-                                                 "Group":  "NotificationStrings"
-                                             },
     "Theme_FloatingIcon_TiebaEmoji":  {
                                           "NewKey":  "Theme_FloatingIcon_TiebaEmoji",
                                           "Group":  "ThemeStrings"
@@ -2587,10 +2483,6 @@
                                  "NewKey":  "Canvas_HideInkOnExit",
                                  "Group":  "CanvasStrings"
                              },
-    "Notification_Provider_Announcement":  {
-                                               "NewKey":  "Provider_Announcement",
-                                               "Group":  "NotificationStrings"
-                                           },
     "QuickPanel_RandomDraw":  {
                                   "NewKey":  "QuickPanel_RandomDraw",
                                   "Group":  "FloatingBarStrings"
@@ -2743,10 +2635,6 @@
                                         "NewKey":  "Settings_Nav_Hotkey_Tooltip",
                                         "Group":  "NavStrings"
                                     },
-    "Notification_Provider_Starting":  {
-                                           "NewKey":  "Provider_Starting",
-                                           "Group":  "NotificationStrings"
-                                       },
     "TimeRange_Hint":  {
                            "NewKey":  "TimeRange_Hint",
                            "Group":  "TimerStrings"
@@ -2859,10 +2747,6 @@
                                  "NewKey":  "TwoFingerGesture",
                                  "Group":  "PPTStrings"
                              },
-    "Announcement_WebSocketUrl":  {
-                                      "NewKey":  "WebSocketUrl",
-                                      "Group":  "AnnouncementStrings"
-                                  },
     "PPT_TimeCapsulePos_TR":  {
                                   "NewKey":  "TimeCapsulePos_TR",
                                   "Group":  "PPTStrings"
@@ -2899,14 +2783,6 @@
                                    "NewKey":  "TestTitle",
                                    "Group":  "NotificationStrings"
                                },
-    "Announcement_LoadFailed":  {
-                                    "NewKey":  "LoadFailed",
-                                    "Group":  "AnnouncementStrings"
-                                },
-    "About_Telemetry_Optional":  {
-                                     "NewKey":  "Telemetry_Optional",
-                                     "Group":  "AboutStrings"
-                                 },
     "Time_Start":  {
                        "NewKey":  "Time_Start",
                        "Group":  "CommonStrings"
@@ -3167,10 +3043,6 @@
                                       "NewKey":  "Canvas_CurveSmoothing_Off",
                                       "Group":  "CanvasStrings"
                                   },
-    "Notification_EnableAnnouncements":  {
-                                             "NewKey":  "EnableAnnouncements",
-                                             "Group":  "NotificationStrings"
-                                         },
     "ThemePanel_Hint_9":  {
                               "NewKey":  "ThemePanel_Hint_9",
                               "Group":  "ThemeStrings"
@@ -3179,10 +3051,6 @@
                         "NewKey":  "OldUI_Check",
                         "Group":  "FloatingBarStrings"
                     },
-    "FriendlyLinks_Title":  {
-                                "NewKey":  "FriendlyLinks_Title",
-                                "Group":  "FriendlyLinksStrings"
-                            },
     "Nav_About":  {
                       "NewKey":  "Nav_About",
                       "Group":  "NavStrings"
@@ -3335,10 +3203,6 @@
                                      "NewKey":  "Resolution_Tooltip",
                                      "Group":  "BoothStrings"
                                  },
-    "Announcement_TokenHint":  {
-                                   "NewKey":  "TokenHint",
-                                   "Group":  "AnnouncementStrings"
-                               },
     "SnapshotPanel_Hint_SetMinInkForAutoScreenshot":  {
                                  "NewKey":  "SnapshotPanel_Hint_SetMinInkForAutoScreenshot",
                                  "Group":  "FloatingBarStrings"
@@ -3427,10 +3291,6 @@
                                       "NewKey":  "ActionsTitle",
                                       "Group":  "NotificationStrings"
                                   },
-    "Notification_EnableForcePopup":  {
-                                          "NewKey":  "EnableForcePopup",
-                                          "Group":  "NotificationStrings"
-                                      },
     "Notification_Close":  {
                                "NewKey":  "Close",
                                "Group":  "NotificationStrings"
@@ -3551,10 +3411,6 @@
                                          "NewKey":  "Canvas_HideFadeInPenMenuHint",
                                          "Group":  "CanvasStrings"
                                      },
-    "Announcement_NoItems":  {
-                                 "NewKey":  "NoItems",
-                                 "Group":  "AnnouncementStrings"
-                             },
     "Theme_FloatingBarIcon":  {
                                   "NewKey":  "Theme_FloatingBarIcon",
                                   "Group":  "ThemeStrings"
@@ -3591,10 +3447,6 @@
                                  "NewKey":  "SecurityPanel_Hint_2",
                                  "Group":  "SecurityStrings"
                              },
-    "Announcement_ConnectionTitle":  {
-                                         "NewKey":  "ConnectionTitle",
-                                         "Group":  "AnnouncementStrings"
-                                     },
     "Theme_EraserDisplay_LineOnly":  {
                                          "NewKey":  "Theme_EraserDisplay_LineOnly",
                                          "Group":  "ThemeStrings"
@@ -3659,10 +3511,6 @@
                                      "NewKey":  "Gesture_EnablePalmEraser",
                                      "Group":  "GestureStrings"
                                  },
-    "Notification_Provider_Stopped":  {
-                                          "NewKey":  "Provider_Stopped",
-                                          "Group":  "NotificationStrings"
-                                      },
     "Advanced_LogByDate":  {
                                "NewKey":  "LogByDate",
                                "Group":  "AdvancedStrings"
@@ -3675,10 +3523,6 @@
                                            "NewKey":  "Random_BackgroundSettingsTitle",
                                            "Group":  "RandomStrings"
                                        },
-    "Announcement_ConnectionHint":  {
-                                        "NewKey":  "ConnectionHint",
-                                        "Group":  "AnnouncementStrings"
-                                    },
     "Theme_FloatingBarOpacity":  {
                                      "NewKey":  "Theme_FloatingBarOpacity",
                                      "Group":  "ThemeStrings"
@@ -3695,18 +3539,10 @@
                                            "NewKey":  "Canvas_AdvancedBezierSmoothing",
                                            "Group":  "CanvasStrings"
                                        },
-    "About_Telemetry_Off":  {
-                                "NewKey":  "Telemetry_Off",
-                                "Group":  "AboutStrings"
-                            },
     "InkRecog_Sensitivity":  {
                                  "NewKey":  "InkRecog_Sensitivity",
                                  "Group":  "CanvasStrings"
                              },
-    "CloudStorage_Manage":  {
-                                "NewKey":  "CloudStorage_Manage",
-                                "Group":  "CloudStorageStrings"
-                            },
     "About_OpenSourceSlogan":  {
                                    "NewKey":  "OpenSourceSlogan",
                                    "Group":  "AboutStrings"
@@ -3719,10 +3555,6 @@
                                          "NewKey":  "Canvas_AutoRestoreTimePoints",
                                          "Group":  "CanvasStrings"
                                      },
-    "Notification_Provider_AnnouncementDesc":  {
-                                                   "NewKey":  "Provider_AnnouncementDesc",
-                                                   "Group":  "NotificationStrings"
-                                               },
     "Tray_ClickAction_ShowMenu":  {
                                       "NewKey":  "Tray_ClickAction_ShowMenu",
                                       "Group":  "WindowStrings"
@@ -3771,10 +3603,6 @@
                                   "NewKey":  "SaveAs",
                                   "Group":  "ConfigStrings"
                               },
-    "About_PrivacyAndTelemetry":  {
-                                      "NewKey":  "PrivacyAndTelemetry",
-                                      "Group":  "AboutStrings"
-                                  },
     "About_Copyright":  {
                             "NewKey":  "Copyright",
                             "Group":  "AboutStrings"
@@ -3891,10 +3719,6 @@
                                      "NewKey":  "Theme_QuoteSource_Mottos",
                                      "Group":  "ThemeStrings"
                                  },
-    "About_DeviceInfo_Loading":  {
-                                     "NewKey":  "DeviceInfo_Loading",
-                                     "Group":  "AboutStrings"
-                                 },
     "Canvas_ShowPenCursor":  {
                                  "NewKey":  "Canvas_ShowPenCursor",
                                  "Group":  "CanvasStrings"
@@ -3987,10 +3811,6 @@
                               "NewKey":  "Canvas_ShowCursor",
                               "Group":  "CanvasStrings"
                           },
-    "FriendlyLinks_InkeysDescription":  {
-                                            "NewKey":  "FriendlyLinks_InkeysDescription",
-                                            "Group":  "FriendlyLinksStrings"
-                                        },
     "InkRecognitionPanel_Hint_4":  {
                                        "NewKey":  "InkRecognitionPanel_Hint_4",
                                        "Group":  "CanvasStrings"
@@ -4031,10 +3851,6 @@
                                "NewKey":  "KillWppProcess",
                                "Group":  "PPTStrings"
                            },
-    "Announcement_NavTooltip":  {
-                                    "NewKey":  "NavTooltip",
-                                    "Group":  "AnnouncementStrings"
-                                },
     "ManualUpdate_Hint":  {
                               "NewKey":  "ManualUpdate_Hint",
                               "Group":  "StartupStrings"
@@ -4079,10 +3895,6 @@
                                   "NewKey":  "Random_OnceCloseDelay",
                                   "Group":  "RandomStrings"
                               },
-    "Announcement_ClearHistory":  {
-                                      "NewKey":  "ClearHistory",
-                                      "Group":  "AnnouncementStrings"
-                                  },
     "Canvas_CurveSmoothingMode":  {
                                       "NewKey":  "Canvas_CurveSmoothingMode",
                                       "Group":  "CanvasStrings"
@@ -4119,10 +3931,6 @@
                              "NewKey":  "Nav_RandomWindow",
                              "Group":  "NavStrings"
                          },
-    "Announcement_WebSocketUrlHint":  {
-                                          "NewKey":  "WebSocketUrlHint",
-                                          "Group":  "AnnouncementStrings"
-                                      },
     "LuckyRandomPanel_Hint_5":  {
                                     "NewKey":  "LuckyRandomPanel_Hint_5",
                                     "Group":  "RandomStrings"
@@ -4155,10 +3963,6 @@
                                                        "NewKey":  "TopMostMode_Normal_RestartRequired",
                                                        "Group":  "StartupStrings"
                                                    },
-    "About_PrivacyAgreement":  {
-                                   "NewKey":  "PrivacyAgreement",
-                                   "Group":  "AboutStrings"
-                               },
     "Storage_Backups_Header":  {
                                    "NewKey":  "Storage_Backups_Header",
                                    "Group":  "StorageStrings"
@@ -4307,10 +4111,6 @@
                                                "NewKey":  "ResolutionChangeDetection",
                                                "Group":  "AdvancedStrings"
                                            },
-    "Notification_Provider_HttpOnly":  {
-                                           "NewKey":  "Provider_HttpOnly",
-                                           "Group":  "NotificationStrings"
-                                       },
     "Theme_QuoteSource_GaokaoBless":  {
                                           "NewKey":  "Theme_QuoteSource_GaokaoBless",
                                           "Group":  "ThemeStrings"

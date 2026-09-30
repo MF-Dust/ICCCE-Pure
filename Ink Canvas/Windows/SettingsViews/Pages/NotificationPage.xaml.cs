@@ -38,8 +38,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             _isLoaded = false;
             var notification = SettingsManager.Settings.Notification;
 
-            CardEnableAnnouncements.IsOn = notification.IsAnnouncementEnabled;
-            CardEnableForcePopup.IsOn = notification.IsForcePopupEnabled;
             CardEnableDynamic.IsOn = notification.IsDynamicNotificationEnabled;
             CardEnableWindowsToast.IsOn = notification.IsWindowsToastEnabled;
             ToggleSwitchDictationDoNotDisturb.IsOn = notification.IsDictationDoNotDisturbEnabled;
@@ -117,43 +115,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 ReminderDurationText.Text = $"{ReminderDurationSlider.Value:F0}s";
             if (OtherDurationText != null && OtherDurationSlider != null)
                 OtherDurationText.Text = $"{OtherDurationSlider.Value:F0}s";
-        }
-
-        private void UpdateAnnouncementProviderEnabledState()
-        {
-            NotificationProviderRegistry.RegisterOrUpdate(new NotificationProviderStatus
-            {
-                ProviderId = "announcement",
-                DisplayName = NotificationStrings.Provider_Announcement,
-                Description = NotificationStrings.Provider_AnnouncementDesc,
-                IsEnabled = SettingsManager.Settings.Notification.IsAnnouncementEnabled,
-                IsRunning = false,
-                Status = SettingsManager.Settings.Notification.IsAnnouncementEnabled
-                    ? NotificationStrings.Provider_WaitingRestart
-                    : NotificationStrings.Provider_Disabled
-            });
-            LoadProviders();
-        }
-
-        private void ToggleSwitchEnableAnnouncements_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            SettingsManager.Settings.Notification.IsAnnouncementEnabled = CardEnableAnnouncements.IsOn;
-            SaveSettings();
-            UpdateAnnouncementProviderEnabledState();
-        }
-
-        private void ToggleSwitchEnableForcePopup_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            SettingsManager.Settings.Notification.IsForcePopupEnabled = CardEnableForcePopup.IsOn;
-            SaveSettings();
-        }
-
-        private void ViewAnnouncementsButton_Click(object sender, RoutedEventArgs e)
-        {
-            var settingsWindow = Window.GetWindow(this) as SettingsWindow;
-            settingsWindow?.NavigateToPage("AnnouncementCenterPage");
         }
 
         private void ToggleSwitchEnableDynamic_Toggled(object sender, RoutedEventArgs e)

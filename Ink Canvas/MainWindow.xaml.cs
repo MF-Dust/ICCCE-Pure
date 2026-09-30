@@ -57,8 +57,6 @@ namespace Ink_Canvas
         private InkFadeManager _inkFadeManager;
         // 暴露给插件墨迹特效服务的入口（未初始化时为 null）
         internal InkFadeManager InkFadeManagerInstance => _inkFadeManager;
-        private readonly CancellationTokenSource _notificationProviderCancellation = new CancellationTokenSource();
-        private AnnouncementService _announcementService;
 
         // 悬浮窗拦截管理器
         public FloatingWindowInterceptorManager _floatingWindowInterceptorManager;
@@ -1402,8 +1400,7 @@ namespace Ink_Canvas
         internal void ApplyFloatingBarTheme()
         {
             FloatingBarThemeService ??= new FloatingBarThemeService(this);
-            FloatingBarThemeService.LoadThemes();
-            FloatingBarThemeService.ApplySavedTheme();
+            FloatingBarThemeService.ApplyBuiltInTheme();
         }
 
         /// <summary>
@@ -1456,13 +1453,6 @@ namespace Ink_Canvas
             }
             // 加载设置
             LoadSettings(true);
-            // 启动性能监测（如果已启用）。最快模式下延迟到首帧之后。
-            // 实时笔迹详细调试日志独立于性能监测，由 Debug 页开关控制，默认关闭。
-            if (!App.IsFastestStartupMode)
-            {
-                PerformanceMonitorHelper.StartIfEnabled();
-                RealtimeInkPerformanceMonitor.StartIfEnabled();
-            }
             // 根据ToolbarPosition设置更新工具栏结构和位置
             UpdateToolbarPosition();
             // 启动时直接设置浮动栏位置，跳过动画
@@ -2637,8 +2627,6 @@ namespace Ink_Canvas
                 try
                 {
                     InitializePopupManager();
-                    PerformanceMonitorHelper.StartIfEnabled();
-                    RealtimeInkPerformanceMonitor.StartIfEnabled();
                 }
                 catch (Exception ex)
                 {
@@ -2675,20 +2663,10 @@ namespace Ink_Canvas
                 LogHelper.WriteLogToFile($"[MainWindow] 初始化自动备份管理器时出错: {ex.Message}", LogHelper.LogType.Error);
             }
 
-            try
-            {
-                UploadQueueHelper.InitializeAllQueues();
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"[MainWindow] 初始化上传队列时出错: {ex.Message}", LogHelper.LogType.Error);
-            }
-
             InitializeClipboardMonitoring();
             InitializeFloatingWindowInterceptor();
             InitializeGlobalHotkeyManager();
 
-            _ = TelemetryUploader.UploadTelemetryIfNeededAsync();
 
             _ = Dispatcher.BeginInvoke(new Action(() =>
             {

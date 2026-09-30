@@ -150,13 +150,10 @@ namespace Ink_Canvas.Windows
         {
             if (settings == null) return;
 
-            // 启动与隐私
+            // 启动
             settings.Startup.IsFoldAtStartup = true;
             settings.Startup.IsAutoUpdate = true;
             settings.Startup.CrashAction = 2; // 弹窗重启
-            settings.Startup.TelemetryUploadLevel = settings.Startup.HasAcceptedTelemetryPrivacy
-                ? TelemetryUploadLevel.Extended
-                : TelemetryUploadLevel.None;
 
             // 画板与墨迹
             settings.Canvas.IsShowCursor = false;
@@ -219,11 +216,10 @@ namespace Ink_Canvas.Windows
         {
             if (settings == null) return;
 
-            // 启动与隐私
+            // 启动
             settings.Startup.IsFoldAtStartup = true;
             settings.Startup.IsAutoUpdate = true;
             settings.Startup.CrashAction = 0;
-            settings.Startup.TelemetryUploadLevel = TelemetryUploadLevel.None;
 
             // 画板与墨迹
             settings.Canvas.IsShowCursor = false;

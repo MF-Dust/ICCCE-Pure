@@ -84,15 +84,6 @@
   <data name="Page1_NetVersion" xml:space="preserve">
     <value>.NET 版本</value>
   </data>
-  <data name="Page1_DeviceInfo" xml:space="preserve">
-    <value>设备信息</value>
-  </data>
-  <data name="Page1_DeviceInfoDesc" xml:space="preserve">
-    <value>选择要包含在反馈中的设备标识信息</value>
-  </data>
-  <data name="Page1_DeviceId" xml:space="preserve">
-    <value>设备 ID</value>
-  </data>
   <data name="Page1_Config" xml:space="preserve">
     <value>软件配置</value>
   </data>
@@ -120,20 +111,11 @@
   <data name="Page2_SystemInfoDesc" xml:space="preserve">
     <value>将要包含在反馈中的系统环境信息</value>
   </data>
-  <data name="Page2_DeviceInfo" xml:space="preserve">
-    <value>设备信息</value>
-  </data>
-  <data name="Page2_DeviceInfoDesc" xml:space="preserve">
-    <value>将要包含在反馈中的设备标识信息</value>
-  </data>
   <data name="Page2_Config" xml:space="preserve">
     <value>软件配置</value>
   </data>
   <data name="Page2_ConfigDesc" xml:space="preserve">
     <value>将要包含在反馈中的软件配置信息</value>
-  </data>
-  <data name="Page2_Exclude" xml:space="preserve">
-    <value>（不包含）</value>
   </data>
   <data name="Page3Title" xml:space="preserve">
     <value>选择反馈方式</value>

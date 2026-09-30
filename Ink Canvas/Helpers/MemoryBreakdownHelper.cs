@@ -17,8 +17,7 @@ namespace Ink_Canvas.Helpers
     ///   1) Process-level working set / private usage / page-file usage
     ///   2) .NET GC heap stats (per-generation size, fragmentation, pinned objects)
     ///   3) WPF UI counts (Windows, SettingsWindow page cache, Visual tree size)
-    ///   4) In-app caches that are known to grow (PerformanceMonitorHelper samples,
-    ///      Automation / plugin manager registry if accessible via reflection)
+    ///   4) In-app caches that are known to grow (whiteboard pages, undo history)
     ///   5) Loaded assemblies count
     /// The caller can persist the report to Logs/MemoryBreakdown_*.txt and/or
     /// emit a short summary through <see cref="LogHelper.WriteLogToFile"/>.
@@ -362,27 +361,11 @@ namespace Ink_Canvas.Helpers
                     }
                 }
 
-                // PerformanceMonitorHelper 内部样本
-                long perfSamples = ReadStaticField<long>(typeof(PerformanceMonitorHelper), "_cpuSamples")
-                                   + ReadStaticField<long>(typeof(PerformanceMonitorHelper), "_memorySamples");
-                sb.AppendLine($"  PerformanceMonitorHelper 累计样本       : {perfSamples}");
-
-                // PerformanceHistory.json 条目
-                try
-                {
-                    var perfHistory = PerformanceMonitorHelper.LoadHistory();
-                    sb.AppendLine($"  PerformanceHistory.json 条目            : {perfHistory.Count}");
-                }
-                catch (Exception ex)
-                {
-                    sb.AppendLine($"  PerformanceHistory.json: 读取失败 ({ex.Message})");
-                }
-
                 // GC 总占用
                 sb.AppendLine($"  GC Total Memory                          : {GC.GetTotalMemory(false) / (1024.0 * 1024.0):F2} MB");
                 sb.AppendLine();
 
-                // MainWindow 相关缓存(白板页 / PageListView / InkSmoothingManager)
+                // MainWindow 相关缓存(白板页 / PageListView)
                 var mainWindow = Application.Current?.MainWindow as Ink_Canvas.MainWindow;
                 if (mainWindow == null)
                 {
@@ -419,9 +402,6 @@ namespace Ink_Canvas.Helpers
                 int pageListCount = ReadInstanceCollectionCount(mw, "blackBoardSidePageListViewObservableCollection");
                 sb.AppendLine($"  MainWindow.PageListView Observable      : {pageListCount} 项");
 
-                // InkSmoothingManager 性能监控器(若暴露了 InkSmoothingPerformanceMonitor.SampleCount)
-                long smSample = ReadInkSmoothingSampleCount(mw);
-                sb.AppendLine($"  InkSmoothingManager SampleCount         : {smSample}");
             }
             catch (Exception ex)
             {
@@ -514,40 +494,6 @@ namespace Ink_Canvas.Helpers
             {
                 return 0;
             }
-        }
-
-        private static long ReadInkSmoothingSampleCount(Ink_Canvas.MainWindow mw)
-        {
-            try
-            {
-                var prop = mw.GetType().GetProperty("InkSmoothingManagerInstance", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                var manager = prop?.GetValue(mw);
-                if (manager == null) return -1;
-
-                // InkSmoothingManager.PerformanceMonitor.SampleCount 或 _samples
-                var monitorProp = manager.GetType().GetProperty("PerformanceMonitor", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                var monitor = monitorProp?.GetValue(manager);
-                if (monitor != null)
-                {
-                    var sampleProp = monitor.GetType().GetProperty("SampleCount");
-                    if (sampleProp != null && sampleProp.PropertyType == typeof(int))
-                    {
-                        return (int)sampleProp.GetValue(monitor);
-                    }
-                }
-
-                // 退路:在 manager 上找 SampleCount 字段
-                foreach (var fi in manager.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
-                {
-                    if (fi.Name.IndexOf("sample", StringComparison.OrdinalIgnoreCase) >= 0
-                        && fi.FieldType == typeof(int))
-                    {
-                        return (int)fi.GetValue(manager);
-                    }
-                }
-            }
-            catch { }
-            return 0;
         }
 
         private static void AppendAssembliesSection(StringBuilder sb)

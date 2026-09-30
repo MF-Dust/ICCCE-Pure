@@ -57,7 +57,7 @@
     <value>一款面向课堂场景的批注与白板工具。下面的向导将帮助你快速完成首次配置,所有选项都可以稍后在「设置」中修改。</value>
   </data>
   <data name="Oobe_StepCount" xml:space="preserve">
-    <value>共 8 个步骤 · 大约 1 分钟</value>
+    <value>共 6 个步骤 · 大约 1 分钟</value>
   </data>
   <data name="Oobe_StartStepByStep" xml:space="preserve">
     <value>开始逐步配置</value>
@@ -67,9 +67,6 @@
   </data>
   <data name="Oobe_NavWelcome" xml:space="preserve">
     <value>欢迎</value>
-  </data>
-  <data name="Oobe_NavTelemetry" xml:space="preserve">
-    <value>启动与隐私</value>
   </data>
   <data name="Oobe_NavCanvas" xml:space="preserve">
     <value>画板与墨迹</value>
@@ -88,39 +85,6 @@
   </data>
   <data name="Oobe_NavFinish" xml:space="preserve">
     <value>完成</value>
-  </data>
-  <data name="Oobe_Step1Title" xml:space="preserve">
-    <value>启动与隐私</value>
-  </data>
-  <data name="Oobe_Step1Subtitle" xml:space="preserve">
-    <value>遥测、隐私协议、自动更新与崩溃处理。</value>
-  </data>
-  <data name="Oobe_PrivacyTitle" xml:space="preserve">
-    <value>匿名使用数据与隐私</value>
-  </data>
-  <data name="Oobe_PrivacyDesc" xml:space="preserve">
-    <value>完全匿名的使用统计,仅用于改进软件稳定性与性能。</value>
-  </data>
-  <data name="Oobe_AgreePrivacy" xml:space="preserve">
-    <value>我已阅读并同意</value>
-  </data>
-  <data name="Oobe_PrivacyPolicy" xml:space="preserve">
-    <value>《隐私协议》</value>
-  </data>
-  <data name="Oobe_TelemetryLevel" xml:space="preserve">
-    <value>遥测级别</value>
-  </data>
-  <data name="Oobe_TelemetryLevelDesc" xml:space="preserve">
-    <value>本软件不会收集课堂内容、学生个人信息或可识别的原始墨迹。详细请见 privacy.txt。</value>
-  </data>
-  <data name="Oobe_TelemetryNone" xml:space="preserve">
-    <value>不上传任何匿名使用数据</value>
-  </data>
-  <data name="Oobe_TelemetryBasic" xml:space="preserve">
-    <value>基础(崩溃信息、版本与系统信息)</value>
-  </data>
-  <data name="Oobe_TelemetryOptional" xml:space="preserve">
-    <value>可选(功能使用频率等)</value>
   </data>
   <data name="Oobe_StartupCrashTitle" xml:space="preserve">
     <value>启动与崩溃处理</value>
@@ -361,9 +325,6 @@
   </data>
   <data name="Oobe_Step8Subtitle" xml:space="preserve">
     <value>日志等高级配置。</value>
-  </data>
-  <data name="Oobe_SummaryTelemetryLevel" xml:space="preserve">
-    <value>遥测级别</value>
   </data>
   <data name="Oobe_SummaryAppTheme" xml:space="preserve">
     <value>应用主题</value>

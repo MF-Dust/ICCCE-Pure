@@ -51,9 +51,6 @@
   <data name="Nav_Automation_Settings" xml:space="preserve">
     <value>自动化代练</value>
   </data>
-  <data name="Nav_FriendlyLinks" xml:space="preserve">
-    <value>氪金与友军</value>
-  </data>
   <data name="Nav_Plugins" xml:space="preserve">
     <value>外挂</value>
   </data>
@@ -146,12 +143,6 @@
   </data>
   <data name="Nav_Basic_Tooltip" xml:space="preserve">
     <value>新手村调教</value>
-  </data>
-  <data name="Nav_Privacy" xml:space="preserve">
-    <value>小秘密</value>
-  </data>
-  <data name="Nav_Privacy_Tooltip" xml:space="preserve">
-    <value>小秘密与遥测调教</value>
   </data>
   <data name="Nav_MainInterface" xml:space="preserve">
     <value>主界面</value>
@@ -248,12 +239,6 @@
   </data>
   <data name="Settings_Description" xml:space="preserve">
     <value>这里是调教中心</value>
-  </data>
-  <data name="Nav_Performance" xml:space="preserve">
-    <value>体检</value>
-  </data>
-  <data name="Nav_Performance_Tooltip" xml:space="preserve">
-    <value>给电脑体检，看看它 pp 行不行</value>
   </data>
   <data name="Menu_AddedItems" xml:space="preserve">
     <value>已加的菜单项</value>

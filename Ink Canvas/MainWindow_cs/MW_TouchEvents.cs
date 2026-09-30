@@ -480,44 +480,27 @@ namespace Ink_Canvas
         private void AppendInterpolatedTouchPoints(StrokeVisual strokeVisual, int strokeId, Point point)
         {
             if (strokeVisual == null) return;
-            var startedAt = RealtimeInkPerformanceMonitor.IsDebugLoggingEnabled ? Stopwatch.GetTimestamp() : 0L;
-            var initialPointCount = strokeVisual.Stroke?.StylusPoints.Count ?? 0;
-            try
+            if (!_realtimeBrushTipStates.TryGetValue(strokeId, out var state))
             {
-                if (!_realtimeBrushTipStates.TryGetValue(strokeId, out var state))
-                {
-                    state = new RealtimeBrushTipState { HasTouchPoint = true, LastTouchPoint = point };
-                    _realtimeBrushTipStates[strokeId] = state;
-                    strokeVisual.Add(new StylusPoint(point.X, point.Y, 0.5f));
-                    return;
-                }
-
-                if (!state.HasTouchPoint)
-                {
-                    state.HasTouchPoint = true;
-                    state.LastTouchPoint = point;
-                    strokeVisual.Add(new StylusPoint(point.X, point.Y, 0.5f));
-                    return;
-                }
-
-                foreach (var p in InterpolateTouchPoints(state, point))
-                {
-                    strokeVisual.Add(new StylusPoint(p.X, p.Y, 0.5f));
-                }
-                UpdateTouchInterpolationState(state, point);
+                state = new RealtimeBrushTipState { HasTouchPoint = true, LastTouchPoint = point };
+                _realtimeBrushTipStates[strokeId] = state;
+                strokeVisual.Add(new StylusPoint(point.X, point.Y, 0.5f));
+                return;
             }
-            finally
+
+            if (!state.HasTouchPoint)
             {
-                if (startedAt != 0L)
-                {
-                    var finalPointCount = strokeVisual.Stroke?.StylusPoints.Count ?? initialPointCount;
-                    RealtimeInkPerformanceMonitor.RecordInputEvent(
-                        strokeVisual,
-                        1,
-                        Math.Max(0, finalPointCount - initialPointCount),
-                        Stopwatch.GetTimestamp() - startedAt);
-                }
+                state.HasTouchPoint = true;
+                state.LastTouchPoint = point;
+                strokeVisual.Add(new StylusPoint(point.X, point.Y, 0.5f));
+                return;
             }
+
+            foreach (var p in InterpolateTouchPoints(state, point))
+            {
+                strokeVisual.Add(new StylusPoint(p.X, p.Y, 0.5f));
+            }
+            UpdateTouchInterpolationState(state, point);
         }
         private bool TryAppendRealtimeVelocityBrushTipPoints(StrokeVisual strokeVisual, StylusEventArgs e)
         {
@@ -531,132 +514,97 @@ namespace Ink_Canvas
             if (stylusPointCollection == null || stylusPointCollection.Count == 0)
                 return true;
 
-            var startedAt = RealtimeInkPerformanceMonitor.IsDebugLoggingEnabled ? Stopwatch.GetTimestamp() : 0L;
-            var addedPointCount = 0L;
-            try
+            var mix = RealtimeClamp((float)Settings.Canvas.VelocityBrushTipMix, 0f, 1f);
+            var appended = false;
+            var baseWidth = (float)Math.Max(0.35,
+                strokeVisual.Stroke?.DrawingAttributes?.Width ?? inkCanvas.DefaultDrawingAttributes.Width);
+
+            foreach (StylusPoint rawPoint in stylusPointCollection)
             {
-                var mix = RealtimeClamp((float)Settings.Canvas.VelocityBrushTipMix, 0f, 1f);
-                var appended = false;
-                var baseWidth = (float)Math.Max(0.35,
-                    strokeVisual.Stroke?.DrawingAttributes?.Width ?? inkCanvas.DefaultDrawingAttributes.Width);
+                var nowMs = RealtimeNowMs();
+                var dtMs = Math.Max(1L, nowMs - state.LastTimestampMs);
+                var dt = dtMs / 1000f;
+                var sampleRate = 1f / Math.Max(1e-4f, dt);
+                state.SmoothedSampleRateHz = state.SmoothedSampleRateHz * 0.85f + sampleRate * 0.15f;
 
-                foreach (StylusPoint rawPoint in stylusPointCollection)
+                var rawX = (float)rawPoint.X;
+                var rawY = (float)rawPoint.Y;
+                var dx = rawX - state.LastRawX;
+                var dy = rawY - state.LastRawY;
+                var dist = (float)Math.Sqrt(dx * dx + dy * dy);
+                var speed = dist / dt;
+
+                var filteredX = state.FilterX.Filter(rawX, dt, speed);
+                var filteredY = state.FilterY.Filter(rawY, dt, speed);
+
+                var hwPressure = RealtimeClamp((float)rawPoint.PressureFactor, 0f, 1f);
+                if (Math.Abs(hwPressure - 0.5f) > 0.02f)
+                    state.SawPressureVariation = true;
+                var usePressure = state.SawPressureVariation && hwPressure > 0f;
+
+                var width = baseWidth;
+                if (usePressure)
+                    width *= 0.25f + 0.75f * hwPressure;
+                var speedNormalization = 1800f + state.SmoothedSampleRateHz * 3.5f;
+                width *= RealtimeClamp(1.15f - (speed / speedNormalization), 0.45f, 1.25f);
+                var speedPressure = WidthToPressure(width, baseWidth);
+
+                var pressure = usePressure
+                    ? ((1f - mix) * hwPressure + mix * speedPressure)
+                    : speedPressure;
+                pressure = RealtimeClamp(pressure, 0.08f, 1f);
+                pressure = state.FilterPressure.Filter(pressure, dt, speed);
+
+                var minDist = GetRealtimeBrushTipMinDistance(state.SmoothedSampleRateHz);
+                if (dist < minDist && state.HasSeed)
                 {
-                    var nowMs = RealtimeNowMs();
-                    var dtMs = Math.Max(1L, nowMs - state.LastTimestampMs);
-                    var dt = dtMs / 1000f;
-                    var sampleRate = 1f / Math.Max(1e-4f, dt);
-                    state.SmoothedSampleRateHz = state.SmoothedSampleRateHz * 0.85f + sampleRate * 0.15f;
-
-                    var rawX = (float)rawPoint.X;
-                    var rawY = (float)rawPoint.Y;
-                    var dx = rawX - state.LastRawX;
-                    var dy = rawY - state.LastRawY;
-                    var dist = (float)Math.Sqrt(dx * dx + dy * dy);
-                    var speed = dist / dt;
-
-                    var filteredX = state.FilterX.Filter(rawX, dt, speed);
-                    var filteredY = state.FilterY.Filter(rawY, dt, speed);
-
-                    var hwPressure = RealtimeClamp((float)rawPoint.PressureFactor, 0f, 1f);
-                    if (Math.Abs(hwPressure - 0.5f) > 0.02f)
-                        state.SawPressureVariation = true;
-                    var usePressure = state.SawPressureVariation && hwPressure > 0f;
-
-                    var width = baseWidth;
-                    if (usePressure)
-                        width *= 0.25f + 0.75f * hwPressure;
-                    var speedNormalization = 1800f + state.SmoothedSampleRateHz * 3.5f;
-                    width *= RealtimeClamp(1.15f - (speed / speedNormalization), 0.45f, 1.25f);
-                    var speedPressure = WidthToPressure(width, baseWidth);
-
-                    var pressure = usePressure
-                        ? ((1f - mix) * hwPressure + mix * speedPressure)
-                        : speedPressure;
-                    pressure = RealtimeClamp(pressure, 0.08f, 1f);
-                    pressure = state.FilterPressure.Filter(pressure, dt, speed);
-
-                    var minDist = GetRealtimeBrushTipMinDistance(state.SmoothedSampleRateHz);
-                    if (dist < minDist && state.HasSeed)
-                    {
-                        state.LastRawX = rawX;
-                        state.LastRawY = rawY;
-                        state.LastTimestampMs = nowMs;
-                        continue;
-                    }
-
-                    if (!state.HasSeed)
-                    {
-                        state.HasSeed = true;
-                        state.LastSmoothX = filteredX;
-                        state.LastSmoothY = filteredY;
-                        state.LastSmoothPressure = pressure;
-                        strokeVisual.Add(new StylusPoint(filteredX, filteredY, pressure));
-                        addedPointCount++;
-                    }
-                    else
-                    {
-                        // 采用中点链减抖：保持实时笔锋同时降低折线锯齿
-                        var midX = (state.LastSmoothX + filteredX) * 0.5f;
-                        var midY = (state.LastSmoothY + filteredY) * 0.5f;
-                        var midPressure = (state.LastSmoothPressure + pressure) * 0.5f;
-                        strokeVisual.Add(new StylusPoint(midX, midY, midPressure));
-                        addedPointCount++;
-                        state.LastSmoothX = filteredX;
-                        state.LastSmoothY = filteredY;
-                        state.LastSmoothPressure = pressure;
-                    }
-
                     state.LastRawX = rawX;
                     state.LastRawY = rawY;
                     state.LastTimestampMs = nowMs;
-                    appended = true;
+                    continue;
                 }
 
-                var committedStroke = strokeVisual.Stroke;
-                if (appended && committedStroke != null)
+                if (!state.HasSeed)
                 {
-                    if (committedStroke.DrawingAttributes != null)
-                        committedStroke.DrawingAttributes.IgnorePressure = false;
-                    if (!committedStroke.ContainsPropertyData(RealtimeVelocityBrushTipAppliedGuid))
-                        committedStroke.AddPropertyData(RealtimeVelocityBrushTipAppliedGuid, true);
+                    state.HasSeed = true;
+                    state.LastSmoothX = filteredX;
+                    state.LastSmoothY = filteredY;
+                    state.LastSmoothPressure = pressure;
+                    strokeVisual.Add(new StylusPoint(filteredX, filteredY, pressure));
+                }
+                else
+                {
+                    // 采用中点链减抖：保持实时笔锋同时降低折线锯齿
+                    var midX = (state.LastSmoothX + filteredX) * 0.5f;
+                    var midY = (state.LastSmoothY + filteredY) * 0.5f;
+                    var midPressure = (state.LastSmoothPressure + pressure) * 0.5f;
+                    strokeVisual.Add(new StylusPoint(midX, midY, midPressure));
+                    state.LastSmoothX = filteredX;
+                    state.LastSmoothY = filteredY;
+                    state.LastSmoothPressure = pressure;
                 }
 
-                return true;
+                state.LastRawX = rawX;
+                state.LastRawY = rawY;
+                state.LastTimestampMs = nowMs;
+                appended = true;
             }
-            finally
+
+            var committedStroke = strokeVisual.Stroke;
+            if (appended && committedStroke != null)
             {
-                if (startedAt != 0L)
-                {
-                    RealtimeInkPerformanceMonitor.RecordInputEvent(
-                        strokeVisual,
-                        stylusPointCollection.Count,
-                        addedPointCount,
-                        Stopwatch.GetTimestamp() - startedAt);
-                }
+                if (committedStroke.DrawingAttributes != null)
+                    committedStroke.DrawingAttributes.IgnorePressure = false;
+                if (!committedStroke.ContainsPropertyData(RealtimeVelocityBrushTipAppliedGuid))
+                    committedStroke.AddPropertyData(RealtimeVelocityBrushTipAppliedGuid, true);
             }
+
+            return true;
         }
 
         private bool TryAppendRealtimeVelocityBrushTipPoint(StrokeVisual strokeVisual, int strokeId, Point point, float rawPressure = 0.5f)
         {
-            var startedAt = RealtimeInkPerformanceMonitor.IsDebugLoggingEnabled ? Stopwatch.GetTimestamp() : 0L;
-            var initialPointCount = strokeVisual?.Stroke?.StylusPoints.Count ?? 0;
-            try
-            {
-                return TryAppendRealtimeVelocityBrushTipPointCore(strokeVisual, strokeId, point, rawPressure);
-            }
-            finally
-            {
-                if (startedAt != 0L)
-                {
-                    var finalPointCount = strokeVisual?.Stroke?.StylusPoints.Count ?? initialPointCount;
-                    RealtimeInkPerformanceMonitor.RecordInputEvent(
-                        strokeVisual,
-                        1,
-                        Math.Max(0, finalPointCount - initialPointCount),
-                        Stopwatch.GetTimestamp() - startedAt);
-                }
-            }
+            return TryAppendRealtimeVelocityBrushTipPointCore(strokeVisual, strokeId, point, rawPressure);
         }
 
         private bool TryAppendRealtimeVelocityBrushTipPointCore(
@@ -765,97 +713,80 @@ namespace Ink_Canvas
             if (!_realtimeBrushTipStates.TryGetValue(strokeId, out var state))
                 return TryAppendRealtimeVelocityBrushTipPoint(strokeVisual, strokeId, point, rawPressure);
 
-            var startedAt = RealtimeInkPerformanceMonitor.IsDebugLoggingEnabled ? Stopwatch.GetTimestamp() : 0L;
-            var initialPointCount = strokeVisual?.Stroke?.StylusPoints.Count ?? 0;
-            try
+            var appended = false;
+            if (!state.HasTouchPoint)
             {
-                var appended = false;
-                if (!state.HasTouchPoint)
-                {
-                    state.HasTouchPoint = true;
-                    state.LastTouchPoint = point;
-                    state.LastTouchInputTimestampTicks = Stopwatch.GetTimestamp();
-                    return TryAppendRealtimeVelocityBrushTipPointCore(strokeVisual, strokeId, point, rawPressure);
-                }
+                state.HasTouchPoint = true;
+                state.LastTouchPoint = point;
+                state.LastTouchInputTimestampTicks = Stopwatch.GetTimestamp();
+                return TryAppendRealtimeVelocityBrushTipPointCore(strokeVisual, strokeId, point, rawPressure);
+            }
 
-                var isTouchVelocity = _activeRealtimeTouchStrokeIds.Contains(strokeId);
-                if (isTouchVelocity)
+            var isTouchVelocity = _activeRealtimeTouchStrokeIds.Contains(strokeId);
+            if (isTouchVelocity)
+            {
+                var touchInputTimestampTicks = Stopwatch.GetTimestamp();
+                var eventDt = state.LastTouchInputTimestampTicks > 0
+                    ? Math.Max(
+                        0.001f,
+                        (float)((touchInputTimestampTicks - state.LastTouchInputTimestampTicks)
+                                / (double)Stopwatch.Frequency))
+                    : 1f / 60f;
+                var eventChord = point - state.LastTouchPoint;
+                if (eventChord.Length < 0.1)
                 {
-                    var touchInputTimestampTicks = Stopwatch.GetTimestamp();
-                    var eventDt = state.LastTouchInputTimestampTicks > 0
-                        ? Math.Max(
-                            0.001f,
-                            (float)((touchInputTimestampTicks - state.LastTouchInputTimestampTicks)
-                                    / (double)Stopwatch.Frequency))
-                        : 1f / 60f;
-                    var eventChord = point - state.LastTouchPoint;
-                    if (eventChord.Length < 0.1)
-                    {
-                        UpdateTouchInterpolationState(state, point);
-                        state.LastTouchInputTimestampTicks = touchInputTimestampTicks;
-                        return false;
-                    }
-
-                    var eventSpeed = (float)(eventChord.Length / eventDt);
-                    GetTouchVelocityInterpolationParams(
-                        state,
-                        point,
-                        eventSpeed,
-                        out var interpolationSpacing,
-                        out var maxSteps);
-                    var stepCount = GetTouchInterpolationStepCount(
-                        eventChord.Length,
-                        interpolationSpacing,
-                        maxSteps);
-                    var pointDt = eventDt / stepCount;
-                    var sampleRate = 1f / eventDt;
-                    state.SmoothedSampleRateHz = state.SmoothedSampleRateHz * 0.85f + sampleRate * 0.15f;
-                    for (var stepIndex = 1; stepIndex <= stepCount; stepIndex++)
-                    {
-                        var interpolatedPoint = GetTouchInterpolationPoint(
-                            state,
-                            point,
-                            stepIndex,
-                            stepCount);
-                        appended |= TryAppendRealtimeVelocityBrushTipPointCore(
-                            strokeVisual,
-                            strokeId,
-                            interpolatedPoint,
-                            rawPressure,
-                            eventSpeed,
-                            pointDt,
-                            false,
-                            false);
-                    }
                     UpdateTouchInterpolationState(state, point);
                     state.LastTouchInputTimestampTicks = touchInputTimestampTicks;
+                    return false;
                 }
-                else
+
+                var eventSpeed = (float)(eventChord.Length / eventDt);
+                GetTouchVelocityInterpolationParams(
+                    state,
+                    point,
+                    eventSpeed,
+                    out var interpolationSpacing,
+                    out var maxSteps);
+                var stepCount = GetTouchInterpolationStepCount(
+                    eventChord.Length,
+                    interpolationSpacing,
+                    maxSteps);
+                var pointDt = eventDt / stepCount;
+                var sampleRate = 1f / eventDt;
+                state.SmoothedSampleRateHz = state.SmoothedSampleRateHz * 0.85f + sampleRate * 0.15f;
+                for (var stepIndex = 1; stepIndex <= stepCount; stepIndex++)
                 {
-                    foreach (var p in InterpolateTouchPoints(state, point))
-                    {
-                        appended |= TryAppendRealtimeVelocityBrushTipPointCore(
-                            strokeVisual,
-                            strokeId,
-                            p,
-                            rawPressure);
-                    }
-                    UpdateTouchInterpolationState(state, point);
-                }
-                return appended;
-            }
-            finally
-            {
-                if (startedAt != 0L)
-                {
-                    var finalPointCount = strokeVisual?.Stroke?.StylusPoints.Count ?? initialPointCount;
-                    RealtimeInkPerformanceMonitor.RecordInputEvent(
+                    var interpolatedPoint = GetTouchInterpolationPoint(
+                        state,
+                        point,
+                        stepIndex,
+                        stepCount);
+                    appended |= TryAppendRealtimeVelocityBrushTipPointCore(
                         strokeVisual,
-                        1,
-                        Math.Max(0, finalPointCount - initialPointCount),
-                        Stopwatch.GetTimestamp() - startedAt);
+                        strokeId,
+                        interpolatedPoint,
+                        rawPressure,
+                        eventSpeed,
+                        pointDt,
+                        false,
+                        false);
                 }
+                UpdateTouchInterpolationState(state, point);
+                state.LastTouchInputTimestampTicks = touchInputTimestampTicks;
             }
+            else
+            {
+                foreach (var p in InterpolateTouchPoints(state, point))
+                {
+                    appended |= TryAppendRealtimeVelocityBrushTipPointCore(
+                        strokeVisual,
+                        strokeId,
+                        p,
+                        rawPressure);
+                }
+                UpdateTouchInterpolationState(state, point);
+            }
+            return appended;
         }
 
         /// <summary>
@@ -1280,7 +1211,7 @@ namespace Ink_Canvas
                 CancelPauseStraightenTimer(stylusId);
                 InitializeRealtimeBrushTipState(stylusId, e);
                 var sv = GetStrokeVisual(stylusId);
-                RealtimeInkPerformanceMonitor.BeginStroke(sv, RealtimeInkInputKind.Stylus);
+                RealtimeInkFrameScheduler.BeginStrokeSession();
                 TryAppendRealtimeVelocityBrushTipInterpolatedPoints(sv, stylusId, p);
                 RealtimeInkFrameScheduler.RequestRedraw(sv);
                 _pauseStraightenInkModeStartPos = p;
@@ -1361,7 +1292,7 @@ namespace Ink_Canvas
                     CancelPauseStraightenTimer(-200001);
                     _pauseStraightenInkModeTracking = false;
                     _activeRealtimeStylusStrokeIds.Remove(stylusId);
-                    RealtimeInkPerformanceMonitor.EndStroke(sv);
+                    RealtimeInkFrameScheduler.EndStrokeSession();
                     EndTouchInkInputIfIdle();
                     inkCanvas.ReleaseStylusCapture();
                     ViewboxFloatingBar.IsHitTestVisible = true;
@@ -2001,7 +1932,7 @@ namespace Ink_Canvas
                     CancelPauseStraightenTimer(touchId);
                     InitializeRealtimeBrushTipStateFromPoint(touchId, p);
                     var sv = GetStrokeVisual(touchId);
-                    RealtimeInkPerformanceMonitor.BeginStroke(sv, RealtimeInkInputKind.TouchVelocity);
+                    RealtimeInkFrameScheduler.BeginStrokeSession();
                     TryAppendRealtimeVelocityBrushTipInterpolatedPoints(sv, touchId, p);
                     RealtimeInkFrameScheduler.RequestRedraw(sv);
                 }
@@ -2026,7 +1957,7 @@ namespace Ink_Canvas
                     BeginTouchInkInput();
                     CancelPauseStraightenTimer(touchId);
                     var sv = GetStrokeVisual(touchId);
-                    RealtimeInkPerformanceMonitor.BeginStroke(sv, RealtimeInkInputKind.TouchInterpolated);
+                    RealtimeInkFrameScheduler.BeginStrokeSession();
                     AppendInterpolatedTouchPoints(sv, touchId, p);
                     RealtimeInkFrameScheduler.RequestRedraw(sv);
                 }
@@ -2261,7 +2192,7 @@ namespace Ink_Canvas
                     CleanupRealtimeBrushTipState(touchId);
                     CancelPauseStraightenTimer(touchId);
                     _activeRealtimeTouchStrokeIds.Remove(touchId);
-                    RealtimeInkPerformanceMonitor.EndStroke(sv);
+                    RealtimeInkFrameScheduler.EndStrokeSession();
                     EndTouchInkInputIfIdle();
                 }
             }
@@ -2294,7 +2225,7 @@ namespace Ink_Canvas
                     CleanupRealtimeBrushTipState(touchId);
                     CancelPauseStraightenTimer(touchId);
                     _activeTouchStrokeIds.Remove(touchId);
-                    RealtimeInkPerformanceMonitor.EndStroke(sv);
+                    RealtimeInkFrameScheduler.EndStrokeSession();
                     EndTouchInkInputIfIdle();
                 }
             }

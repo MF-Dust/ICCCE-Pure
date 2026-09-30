@@ -68,12 +68,6 @@ namespace Ink_Canvas.Properties
 
         public static string Page1_NetVersion => ResourceManager.GetString(nameof(Page1_NetVersion), _resourceCulture);
 
-        public static string Page1_DeviceInfo => ResourceManager.GetString(nameof(Page1_DeviceInfo), _resourceCulture);
-
-        public static string Page1_DeviceInfoDesc => ResourceManager.GetString(nameof(Page1_DeviceInfoDesc), _resourceCulture);
-
-        public static string Page1_DeviceId => ResourceManager.GetString(nameof(Page1_DeviceId), _resourceCulture);
-
         public static string Page1_Config => ResourceManager.GetString(nameof(Page1_Config), _resourceCulture);
 
         public static string Page1_ConfigDesc => ResourceManager.GetString(nameof(Page1_ConfigDesc), _resourceCulture);
@@ -92,15 +86,9 @@ namespace Ink_Canvas.Properties
 
         public static string Page2_SystemInfoDesc => ResourceManager.GetString(nameof(Page2_SystemInfoDesc), _resourceCulture);
 
-        public static string Page2_DeviceInfo => ResourceManager.GetString(nameof(Page2_DeviceInfo), _resourceCulture);
-
-        public static string Page2_DeviceInfoDesc => ResourceManager.GetString(nameof(Page2_DeviceInfoDesc), _resourceCulture);
-
         public static string Page2_Config => ResourceManager.GetString(nameof(Page2_Config), _resourceCulture);
 
         public static string Page2_ConfigDesc => ResourceManager.GetString(nameof(Page2_ConfigDesc), _resourceCulture);
-
-        public static string Page2_Exclude => ResourceManager.GetString(nameof(Page2_Exclude), _resourceCulture);
 
         public static string Page3Title => ResourceManager.GetString(nameof(Page3Title), _resourceCulture);
 

@@ -702,12 +702,6 @@
   <data name="Main_Screenshot_DefaultHint" xml:space="preserve">
     <value>拖一下选区域，右键或双击可全屏；自由绘制松开后点确认</value>
   </data>
-  <data name="Main_Privacy_FileNotFound" xml:space="preserve">
-    <value>隐私说明查无此人（privacy.txt）</value>
-  </data>
-  <data name="Main_Privacy_ReadError" xml:space="preserve">
-    <value>隐私说明读取寄了</value>
-  </data>
   <data name="Main_App_RestartLoopDetected" xml:space="preserve">
     <value>程序已连续复活 5 次，自动复活已停。快联系开发者或检查系统环境吧</value>
   </data>

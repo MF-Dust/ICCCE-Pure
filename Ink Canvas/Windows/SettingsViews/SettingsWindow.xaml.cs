@@ -27,7 +27,6 @@ namespace Ink_Canvas.Windows.SettingsViews
             { "HomePage", typeof(HomePage) },
             { "StartupPage", typeof(StartupPage) },
             { "ClockPage", typeof(ClockPage) },
-            { "PrivacyPage", typeof(PrivacyPage) },
             { "SecurityPage", typeof(SecurityPage) },
             { "WindowPage", typeof(WindowPage) },
             { "AppearancePage", typeof(AppearancePage) },
@@ -35,27 +34,21 @@ namespace Ink_Canvas.Windows.SettingsViews
             { "HotkeyPage", typeof(HotkeyPage) },
             { "ToolbarPage", typeof(ToolbarPage) },
             { "ToolbarAppearancePage", typeof(ToolbarAppearancePage) },
-            { "FloatingBarThemePage", typeof(FloatingBarThemePage) },
-            { "FloatingBarThemeMarketPage", typeof(FloatingBarThemeMarketPage) },
             { "ToolbarMenuPage", typeof(ToolbarMenuPage) },
             { "BoardToolbarPage", typeof(BoardToolbarPage) },
             { "BoardAppearancePage", typeof(BoardAppearancePage) },
             { "BoardMenuPage", typeof(BoardMenuPage) },
             { "UpdatePage", typeof(UpdatePage) },
             { "NotificationPage", typeof(NotificationPage) },
-            { "AnnouncementCenterPage", typeof(AnnouncementCenterPage) },
             { "ExperimentalPage", typeof(ExperimentalPage) },
             { "AdvancedPage", typeof(AdvancedPage) },
             { "StoragePage", typeof(StoragePage) },
             { "BackupPage", typeof(BackupPage) },
-            { "CloudStoragePage", typeof(CloudStoragePage) },
             { "AutomationWorkflowPage", typeof(AutomationWorkflowPage) },
             { "PowerPointPage", typeof(PowerPointPage) },
             { "CanvasPage", typeof(CanvasPage) },
             { "InkRecognitionPage", typeof(InkRecognitionPage) },
-            { "PerformancePage", typeof(PerformancePage) },
             { "DebugPage", typeof(DebugPage) },
-            { "FriendlyLinksPage", typeof(FriendlyLinksPage) },
             { "AboutPage", typeof(AboutPage) },
             { "Settings", typeof(SettingsPage) },
             { "PPTPageFlipPreviewPage", typeof(PPTPageFlipPreviewPage) }
@@ -112,7 +105,6 @@ namespace Ink_Canvas.Windows.SettingsViews
                 { "HomePage", typeof(HomePage) },
                 { "StartupPage", typeof(StartupPage) },
                 { "ClockPage", typeof(ClockPage) },
-                { "PrivacyPage", typeof(PrivacyPage) },
                 { "SecurityPage", typeof(SecurityPage) },
                 { "WindowPage", typeof(WindowPage) },
                 { "AppearancePage", typeof(AppearancePage) },
@@ -120,27 +112,21 @@ namespace Ink_Canvas.Windows.SettingsViews
                 { "HotkeyPage", typeof(HotkeyPage) },
                 { "ToolbarPage", typeof(ToolbarPage) },
                 { "ToolbarAppearancePage", typeof(ToolbarAppearancePage) },
-            { "FloatingBarThemePage", typeof(FloatingBarThemePage) },
-            { "FloatingBarThemeMarketPage", typeof(FloatingBarThemeMarketPage) },
                 { "ToolbarMenuPage", typeof(ToolbarMenuPage) },
                 { "BoardToolbarPage", typeof(BoardToolbarPage) },
                 { "BoardAppearancePage", typeof(BoardAppearancePage) },
                 { "BoardMenuPage", typeof(BoardMenuPage) },
                 { "UpdatePage", typeof(UpdatePage) },
                 { "NotificationPage", typeof(NotificationPage) },
-                { "AnnouncementCenterPage", typeof(AnnouncementCenterPage) },
                 { "ExperimentalPage", typeof(ExperimentalPage) },
                 { "AdvancedPage", typeof(AdvancedPage) },
                 { "StoragePage", typeof(StoragePage) },
                 { "BackupPage", typeof(BackupPage) },
-                { "CloudStoragePage", typeof(CloudStoragePage) },
                 { "AutomationWorkflowPage", typeof(AutomationWorkflowPage) },
                 { "PowerPointPage", typeof(PowerPointPage) },
                 { "CanvasPage", typeof(CanvasPage) },
                 { "InkRecognitionPage", typeof(InkRecognitionPage) },
-                { "PerformancePage", typeof(PerformancePage) },
                 { "DebugPage", typeof(DebugPage) },
-                { "FriendlyLinksPage", typeof(FriendlyLinksPage) },
                 { "AboutPage", typeof(AboutPage) },
                 { "Settings", typeof(SettingsPage) },
                 { "PPTPageFlipPreviewPage", typeof(PPTPageFlipPreviewPage) }
@@ -166,7 +152,6 @@ namespace Ink_Canvas.Windows.SettingsViews
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
                         UpdateUpdateBadgeVisibility();
-                        UpdateAnnouncementUnreadBadge();
                         // 绑定设置窗口中的 ToggleSwitch 本地化文本
                         Ink_Canvas.Helpers.LocalizationHelper.BindToggleSwitchesInWindow(this);
                     }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
@@ -175,11 +160,9 @@ namespace Ink_Canvas.Windows.SettingsViews
                 _ = PreloadAllPagesAsync();
             };
 
-            AnnouncementService.UnreadCountChanged += UpdateAnnouncementUnreadBadge;
 
             this.Closed += (sender, e) =>
             {
-                AnnouncementService.UnreadCountChanged -= UpdateAnnouncementUnreadBadge;
                 UnregisterDpiChangedListener();
                 _pages.Clear();
                 _pageTypes.Clear();
@@ -492,27 +475,6 @@ namespace Ink_Canvas.Windows.SettingsViews
             // 应用 URI 处理器留下的待处理高亮 key（等待页面 Loaded 完成，确保可视树已构建）
             TryApplyPendingHighlight();
 
-            // 如果导航到了浮动栏主题管理页，确保刷新主题列表（比如从主题市场安装后返回能立即看到）
-            try
-            {
-                if (currentPageType == typeof(FloatingBarThemePage))
-                {
-                    (rootFrame.Content as FloatingBarThemePage)?.RefreshThemes();
-                }
-            }
-            catch { }
-        }
-
-        /// <summary>
-        /// 允许外部调用以刷新设置窗口中的浮动栏主题管理页（如果当前正在显示）
-        /// </summary>
-        public void RefreshFloatingBarThemePage()
-        {
-            try
-            {
-                (rootFrame.Content as FloatingBarThemePage)?.RefreshThemes();
-            }
-            catch { }
         }
 
         /// <summary>
@@ -1348,21 +1310,5 @@ namespace Ink_Canvas.Windows.SettingsViews
             catch { }
         }
 
-        public void UpdateAnnouncementUnreadBadge()
-        {
-            Dispatcher.InvokeAsync(() =>
-            {
-                try
-                {
-                    var count = AnnouncementService.GetUnreadCount(Helpers.SettingsManager.Settings);
-                    if (AnnouncementUnreadInfoBadge != null)
-                    {
-                        AnnouncementUnreadInfoBadge.Value = count;
-                        AnnouncementUnreadInfoBadge.Visibility = count > 0 ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                }
-                catch { }
-            });
-        }
     }
 }

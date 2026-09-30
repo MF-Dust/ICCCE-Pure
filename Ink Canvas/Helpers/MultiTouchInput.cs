@@ -259,21 +259,11 @@ namespace Ink_Canvas.Helpers
         /// </summary>
         public void Redraw(bool forceRedraw = false)
         {
-            // 任何路径(旧 WPF 墨迹/新湿墨提交)走到这里都算一帧"墨迹入帧",
-            // HUD 用此计数得到墨迹帧率。放在最前面,即使 Stroke/_visualCanvas 为 null
-            // 也能保证每次进入 Redraw 入口就 +1(笔迹开始建立时 _visualCanvas 可能尚未挂载)。
-            RealtimeInkFrameScheduler.RecordInkTick();
-
             if (Stroke == null || _visualCanvas == null) return;
 
             var currentPointCount = Stroke.StylusPoints.Count;
             if (currentPointCount == 0) return;
 
-            var startedAt = RealtimeInkPerformanceMonitor.IsDebugLoggingEnabled ? Stopwatch.GetTimestamp() : 0L;
-            var gen0CollectionCountStart = startedAt != 0L ? GC.CollectionCount(0) : -1;
-            var gen1CollectionCountStart = startedAt != 0L ? GC.CollectionCount(1) : -1;
-            var gen2CollectionCountStart = startedAt != 0L ? GC.CollectionCount(2) : -1;
-            var committed = false;
             try
             {
                 if (_activeVisual == null)
@@ -288,22 +278,9 @@ namespace Ink_Canvas.Helpers
                 if (currentPointCount - _lastCommittedPointCount >= COMMIT_POINT_THRESHOLD)
                 {
                     CommitActiveVisual(currentPointCount);
-                    committed = true;
                 }
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-            finally
-            {
-                if (startedAt != 0L)
-                    RealtimeInkPerformanceMonitor.RecordRedraw(
-                        this,
-                        Stopwatch.GetTimestamp() - startedAt,
-                        committed,
-                        forceRedraw,
-                        gen0CollectionCountStart,
-                        gen1CollectionCountStart,
-                        gen2CollectionCountStart);
-            }
         }
 
         /// <summary>
@@ -314,8 +291,6 @@ namespace Ink_Canvas.Helpers
         {
             if (Stroke == null || _visualCanvas == null) return;
 
-            RealtimeInkFrameScheduler.RecordInkTick();
-            RealtimeInkPerformanceMonitor.RecordForceRedraw(this);
             var currentPointCount = Stroke.StylusPoints.Count;
 
             // 点数回退（笔画被替换/缩短），必须清除全部已提交视觉重建

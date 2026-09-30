@@ -70,17 +70,9 @@ namespace Ink_Canvas.Properties
 
         public static string DictationDoNotDisturbWhiteboardHint => ResourceManager.GetString(nameof(DictationDoNotDisturbWhiteboardHint), _resourceCulture);
 
-        public static string EnableAnnouncements => ResourceManager.GetString(nameof(EnableAnnouncements), _resourceCulture);
-
-        public static string EnableAnnouncementsHint => ResourceManager.GetString(nameof(EnableAnnouncementsHint), _resourceCulture);
-
         public static string EnableDynamic => ResourceManager.GetString(nameof(EnableDynamic), _resourceCulture);
 
         public static string EnableDynamicHint => ResourceManager.GetString(nameof(EnableDynamicHint), _resourceCulture);
-
-        public static string EnableForcePopup => ResourceManager.GetString(nameof(EnableForcePopup), _resourceCulture);
-
-        public static string EnableForcePopupHint => ResourceManager.GetString(nameof(EnableForcePopupHint), _resourceCulture);
 
         public static string EnableWindowsToast => ResourceManager.GetString(nameof(EnableWindowsToast), _resourceCulture);
 
@@ -112,29 +104,13 @@ namespace Ink_Canvas.Properties
 
         public static string PlacementTopRight => ResourceManager.GetString(nameof(PlacementTopRight), _resourceCulture);
 
-        public static string Provider_Announcement => ResourceManager.GetString(nameof(Provider_Announcement), _resourceCulture);
-
-        public static string Provider_AnnouncementDesc => ResourceManager.GetString(nameof(Provider_AnnouncementDesc), _resourceCulture);
-
         public static string Provider_Disabled => ResourceManager.GetString(nameof(Provider_Disabled), _resourceCulture);
-
-        public static string Provider_HttpOnly => ResourceManager.GetString(nameof(Provider_HttpOnly), _resourceCulture);
 
         public static string Provider_Local => ResourceManager.GetString(nameof(Provider_Local), _resourceCulture);
 
         public static string Provider_LocalDesc => ResourceManager.GetString(nameof(Provider_LocalDesc), _resourceCulture);
 
-        public static string Provider_NoToken => ResourceManager.GetString(nameof(Provider_NoToken), _resourceCulture);
-
-        public static string Provider_Reconnecting => ResourceManager.GetString(nameof(Provider_Reconnecting), _resourceCulture);
-
         public static string Provider_Running => ResourceManager.GetString(nameof(Provider_Running), _resourceCulture);
-
-        public static string Provider_Starting => ResourceManager.GetString(nameof(Provider_Starting), _resourceCulture);
-
-        public static string Provider_Stopped => ResourceManager.GetString(nameof(Provider_Stopped), _resourceCulture);
-
-        public static string Provider_WaitingRestart => ResourceManager.GetString(nameof(Provider_WaitingRestart), _resourceCulture);
 
         public static string Provider_WindowsToast => ResourceManager.GetString(nameof(Provider_WindowsToast), _resourceCulture);
 
@@ -188,6 +164,5 @@ namespace Ink_Canvas.Properties
 
         public static string ViewDetails => ResourceManager.GetString(nameof(ViewDetails), _resourceCulture);
 
-        public static string ViewHistory => ResourceManager.GetString(nameof(ViewHistory), _resourceCulture);
     }
 }

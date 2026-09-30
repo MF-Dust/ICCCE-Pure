@@ -37,8 +37,6 @@ namespace Ink_Canvas.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string Source { get; set; } = string.Empty;
         public string ProviderId { get; set; } = string.Empty;
-        public string AnnouncementId { get; set; } = string.Empty;
-        public string AnnouncementType { get; set; } = string.Empty;
 
         [JsonIgnore]
         public Action Action { get; set; }

@@ -22,11 +22,6 @@
 │   ├── 时钟
 │   │   └── TextBlock "时钟"
 │   │       └── SettingsCard: 使用24小时制显示时间 → ComboBox
-│   ├── 隐私
-│   │   └── TextBlock "隐私与遥测"
-│   │       └── SettingsExpander: 隐私与遥测（默认展开）
-│   │           ├── SettingsCard → CheckBox: 隐私协议
-│   │           └── SettingsCard: 遥测级别 → ComboBox
 │   ├── 安全
 │   │   ├── TextBlock "安全密码"
 │   │   │   ├── InfoBar: 安全密码说明
@@ -65,20 +60,6 @@
 │           ├── TextBlock: 配置说明
 │           ├── SettingsCard: 配置方案 → ComboBox
 │           └── SettingsCard → Button: 删除 / Button: 另存为
-│   └── 性能
-│       ├── TextBlock "性能监测"
-│       │   └── LabeledSettingsCard: 启用监测 → ToggleSwitch
-│       ├── TextBlock "当前运行状态"
-│       │   └── SettingsCard: 当前状态 → TextBlock + Panel
-│       ├── TextBlock "历史记录"
-│       │   ├── SettingsCard: 历史摘要 → TextBlock + Panel
-│       │   ├── SettingsCard: 墨迹平滑历史 → TextBlock + Panel
-│       │   └── SettingsCard: 清除历史 → Button
-│       ├── TextBlock "设备性能评估"
-│       │   ├── SettingsCard: 设备评分 → TextBlock + Panel
-│       │   └── SettingsCard: 运行设备测试 → Button
-│       └── TextBlock "墨迹纠正耗时"
-│           └── SettingsCard: 墨迹平滑统计 → TextBlock + Panel
 ├── 主界面
 │   ├── 窗口
 │   │   └── TextBlock "窗口设置"
@@ -92,19 +73,10 @@
 │   │           ├── SettingsCard: 置顶模式 → RadioButton × 2
 │   │           └── SettingsCard: 重启按钮 → Button
 │   ├── 个性化
-│   │   ├── TextBlock "主题"
-│   │   │   ├── SettingsCard: 主题 → ComboBox
-│   │   │   ├── SettingsCard: 窗口背景材质 → ComboBox
-│   │   │   └── SettingsCard: 语言 → ComboBox
-│   │   ├── TextBlock "浮动栏图标"
-│   │   │   ├── SettingsCard: 浮动栏图标 → ComboBox
-│   │   │   ├── Button: 上传自定义 + Button: 管理自定义
-│   │   │   ├── SettingsCard: 黑板缩放比例 → Slider
-│   │   │   ├── LabeledSettingsCard: 画板模式显示时间 → ToggleSwitch
-│   │   │   └── LabeledSettingsCard: 使用24小时制 → ToggleSwitch
-│   │   └── TextBlock "浮动栏按钮"
-│   │       ├── LabeledSettingsCard: 使用旧版浮动栏 UI → ToggleSwitch
-│   │       └── SettingsCard: 浮动栏按钮 → Clickable
+│   │   └── TextBlock "主题"
+│   │       ├── SettingsCard: 主题 → ComboBox
+│   │       ├── SettingsCard: 窗口背景材质 → ComboBox
+│   │       └── SettingsCard: 语言 → ComboBox
 │   ├── 侧边栏 (SidebarPage)
 │   │   ├── SettingsExpander: 启用快捷面板 → ToggleSwitch（开则展开）
 │   │   │   ├── SettingsCard: 快捷面板底部偏移 → Slider
@@ -252,29 +224,26 @@
 │           ├── MarkdownScrollViewer
 │           └── Button: 回滚到此版本
 ├── 通知
-│   ├── 通知设置
-│   │   ├── TextBlock "通知"
-│   │   │   ├── LabeledSettingsCard: 启用公告 → ToggleSwitch
-│   │   │   ├── LabeledSettingsCard: 启用强制弹窗 → ToggleSwitch
-│   │   │   ├── LabeledSettingsCard: 启用动态 → ToggleSwitch
-│   │   │   ├── LabeledSettingsCard: 启用 Windows 通知 → ToggleSwitch
-│   │   │   └── SettingsExpander: 听写免打扰 → ToggleSwitch（开则展开）
-│   │   │       ├── SettingsCard: PPT 模式免打扰 → CheckBox
-│   │   │       └── SettingsCard: 白板模式免打扰 → CheckBox
-│   │   ├── TextBlock "通知提供商"
-│   │   │   ├── SettingsCard: 通知提供商管理 → Button
-│   │   │   └── ItemsControl: 提供商列表（动态）
-│   │   ├── TextBlock "行为"
-│   │   │   ├── SettingsCard: 通知位置 → ComboBox
-│   │   │   ├── SettingsCard: 动画模式 → ComboBox
-│   │   │   ├── SettingsCard: 更新通知持续时间 → Slider
-│   │   │   ├── SettingsCard: 紧急通知持续时间 → Slider
-│   │   │   ├── SettingsCard: 重要通知持续时间 → Slider
-│   │   │   ├── SettingsCard: 提醒通知持续时间 → Slider
-│   │   │   └── SettingsCard: 其他通知持续时间 → Slider
-│   │   └── TextBlock "操作"
-│   │       └── SettingsCard: 测试通知 → Button
-│   └── 公告中心
+│   └── 通知设置
+│       ├── TextBlock "通知"
+│       │   ├── LabeledSettingsCard: 启用动态 → ToggleSwitch
+│       │   ├── LabeledSettingsCard: 启用 Windows 通知 → ToggleSwitch
+│       │   └── SettingsExpander: 听写免打扰 → ToggleSwitch（开则展开）
+│       │       ├── SettingsCard: PPT 模式免打扰 → CheckBox
+│       │       └── SettingsCard: 白板模式免打扰 → CheckBox
+│       ├── TextBlock "通知提供商"
+│       │   ├── SettingsCard: 通知提供商管理 → Button
+│       │   └── ItemsControl: 提供商列表（动态）
+│       ├── TextBlock "行为"
+│       │   ├── SettingsCard: 通知位置 → ComboBox
+│       │   ├── SettingsCard: 动画模式 → ComboBox
+│       │   ├── SettingsCard: 更新通知持续时间 → Slider
+│       │   ├── SettingsCard: 紧急通知持续时间 → Slider
+│       │   ├── SettingsCard: 重要通知持续时间 → Slider
+│       │   ├── SettingsCard: 提醒通知持续时间 → Slider
+│       │   └── SettingsCard: 其他通知持续时间 → Slider
+│       └── TextBlock "操作"
+│           └── SettingsCard: 测试通知 → Button
 ├── 实验性
 │   └── TextBlock "无"
 │       ├── LabeledSettingsCard: 全屏辅助 → ToggleSwitch
@@ -305,26 +274,6 @@
 │           └── SettingsExpander: 手动操作（默认展开）
 │               ├── SettingsCard: 手动备份 → Clickable
 │               └── SettingsCard: 还原备份 → Clickable
-│   └── 云存储
-│       ├── TextBlock "云存储管理"
-│       │   ├── SettingsCard: 上传延迟 → TextBox
-│       │   └── SettingsExpander: 上传提供商（默认展开）
-│       │       └── SettingsCard: 提供商列表 → ItemsControl
-│       ├── TextBlock "Dlass"
-│       │   ├── SettingsExpander: 用户令牌（默认展开）
-│       │   │   ├── SettingsCard: 已保存令牌 → ComboBox
-│       │   │   ├── SettingsCard: 新令牌 → TextBox
-│       │   │   └── SettingsCard: 令牌操作 → Button × 3
-│       │   ├── SettingsCard: 连接状态 → TextBlock + Button
-│       │   ├── SettingsCard: 班级选择 → ComboBox
-│       │   └── LabeledSettingsCard: 自动上传笔记 → ToggleSwitch
-│       └── TextBlock "WebDAV"
-│           └── SettingsExpander: WebDAV 设置（默认展开）
-│               ├── SettingsCard: WebDAV URL → TextBox
-│               ├── SettingsCard: 用户名 → TextBox
-│               ├── SettingsCard: 密码 → PasswordBox
-│               ├── SettingsCard: 根目录 → TextBox
-│               └── SettingsCard: 操作 → Button × 2
 ├── 工具栏
 │   ├── 组件
 │   │   ├── TextBlock "配置方案"
@@ -494,17 +443,7 @@
 │       └── SettingsExpander: SettingsExpander 示例（默认展开）
 │           ├── CopyButton
 │           └── SettingsCard: Customization
-├── ── 浮动栏主题 ──
-│   ├── 浮动栏主题 (FloatingBarThemePage)
-│   │   ├── SettingsCard: 打开主题文件夹 → Button
-│   │   └── ItemsControl: 主题列表（动态，含 应用/删除 按钮，内置主题不显示删除）
-│   └── 浮动栏主题市场 (FloatingBarThemeMarketPage)
-│       ├── Button: 刷新 + Button: 打开主题文件夹 + ProgressBar（加载条）
-│       └── ItemsControl: 市场主题列表（动态，含 安装 按钮）
 ├── ── 底部 ──
-├── 友情链接
-│   └── TextBlock "无"
-│       └── （动态内容）
 └── 关于 Ink Canvas
     └── TextBlock "无"
         └── （动态内容）

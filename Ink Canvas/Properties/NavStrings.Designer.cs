@@ -46,8 +46,6 @@ namespace Ink_Canvas.Properties
 
         public static string Nav_Automation_Settings => ResourceManager.GetString(nameof(Nav_Automation_Settings), _resourceCulture);
 
-        public static string Nav_FriendlyLinks => ResourceManager.GetString(nameof(Nav_FriendlyLinks), _resourceCulture);
-
         public static string Nav_PPT_Settings => ResourceManager.GetString(nameof(Nav_PPT_Settings), _resourceCulture);
 
         public static string Nav_Shortcuts => ResourceManager.GetString(nameof(Nav_Shortcuts), _resourceCulture);
@@ -105,10 +103,6 @@ namespace Ink_Canvas.Properties
         public static string Nav_ToolbarAppearance_Tooltip => ResourceManager.GetString(nameof(Nav_ToolbarAppearance_Tooltip), _resourceCulture);
 
         public static string Nav_Basic_Tooltip => ResourceManager.GetString(nameof(Nav_Basic_Tooltip), _resourceCulture);
-
-        public static string Nav_Privacy => ResourceManager.GetString(nameof(Nav_Privacy), _resourceCulture);
-
-        public static string Nav_Privacy_Tooltip => ResourceManager.GetString(nameof(Nav_Privacy_Tooltip), _resourceCulture);
 
         public static string Nav_MainInterface => ResourceManager.GetString(nameof(Nav_MainInterface), _resourceCulture);
 
@@ -175,10 +169,6 @@ namespace Ink_Canvas.Properties
         public static string Nav_PreloadPagesFailed => ResourceManager.GetString(nameof(Nav_PreloadPagesFailed), _resourceCulture);
 
         public static string Settings_Description => ResourceManager.GetString(nameof(Settings_Description), _resourceCulture);
-
-        public static string Nav_Performance => ResourceManager.GetString(nameof(Nav_Performance), _resourceCulture);
-
-        public static string Nav_Performance_Tooltip => ResourceManager.GetString(nameof(Nav_Performance_Tooltip), _resourceCulture);
 
         public static string Nav_WhiteboardTips => ResourceManager.GetString(nameof(Nav_WhiteboardTips), _resourceCulture);
 

@@ -51,6 +51,7 @@ namespace Ink_Canvas
 
             var rd1 = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
             Application.Current.Resources.MergedDictionaries.Add(rd1);
+            FloatingBarThemeService?.ApplyBuiltInTheme();
 
             _ = Task.Run(async () =>
             {

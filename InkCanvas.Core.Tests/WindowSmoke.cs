@@ -1,5 +1,7 @@
 using Ink_Canvas;
 using Ink_Canvas.Windows.SettingsViews.Helpers;
+using Ink_Canvas.Windows.SettingsViews;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -21,6 +23,7 @@ internal static class WindowSmoke
         try
         {
             var settings = new Settings();
+            settings.Appearance.IsColorfulViewboxFloatingBar = false;
             settings.Startup.HasShownOobe = true;
             settings.Startup.IsAutoUpdate = false;
             settings.Startup.CrashAction = 1;
@@ -68,6 +71,23 @@ internal static class WindowSmoke
                         .GetValue(window);
                     if (!autoSave.IsEnabled || autoSave.Interval != TimeSpan.FromMinutes(3))
                         throw new Exception("配置重载未应用新的自动保存间隔");
+                    foreach (var theme in new[] { 0, 1 })
+                    {
+                        typeof(MainWindow).GetMethod("ApplyTheme", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(window, new object[] { theme });
+                        if (!ReferenceEquals(app.TryFindResource("FloatingBarBackgroundBrush"), app.TryFindResource("FloatBarBackground")))
+                            throw new Exception("内置工具栏外观未跟随深浅色主题");
+                    }
+                    var settingsWindow = new SettingsWindow();
+                    var pages = (Dictionary<string, Type>)typeof(SettingsWindow)
+                        .GetField("_pageTypes", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(settingsWindow);
+                    foreach (var removed in new[] { "CloudStoragePage", "PrivacyPage", "PerformancePage",
+                        "AnnouncementCenterPage", "FriendlyLinksPage", "FloatingBarThemePage", "FloatingBarThemeMarketPage" })
+                        if (pages.ContainsKey(removed)) throw new Exception("已删除设置页仍被注册：" + removed);
+                    foreach (var retained in new[] { "NotificationPage", "StoragePage", "BackupPage", "AutomationWorkflowPage",
+                        "ToolbarPage", "BoardToolbarPage", "PowerPointPage", "UpdatePage", "SecurityPage" })
+                        if (!pages.ContainsKey(retained)) throw new Exception("应保留的设置页丢失：" + retained);
+                    settingsWindow.Close();
                     checkedWindow = true;
                     // 白板模式的第一次关闭仅退回批注模式；第二次走真实关闭流程。
                     window.Close();

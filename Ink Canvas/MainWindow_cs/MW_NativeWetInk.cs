@@ -48,7 +48,6 @@ namespace Ink_Canvas
         private Point _inkCanvasOriginInWindow = new Point(double.NaN, double.NaN);
         private bool _inkCanvasOriginCached;
         // Dispatcher 延迟探针节流。
-        private long _lastDispatcherProbeMs;
 
         internal void TryStartNativeWetInkPipeline()
         {
@@ -486,29 +485,6 @@ namespace Ink_Canvas
         {
             try
             {
-                // 同步 raw-mouse 诊断（供 Live JSON 判断 WM_INPUT 是否生效）。
-                if (_nativePointerInputSource != null)
-                    Ink_Canvas.Ink.Native.NativeInkPerfProbe.UpdateRawMouseDiagnostics(
-                        _nativePointerInputSource.RawMouseActive,
-                        _nativePointerInputSource.RawMouseSampleCount,
-                        _nativePointerInputSource.LegacyMouseSampleCount,
-                        _nativePointerInputSource.RawMouseRegisterError);
-
-                // Dispatcher 延迟探针：用 Send 优先级（立即执行不排队）测 UI 线程真实可用性。
-                // 高频下只每 500ms 测一次，避免探针本身干扰。
-                var nowMs = Environment.TickCount64;
-                if (nowMs - _lastDispatcherProbeMs >= 500)
-                {
-                    _lastDispatcherProbeMs = nowMs;
-                    var sw = System.Diagnostics.Stopwatch.StartNew();
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        sw.Stop();
-                        Ink_Canvas.Ink.Native.NativeInkPerfProbe.RecordDispatcherDelay(
-                            sw.Elapsed.TotalMilliseconds);
-                    }), System.Windows.Threading.DispatcherPriority.Send);
-                }
-
                 if (!ShouldAcceptPointerBatch(batch))
                     return false;
 
@@ -595,8 +571,6 @@ namespace Ink_Canvas
             if (!_nativeCapturedRoutes.TryGetValue(batch.PointerId, out var captured))
                 return false;
 
-            var inputStartTicks = System.Diagnostics.Stopwatch.GetTimestamp();
-            var nativeKindIndex = (int)batch.InputKind; // Pen=0, Touch=1, Mouse=2
 
             var facts = CreatePointerFacts(batch);
             var context = BuildCapturedRouteContext(captured, batch.InputKind);
@@ -634,12 +608,6 @@ namespace Ink_Canvas
                         predictionEnabled);
                     ResetPauseStraightenTimerForPointer(batch.PointerId);
 
-                    // 记录新墨迹 input 事件（按 batch.InputKind 分桶）。
-                    var inputElapsedMs = (System.Diagnostics.Stopwatch.GetTimestamp() - inputStartTicks) * 1000.0
-                        / System.Diagnostics.Stopwatch.Frequency;
-                    var rawCount = batch.SamplesNewestFirst?.Count ?? 0;
-                    Ink_Canvas.Ink.Native.NativeInkPerfProbe.RecordInputEvent(
-                        nativeKindIndex, rawCount, rawCount, inputElapsedMs);
                 }
             }
 

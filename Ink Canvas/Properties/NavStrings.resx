@@ -51,9 +51,6 @@
   <data name="Nav_Automation_Settings" xml:space="preserve">
     <value>自动化设置</value>
   </data>
-  <data name="Nav_FriendlyLinks" xml:space="preserve">
-    <value>赞助及友链</value>
-  </data>
   <data name="Nav_Plugins" xml:space="preserve">
     <value>插件</value>
   </data>
@@ -146,12 +143,6 @@
   </data>
   <data name="Nav_Basic_Tooltip" xml:space="preserve">
     <value>基本设置</value>
-  </data>
-  <data name="Nav_Privacy" xml:space="preserve">
-    <value>隐私</value>
-  </data>
-  <data name="Nav_Privacy_Tooltip" xml:space="preserve">
-    <value>隐私与遥测设置</value>
   </data>
   <data name="Nav_MainInterface" xml:space="preserve">
     <value>主界面</value>
@@ -260,12 +251,6 @@
   </data>
   <data name="Settings_Description" xml:space="preserve">
     <value>这里是设置页面</value>
-  </data>
-  <data name="Nav_Performance" xml:space="preserve">
-    <value>性能</value>
-  </data>
-  <data name="Nav_Performance_Tooltip" xml:space="preserve">
-    <value>性能监测与设备评估</value>
   </data>
   <data name="Menu_AddedItems" xml:space="preserve">
     <value>已添加的菜单项</value>

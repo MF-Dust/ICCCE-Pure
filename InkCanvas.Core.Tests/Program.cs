@@ -1,6 +1,8 @@
 using Ink_Canvas;
 using Ink_Canvas.Controls.Toolbar;
 using Ink_Canvas.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Linq;
@@ -72,7 +74,45 @@ internal static class Program
         window.UpdateAutoSaveStrokesTimer();
         Check(!timer.IsEnabled, "关闭自动保存必须停止定时器");
         CheckLegacyToolsLayouts();
-        Console.WriteLine("Core save/autosave/layout regression checks passed.");
+        CheckRemovedFeatureSettings();
+        Console.WriteLine("Core save/autosave/layout/settings regression checks passed.");
+    }
+
+    private static void CheckRemovedFeatureSettings()
+    {
+        const string legacyJson = """
+            {
+              "dlass": { "userToken": "old-token", "webDavPassword": "old-password" },
+              "upload": { "enabledProviders": ["Dlass", "WebDav"] },
+              "performance": { "isMonitoringEnabled": true, "deviceScore": 42 },
+              "appearance": { "floatingBarThemeId": "custom-skin", "theme": 1 },
+              "startup": { "telemetryUploadLevel": 2, "hasAcceptedTelemetryPrivacy": true, "isAutoUpdate": false },
+              "notification": { "isAnnouncementEnabled": true, "isForcePopupEnabled": true, "isDynamicNotificationEnabled": true },
+              "automation": { "isEnableAutoSaveStrokes": true, "autoSaveStrokesIntervalMinutes": 3 }
+            }
+            """;
+        var settings = JsonConvert.DeserializeObject<Settings>(legacyJson);
+        Check(settings.Appearance.Theme == 1 && !settings.Startup.IsAutoUpdate, "旧配置的内置主题和更新偏好必须保留");
+        Check(settings.Automation.IsEnableAutoSaveStrokes && settings.Automation.AutoSaveStrokesIntervalMinutes == 3,
+            "旧配置的本地自动保存必须保留");
+        Check(settings.Notification.IsDynamicNotificationEnabled, "本地通知设置必须保留");
+        foreach (var pair in new[] { (typeof(Settings), "Dlass"), (typeof(Settings), "Upload"),
+            (typeof(Settings), "Performance"), (typeof(Startup), "TelemetryUploadLevel"),
+            (typeof(Appearance), "FloatingBarThemeId"), (typeof(NotificationSettings), "IsAnnouncementEnabled") })
+            Check(pair.Item1.GetProperty(pair.Item2) == null, "已删除功能不能保留运行时设置入口：" + pair.Item2);
+
+        var original = JObject.Parse(legacyJson);
+        var roundTrip = JObject.FromObject(settings);
+        foreach (var path in new[] { "dlass", "upload", "performance", "appearance.floatingBarThemeId",
+            "startup.telemetryUploadLevel", "startup.hasAcceptedTelemetryPrivacy", "notification.isAnnouncementEnabled",
+            "notification.isForcePopupEnabled" })
+            Check(JToken.DeepEquals(original.SelectToken(path), roundTrip.SelectToken(path)), "保存设置不能清理旧用户数据：" + path);
+        var feedback = FeedbackSanitizer.BuildSanitizedSettingsJson(settings);
+        Check(!feedback.Contains("old-token") && !feedback.Contains("old-password") && !feedback.Contains("deviceId"),
+            "主动反馈不得泄漏旧凭据或设备标识");
+        var defaults = JObject.FromObject(new Settings());
+        Check(defaults["dlass"] == null && defaults["upload"] == null && defaults["performance"] == null,
+            "新配置不应生成已删除功能的配置");
     }
 
     private static void CheckLegacyToolsLayouts()

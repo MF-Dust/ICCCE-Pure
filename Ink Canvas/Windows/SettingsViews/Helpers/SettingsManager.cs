@@ -31,7 +31,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
             }
         }
 
-        // 全局 SaveSettingsToFile 串行化：419 个调用点跨 UI 线程、公告轮询线程、插件线程，
+        // 全局 SaveSettingsToFile 串行化：多个调用点跨 UI 线程和后台任务，
         // 互相 File.WriteAllText 同路径写时部分抛 IOException 被 catch 吞掉只记日志，用户感知不到
         // 设置已丢失。先到先写、后到排队。
         private static readonly object _saveGate = new object();

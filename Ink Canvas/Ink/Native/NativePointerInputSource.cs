@@ -61,15 +61,6 @@ namespace Ink_Canvas.Ink.Native
         // WM_MOUSEMOVE 被拦截（样本由 raw 高频提供）；为 false 时回退用 legacy
         // move 喂样本，覆盖「触摸框以注入鼠标上报、不走 RawInput」的设备。
         private bool _rawMouseUpdateDeliveredInContact;
-        // 诊断：raw vs legacy 鼠标 sample 计数（供 RealtimeInkDebugLive.json）。
-        private long _rawMouseSampleCount;
-        private long _legacyMouseSampleCount;
-        private int _rawMouseRegisterError;
-        public long RawMouseSampleCount => System.Threading.Volatile.Read(ref _rawMouseSampleCount);
-        public long LegacyMouseSampleCount => System.Threading.Volatile.Read(ref _legacyMouseSampleCount);
-        public bool RawMouseActive => _rawMouseActive;
-        public int RawMouseRegisterError => System.Threading.Volatile.Read(ref _rawMouseRegisterError);
-
         public NativePointerInputSource(
             HwndSource source,
             NativePointerInputHandler handler,
@@ -111,7 +102,6 @@ namespace Ink_Canvas.Ink.Native
                 else
                 {
                     var error = Marshal.GetLastWin32Error();
-                    _rawMouseRegisterError = error;
                     System.Diagnostics.Debug.WriteLine($"[WetInk] RegisterRawInputDevices failed: Win32 {error}, cbSize={cbSize}, hwnd=0x{hwnd.ToInt64():X}");
                 }
             }
@@ -352,7 +342,6 @@ namespace Ink_Canvas.Ink.Native
                         true));
 
                     _rawMouseUpdateDeliveredInContact = true;
-                    System.Threading.Interlocked.Increment(ref _rawMouseSampleCount);
                     handled = consumed;
                 }
                 finally
@@ -412,7 +401,6 @@ namespace Ink_Canvas.Ink.Native
                 (LowWord(wParam) & 0x0002) != 0,
                 promoted,
                 true));
-            System.Threading.Interlocked.Increment(ref _legacyMouseSampleCount);
         }
 
         private bool TryReadPenBatch(
@@ -601,10 +589,6 @@ namespace Ink_Canvas.Ink.Native
                     {
                         historyComplete = capacity >= count;
                         error = 0;
-                        NativeInkPerfProbe.RecordPointerHistory(
-                            (int)count,
-                            (int)capacity,
-                            historyComplete);
                         return Trim(history, capacity);
                     }
                     error = Marshal.GetLastWin32Error();
@@ -646,10 +630,6 @@ namespace Ink_Canvas.Ink.Native
                     {
                         historyComplete = capacity >= count;
                         error = 0;
-                        NativeInkPerfProbe.RecordPointerHistory(
-                            (int)count,
-                            (int)capacity,
-                            historyComplete);
                         return Trim(history, capacity);
                     }
                     error = Marshal.GetLastWin32Error();

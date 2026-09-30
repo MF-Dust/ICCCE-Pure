@@ -31,14 +31,6 @@
                             <TreeViewItem Header="SettingsCard: 使用24小时制显示时间 → ComboBox" />
                         </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem Header="隐私">
-                        <TreeViewItem Header='TextBlock "隐私与遥测"'>
-                            <TreeViewItem Header="SettingsExpander: 隐私与遥测（默认展开）" IsExpanded="True">
-                                <TreeViewItem Header="SettingsCard → CheckBox: 隐私协议" />
-                                <TreeViewItem Header="SettingsCard: 遥测级别 → ComboBox" />
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </TreeViewItem>
                     <TreeViewItem Header="安全" IsExpanded="True">
                         <TreeViewItem Header='TextBlock "安全密码"' IsExpanded="True">
                             <TreeViewItem Header="InfoBar: 安全密码说明" />
@@ -86,26 +78,6 @@
                             <TreeViewItem Header="SettingsCard → Button: 删除 / Button: 另存为" />
                         </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem Header="性能" Tag="PerformancePage">
-                        <TreeViewItem Header='TextBlock "性能监测"'>
-                            <TreeViewItem Header="LabeledSettingsCard: 启用监测 → ToggleSwitch" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "当前运行状态"'>
-                            <TreeViewItem Header="SettingsCard: 当前状态 → TextBlock + Panel" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "历史记录"'>
-                            <TreeViewItem Header="SettingsCard: 历史摘要 → TextBlock + Panel" />
-                            <TreeViewItem Header="SettingsCard: 墨迹平滑历史 → TextBlock + Panel" />
-                            <TreeViewItem Header="SettingsCard: 清除历史 → Button" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "设备性能评估"'>
-                            <TreeViewItem Header="SettingsCard: 设备评分 → TextBlock + Panel" />
-                            <TreeViewItem Header="SettingsCard: 运行设备测试 → Button" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "墨迹纠正耗时"'>
-                            <TreeViewItem Header="SettingsCard: 墨迹平滑统计 → TextBlock + Panel" />
-                        </TreeViewItem>
-                    </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="主界面">
                     <TreeViewItem Header="窗口">
@@ -127,18 +99,6 @@
                             <TreeViewItem Header="SettingsCard: 主题 → ComboBox" />
                             <TreeViewItem Header="SettingsCard: 窗口背景材质 → ComboBox" />
                             <TreeViewItem Header="SettingsCard: 语言 → ComboBox" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "浮动栏图标"' IsExpanded="True">
-                            <TreeViewItem Header="SettingsCard: 浮动栏图标 → ComboBox" />
-                            <TreeViewItem Header="Button: 上传自定义 + Button: 管理自定义" />
-                            <TreeViewItem Header="SettingsCard: 黑板缩放比例 → Slider" />
-                            <TreeViewItem Header="LabeledSettingsCard: 画板模式显示时间 → ToggleSwitch" />
-                            <TreeViewItem Header="LabeledSettingsCard: 画板模式显示鸡汤 → ToggleSwitch" />
-                            <TreeViewItem Header="SettingsCard: 鸡汤来源 → ComboBox + Button" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "浮动栏按钮"'>
-                            <TreeViewItem Header="LabeledSettingsCard: 使用旧版浮动栏 UI → ToggleSwitch" />
-                            <TreeViewItem Header="SettingsCard: 浮动栏按钮 → Clickable" />
                         </TreeViewItem>
                     </TreeViewItem>
                     <TreeViewItem Header="侧边栏" IsExpanded="True">
@@ -287,11 +247,6 @@
                     <TreeViewItem Header='TextBlock "PPT设置"'>
                         <TreeViewItem Header="LabeledSettingsCard: 双指手势 → ToggleSwitch" />
                         <TreeViewItem Header="LabeledSettingsCard: 手势翻页 → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 时间胶囊 → ToggleSwitch" />
-                        <TreeViewItem Header="SettingsCard: 时间胶囊位置 → ComboBox" />
-                        <TreeViewItem Header="SettingsCard: 时间胶囊透明度 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 时间胶囊缩放 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 时间胶囊重置位置 → Button" />
                         <TreeViewItem Header="LabeledSettingsCard: 放映时显示快捷面板 → ToggleSwitch" />
                     </TreeViewItem>
                     <TreeViewItem Header='TextBlock "自动截图"'>
@@ -339,8 +294,6 @@
                 <TreeViewItem Header="通知" Tag="NotificationPage" IsExpanded="True">
                     <TreeViewItem Header="通知设置" IsExpanded="True">
                         <TreeViewItem Header='TextBlock "通知"'>
-                            <TreeViewItem Header="LabeledSettingsCard: 启用公告 → ToggleSwitch" />
-                            <TreeViewItem Header="LabeledSettingsCard: 启用强制弹窗 → ToggleSwitch" />
                             <TreeViewItem Header="LabeledSettingsCard: 启用动态 → ToggleSwitch" />
                             <TreeViewItem Header="LabeledSettingsCard: 启用 Windows 通知 → ToggleSwitch" />
                             <TreeViewItem Header="SettingsExpander: 听写免打扰 → ToggleSwitch（开则展开）">
@@ -365,7 +318,6 @@
                             <TreeViewItem Header="SettingsCard: 测试通知 → Button" />
                         </TreeViewItem>
                     </TreeViewItem>
-                    <TreeViewItem Header="公告中心" Tag="AnnouncementCenterPage" />
                 </TreeViewItem>
                 <TreeViewItem Header="实验性">
                     <TreeViewItem Header='TextBlock "无"'>
@@ -392,9 +344,6 @@
                             <TreeViewItem Header="SettingsExpander: 自定义文件（默认展开）">
                                 <TreeViewItem Header="SettingsCard: 自定义文件说明" />
                             </TreeViewItem>
-                            <TreeViewItem Header="SettingsExpander: 插件（默认展开）">
-                                <TreeViewItem Header="SettingsCard: 插件说明" />
-                            </TreeViewItem>
                             <TreeViewItem Header="SettingsCard: 自动更新 → TextBlock + Button: 清理" />
                             <TreeViewItem Header="SettingsCard: 其他 → TextBlock" />
                         </TreeViewItem>
@@ -408,33 +357,6 @@
                             <TreeViewItem Header="SettingsExpander: 手动操作（默认展开）">
                                 <TreeViewItem Header="SettingsCard: 手动备份 → Clickable" />
                                 <TreeViewItem Header="SettingsCard: 还原备份 → Clickable" />
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </TreeViewItem>
-                    <TreeViewItem Header="云存储" IsExpanded="True">
-                        <TreeViewItem Header='TextBlock "云存储管理"'>
-                            <TreeViewItem Header="SettingsCard: 上传延迟 → TextBox" />
-                            <TreeViewItem Header="SettingsExpander: 上传提供商（默认展开）">
-                                <TreeViewItem Header="SettingsCard: 提供商列表 → ItemsControl" />
-                            </TreeViewItem>
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "Dlass"' IsExpanded="True">
-                            <TreeViewItem Header="SettingsExpander: 用户令牌（默认展开）">
-                                <TreeViewItem Header="SettingsCard: 已保存令牌 → ComboBox" />
-                                <TreeViewItem Header="SettingsCard: 新令牌 → TextBox" />
-                                <TreeViewItem Header="SettingsCard: 令牌操作 → Button × 3" />
-                            </TreeViewItem>
-                            <TreeViewItem Header="SettingsCard: 连接状态 → TextBlock + Button" />
-                            <TreeViewItem Header="SettingsCard: 班级选择 → ComboBox" />
-                            <TreeViewItem Header="LabeledSettingsCard: 自动上传笔记 → ToggleSwitch" />
-                        </TreeViewItem>
-                        <TreeViewItem Header='TextBlock "WebDAV"'>
-                            <TreeViewItem Header="SettingsExpander: WebDAV 设置（默认展开）">
-                                <TreeViewItem Header="SettingsCard: WebDAV URL → TextBox" />
-                                <TreeViewItem Header="SettingsCard: 用户名 → TextBox" />
-                                <TreeViewItem Header="SettingsCard: 密码 → PasswordBox" />
-                                <TreeViewItem Header="SettingsCard: 根目录 → TextBox" />
-                                <TreeViewItem Header="SettingsCard: 操作 → Button × 2" />
                             </TreeViewItem>
                         </TreeViewItem>
                     </TreeViewItem>
@@ -651,36 +573,6 @@
                         </TreeViewItem>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="随机点名">
-                    <TreeViewItem Header='TextBlock "随机点名"'>
-                        <TreeViewItem Header="LabeledSettingsCard: 显示编辑名单按钮 → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 启用随机和单人抽取 → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 启用快速抽取 → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 使用外部调用 → ToggleSwitch" />
-                        <TreeViewItem Header="SettingsCard: 外部调用类型 → ComboBox" />
-                        <TreeViewItem Header="SettingsCard: 单次关闭延迟 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 单次最大人数 → Slider" />
-                    </TreeViewItem>
-                    <TreeViewItem Header='TextBlock "背景设置"'>
-                        <TreeViewItem Header="SettingsCard: 背景选择 → Button × 2 + ComboBox" />
-                    </TreeViewItem>
-                    <TreeViewItem Header='TextBlock "新 UI"'>
-                        <TreeViewItem Header="LabeledSettingsCard: 使用新点名 UI → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 避免重复抽取 → ToggleSwitch" />
-                        <TreeViewItem Header="SettingsCard: 历史记录数 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 权重 → Slider" />
-                    </TreeViewItem>
-                    <TreeViewItem Header='TextBlock "计时器"'>
-                        <TreeViewItem Header="SettingsCard: 计时器样式 → ComboBox" />
-                        <TreeViewItem Header="LabeledSettingsCard: 超时正计时 → ToggleSwitch" />
-                        <TreeViewItem Header="LabeledSettingsCard: 超时高亮 → ToggleSwitch" />
-                        <TreeViewItem Header="SettingsCard: 音量 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 自定义提示音 → Button × 2" />
-                        <TreeViewItem Header="LabeledSettingsCard: 渐进提醒 → ToggleSwitch" />
-                        <TreeViewItem Header="SettingsCard: 渐进提醒音量 → Slider" />
-                        <TreeViewItem Header="SettingsCard: 渐进提醒自定义音 → Button × 2" />
-                    </TreeViewItem>
-                </TreeViewItem>
                 <TreeViewItem Header="Debug">
                     <TreeViewItem Header='TextBlock "Debug"'>
                         <TreeViewItem Header="LabeledSettingsCard: 显示控制台 → ToggleSwitch" />
@@ -692,19 +584,7 @@
                         </TreeViewItem>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="── 插件设置 ──" />
-                <TreeViewItem Header="插件">
-                    <TreeViewItem Header='TextBlock "无"'>
-                        <TreeViewItem Header="Border: 插件数量状态" />
-                        <TreeViewItem Header="StackPanel: 插件容器（动态加载）" />
-                    </TreeViewItem>
-                </TreeViewItem>
                 <TreeViewItem Header="── 底部 ──" />
-                <TreeViewItem Header="友情链接">
-                    <TreeViewItem Header='TextBlock "无"'>
-                        <TreeViewItem Header="（动态内容）" />
-                    </TreeViewItem>
-                </TreeViewItem>
                 <TreeViewItem Header="关于 Ink Canvas">
                     <TreeViewItem Header='TextBlock "无"'>
                         <TreeViewItem Header="（动态内容）" />

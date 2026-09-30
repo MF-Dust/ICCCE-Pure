@@ -481,7 +481,6 @@ namespace Ink_Canvas
                 WriteCrashLog("PowerPoint模块等待WPF会话结束事件清理");
             }
 
-            DeviceIdentifier.SaveUsageStatsOnShutdown();
         }
 
         private void App_SessionEnding(object sender, System.Windows.SessionEndingCancelEventArgs e)
@@ -1469,29 +1468,6 @@ namespace Ink_Canvas
                     LogHelper.WriteLogToFile($"启动IPC监听器时出错: {ex.Message}", LogHelper.LogType.Error);
                 }
 
-                try
-                {
-                    LogHelper.WriteLogToFile("初始化上传帮助类");
-                    Helpers.UploadHelper.Initialize();
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile($"初始化上传帮助类时出错: {ex.Message}", LogHelper.LogType.Error);
-                }
-
-                try
-                {
-                    DeviceIdentifier.RecordAppLaunch();
-                    var systemVersion = DeviceIdentifier.GetSystemVersion();
-                    LogHelper.WriteLogToFile($"App | 系统版本: {systemVersion}");
-                    LogHelper.WriteLogToFile($"App | 设备ID: {DeviceIdentifier.GetDeviceId()}");
-                    LogHelper.WriteLogToFile($"App | 使用频率: {DeviceIdentifier.GetUsageFrequency()}");
-                    LogHelper.WriteLogToFile($"App | 更新优先级: {DeviceIdentifier.GetUpdatePriority()}");
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile($"App | 初始化设备统计与遥测标签失败: {ex.Message}", LogHelper.LogType.Warning);
-                }
             }
             catch (Exception ex)
             {
@@ -1937,37 +1913,6 @@ namespace Ink_Canvas
                 // 记录应用退出状态
                 string exitType = IsAppExitByUser ? "用户主动退出" : "应用程序退出";
                 WriteCrashLog($"{exitType}，退出代码: {e.ApplicationExitCode}");
-
-                // 停止性能监测并保存运行记录
-                try
-                {
-                    PerformanceMonitorHelper.StopAndSave();
-                }
-                catch (Exception perfEx)
-                {
-                    LogHelper.WriteLogToFile($"保存性能监测数据失败: {perfEx.Message}", LogHelper.LogType.Warning);
-                }
-
-                // 实时笔迹详细调试日志独立写盘（仅 Debug 页开启过时才会落盘）
-                try
-                {
-                    RealtimeInkPerformanceMonitor.StopAndSave();
-                }
-                catch (Exception inkPerfEx)
-                {
-                    LogHelper.WriteLogToFile($"保存实时笔迹调试日志失败: {inkPerfEx.Message}", LogHelper.LogType.Warning);
-                }
-
-                // 记录应用退出（设备标识符）
-                try
-                {
-                    DeviceIdentifier.RecordAppExit();
-                    LogHelper.WriteLogToFile($"App | 应用运行时长: {(DateTime.Now - appStartTime).TotalMinutes:F1}分钟");
-                }
-                catch (Exception deviceEx)
-                {
-                    LogHelper.WriteLogToFile($"记录设备标识符退出信息失败: {deviceEx.Message}", LogHelper.LogType.Error);
-                }
 
                 if (IsAppExitByUser)
                 {

@@ -21,7 +21,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
         private string _updateChannel = "";
         private string _osVersion = "";
         private string _netVersion = "";
-        private string _deviceId = "";
         private string _pptLinkageSettings = "";
         private string _inkRecognitionSettings = "";
 
@@ -55,7 +54,7 @@ namespace Ink_Canvas.Windows.FeedbackPages
         }
 
         /// <summary>
-        /// 加载系统环境信息，包括软件版本、系统信息、设备信息等。
+        /// 加载系统环境信息，包括软件版本、系统信息和功能配置。
         /// </summary>
         private void LoadInformation()
         {
@@ -102,16 +101,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
             {
                 _netVersion = "未知";
                 Debug.WriteLine($"获取.NET版本失败: {ex.Message}");
-            }
-
-            try
-            {
-                _deviceId = DeviceIdentifier.GetDeviceId();
-            }
-            catch (Exception ex)
-            {
-                _deviceId = "获取失败";
-                Debug.WriteLine($"获取设备ID失败: {ex.Message}");
             }
 
             try
@@ -246,15 +235,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
                 _page2.TextAppVersionInfo.Text = versionInfo;
                 _page2.TextSystemInfo.Text = systemInfo;
 
-                if (_page1.CheckDeviceId.IsChecked == true)
-                {
-                    _page2.TextDeviceInfo.Text = $"设备ID: {_deviceId}";
-                }
-                else
-                {
-                    _page2.TextDeviceInfo.Text = $"设备ID: {FeedbackStrings.Page2_Exclude}";
-                }
-
                 if (_page1.CheckPPTLinkage.IsChecked == true || _page1.CheckInkRecognition.IsChecked == true)
                 {
                     _page2.CardConfiguration.Visibility = Visibility.Visible;
@@ -304,12 +284,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
                 template += $"- .NET 版本: {_netVersion}\n";
             }
 
-            template += "\n## 设备信息\n";
-            if (_page1.CheckDeviceId.IsChecked == true)
-            {
-                template += $"- 设备ID: {_deviceId}\n";
-            }
-
             if (_page1.CheckPPTLinkage.IsChecked == true || _page1.CheckInkRecognition.IsChecked == true)
             {
                 template += "\n## 软件配置\n";
@@ -356,11 +330,6 @@ namespace Ink_Canvas.Windows.FeedbackPages
             {
                 if (!string.IsNullOrEmpty(systemInfo)) systemInfo += " | ";
                 systemInfo += _netVersion;
-            }
-
-            if (_page1.CheckDeviceId.IsChecked == true)
-            {
-                extraInfo += $"设备ID: {_deviceId}\n";
             }
 
             if (_page1.CheckPPTLinkage.IsChecked == true)
@@ -519,11 +488,11 @@ namespace Ink_Canvas.Windows.FeedbackPages
 
         /// <summary>
         /// 构建脱敏后的反馈 JSON 字符串。
-        /// 设备 ID 保留原样，WebDAV/token/密码等敏感字段被移除。
+        /// 移除敏感配置，不附加设备标识。
         /// </summary>
         private string BuildSanitizedFeedbackJson()
         {
-            return FeedbackSanitizer.BuildSanitizedSettingsJson(SettingsManager.Settings, _deviceId);
+            return FeedbackSanitizer.BuildSanitizedSettingsJson(SettingsManager.Settings);
         }
 
         /// <summary>
