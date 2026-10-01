@@ -1,4 +1,3 @@
-using OSVersionExtension;
 using System.Windows;
 using System.Windows.Ink;
 using System.Windows.Media;
@@ -22,14 +21,14 @@ namespace Ink_Canvas.Helpers
         {
             if (mode == ShapeRecognitionEngineMode.WinRT) return true;
             if (mode == ShapeRecognitionEngineMode.IACore) return false;
-            return OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows10;
+            return System.OperatingSystem.IsWindowsVersionAtLeast(10);
         }
 
         public static bool ShouldRunShapeRecognition(bool inkToShapeEnabled, ShapeRecognitionEngineMode mode)
         {
             if (!inkToShapeEnabled) return false;
             if (ResolveUseWinRt(mode))
-                return OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows10;
+                return System.OperatingSystem.IsWindowsVersionAtLeast(10);
             return true;
         }
 

@@ -1,4 +1,3 @@
-using OSVersionExtension;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -147,7 +146,7 @@ namespace Ink_Canvas.Helpers
     internal static class WinRtInkShapeRecognizer
     {
         public static bool IsApiAvailable =>
-            OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows10;
+            System.OperatingSystem.IsWindowsVersionAtLeast(10);
 
         public static void Warmup()
         {

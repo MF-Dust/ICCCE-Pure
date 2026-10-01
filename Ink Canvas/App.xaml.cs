@@ -109,11 +109,11 @@ namespace Ink_Canvas
         // 新增：标记是否正在显示 OOBE（首次启动向导），看门狗在此期间不判定为卡死/假死
         public static bool IsOobeShowing;
         // 新增：退出信号文件路径
-        private static string watchdogExitSignalFile = Path.Combine(Path.GetTempPath(), "icc_watchdog_exit_" + Process.GetCurrentProcess().Id + ".flag");
+        private static string watchdogExitSignalFile = Path.Combine(Path.GetTempPath(), "icc_watchdog_exit_" + Environment.ProcessId + ".flag");
         // 新增：崩溃日志文件路径
         private static string crashLogFile = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Crashes");
         // 新增：进程ID
-        private static int currentProcessId = Process.GetCurrentProcess().Id;
+        private static int currentProcessId = Environment.ProcessId;
         // 新增：应用启动时间
         internal static DateTime appStartTime { get; private set; }
         // 新增：最后一次错误信息
@@ -1508,7 +1508,7 @@ namespace Ink_Canvas
                 // 通知并停止看门狗，防止看门狗检测到进程退出后二次触发重启。
                 StopWatchdog();
 
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
                 Process.Start(exePath);
             }
             catch (Exception ex)
@@ -1644,11 +1644,11 @@ namespace Ink_Canvas
             // 避免递归启动
             if (Environment.GetCommandLineArgs().Contains("--watchdog")) return;
             // 启动看门狗进程
-            string exePath = Process.GetCurrentProcess().MainModule.FileName;
+            string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
             var psi = new ProcessStartInfo
             {
                 FileName = exePath,
-                Arguments = "--watchdog " + Process.GetCurrentProcess().Id + " \"" + watchdogExitSignalFile + "\"",
+                Arguments = "--watchdog " + Environment.ProcessId + " \"" + watchdogExitSignalFile + "\"",
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden

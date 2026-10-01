@@ -9,7 +9,6 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -26,8 +25,7 @@
     <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU;x86;x64</Platforms>
     <LangVersion>14</LangVersion>
-    <NoWarn>$(NoWarn);CA1416;NU1701;MSB3270;CS8012;NETSDK1138;CS9269</NoWarn>
-    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+    <NoWarn>$(NoWarn);CA1416;NU1701;MSB3270;CS8012;CS9269</NoWarn>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
   </PropertyGroup>
@@ -35,13 +33,11 @@
     <DebugType>embedded</DebugType>
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>embedded</DebugType>
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icc.ico</ApplicationIcon>
@@ -50,13 +46,11 @@
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>embedded</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>embedded</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -72,7 +66,6 @@
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
   </PropertyGroup>
@@ -80,7 +73,6 @@
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>ARM64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
     <TieredCompilation>true</TieredCompilation>
     <TieredPGO>true</TieredPGO>
     <PublishReadyToRun>true</PublishReadyToRun>
@@ -91,14 +83,12 @@
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <PlatformTarget>x64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
     <PlatformTarget>x64</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <None Include="app.manifest" />

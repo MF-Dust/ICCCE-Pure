@@ -1583,7 +1583,7 @@ namespace Ink_Canvas.Windows
                     return $"unknown_{DateTime.Now.Ticks}";
                 }
 
-                var fileHash = GetFileHash(presentationPath);
+                var fileHash = HashHelper.GetFileHash(presentationPath);
                 return $"{presentationName}_{slidesCount}_{fileHash}";
             }
             catch (System.Runtime.InteropServices.InvalidComObjectException)
@@ -1600,28 +1600,6 @@ namespace Ink_Canvas.Windows
             {
                 LogHelper.WriteLogToFile($"生成演示文稿ID失败: {ex}", LogHelper.LogType.Error);
                 return $"unknown_{DateTime.Now.Ticks}";
-            }
-        }
-
-        /// <summary>
-        /// 计算文件哈希值
-        /// </summary>
-        private string GetFileHash(string filePath)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(filePath)) return "unknown";
-
-                using (var md5 = System.Security.Cryptography.MD5.Create())
-                {
-                    byte[] hashBytes = md5.ComputeHash(System.Text.Encoding.UTF8.GetBytes(filePath));
-                    return BitConverter.ToString(hashBytes).Replace("-", "").Substring(0, 8);
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"计算文件哈希值失败: {ex}", LogHelper.LogType.Error);
-                return "error";
             }
         }
 

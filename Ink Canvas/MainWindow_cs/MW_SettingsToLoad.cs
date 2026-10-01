@@ -2,7 +2,6 @@ using Ink_Canvas.Helpers;
 using Ink_Canvas.Windows.SettingsViews.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OSVersionExtension;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -13,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using File = System.IO.File;
-using OperatingSystem = OSVersionExtension.OperatingSystem;
 using WinForms = System.Windows.Forms;
 
 namespace Ink_Canvas
@@ -542,7 +540,7 @@ namespace Ink_Canvas
                 }
                 if (Settings.Advanced.IsEnableEdgeGestureUtil)
                 {
-                    if (OSVersion.GetOperatingSystem() >= OperatingSystem.Windows10)
+                    if (System.OperatingSystem.IsWindowsVersionAtLeast(10))
                         EdgeGestureUtil.DisableEdgeGestures(new WindowInteropHelper(this).Handle, true);
                 }
             }

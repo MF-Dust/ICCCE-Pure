@@ -137,7 +137,7 @@ using SimpleStackPanel = iNKORE.UI.WPF.Controls.SimpleStackPanel;
 
 ### Thickness 构造函数
 
-.NET 6 SDK 中 `Thickness` 不支持双参数构造函数 `Thickness(double, double)`，必须使用四参数：
+WPF 的 `Thickness` 不支持双参数构造函数 `Thickness(double, double)`，必须使用四参数：
 
 ```csharp
 // ❌ 错误：编译报错

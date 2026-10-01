@@ -3,6 +3,7 @@ using Ink_Canvas.Windows.SettingsViews.Helpers;
 using iNKORE.UI.WPF.Controls;
 using iNKORE.UI.WPF.Modern.Controls;
 using System;
+using System.Buffers.Binary;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -95,15 +96,17 @@ namespace Ink_Canvas.Helpers
             try
             {
                 var salt = Convert.FromBase64String(settings.Security.PasswordSalt);
+                // Preserve the minimum salt length enforced by the old PBKDF2 constructor.
+                if (salt.Length < 8) return false;
                 var expected = Convert.FromBase64String(settings.Security.PasswordHash);
 
                 // 优先用 SHA256 验证（新 hash）
                 var actual = DeriveKey(password, salt, expected.Length);
-                if (FixedTimeEquals(actual, expected)) return true;
+                if (CryptographicOperations.FixedTimeEquals(actual, expected)) return true;
 
                 // 兼容旧版 HMACSHA1 hash：匹配后自动升级为 SHA256
                 var legacyActual = DeriveKeyLegacy(password, salt, expected.Length);
-                if (FixedTimeEquals(legacyActual, expected))
+                if (CryptographicOperations.FixedTimeEquals(legacyActual, expected))
                 {
                     // 自动迁移：用 SHA256 重新派生并更新存储
                     var upgradedHash = DeriveKey(password, salt, expected.Length);
@@ -562,11 +565,7 @@ namespace Ink_Canvas.Helpers
         {
             if (settings?.Security == null) return;
 
-            var salt = new byte[SaltSizeBytes];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
+            var salt = RandomNumberGenerator.GetBytes(SaltSizeBytes);
             var hash = DeriveKey(password, salt, HashSizeBytes);
 
             settings.Security.PasswordSalt = Convert.ToBase64String(salt);
@@ -586,12 +585,7 @@ namespace Ink_Canvas.Helpers
 
         public static string GenerateTotpSecret()
         {
-            var bytes = new byte[20];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(bytes);
-            }
-            return Base32Encode(bytes);
+            return Base32Encode(RandomNumberGenerator.GetBytes(20));
         }
 
         public static bool VerifyTotp(Settings settings, string code)
@@ -608,7 +602,7 @@ namespace Ink_Canvas.Helpers
                 for (long offset = -1; offset <= 1; offset++)
                 {
                     string expected = GenerateTotpCode(secret, step + offset);
-                    if (FixedTimeEquals(Encoding.ASCII.GetBytes(normalized), Encoding.ASCII.GetBytes(expected)))
+                    if (CryptographicOperations.FixedTimeEquals(Encoding.ASCII.GetBytes(normalized), Encoding.ASCII.GetBytes(expected)))
                         return true;
                 }
             }
@@ -624,59 +618,23 @@ namespace Ink_Canvas.Helpers
         /// 使用 PBKDF2（Rfc2898）从给定的密码和盐派生指定长度的密钥字节（SHA256）。
         /// </summary>
         private static byte[] DeriveKey(string password, byte[] salt, int keyBytes)
-        {
-            using (var kdf = new Rfc2898DeriveBytes(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA256))
-            {
-                return kdf.GetBytes(keyBytes);
-            }
-        }
+            => Rfc2898DeriveBytes.Pbkdf2(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA256, keyBytes);
 
         /// <summary>
         /// 使用旧版 PBKDF2（HMACSHA1）派生密钥，仅用于验证历史遗留的密码哈希。
         /// </summary>
         private static byte[] DeriveKeyLegacy(string password, byte[] salt, int keyBytes)
-        {
-            using (var kdf = new Rfc2898DeriveBytes(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA1))
-            {
-                return kdf.GetBytes(keyBytes);
-            }
-        }
-
-        /// <summary>
-        /// 以固定时间方式比较两个字节数组的内容是否完全相同，防止基于时序的比对攻击。
-        /// </summary>
-        /// <param name="a">要比较的第一个字节数组。</param>
-        /// <param name="b">要比较的第二个字节数组。</param>
-        /// <returns>`true` 如果两个数组长度相同且所有字节相等，`false` 否则。</returns>
-        private static bool FixedTimeEquals(byte[] a, byte[] b)
-        {
-            if (a == null || b == null) return false;
-            if (a.Length != b.Length) return false;
-            var diff = 0;
-            for (int i = 0; i < a.Length; i++)
-            {
-                diff |= a[i] ^ b[i];
-            }
-            return diff == 0;
-        }
+            => Rfc2898DeriveBytes.Pbkdf2(password, salt, Pbkdf2Iterations, HashAlgorithmName.SHA1, keyBytes);
 
         private static string GenerateTotpCode(byte[] secret, long timeStep)
         {
-            var counter = BitConverter.GetBytes(timeStep);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(counter);
-
-            using (var hmac = new HMACSHA256(secret))
-            {
-                var hash = hmac.ComputeHash(counter);
-                int offset = hash[hash.Length - 1] & 0x0f;
-                int binary =
-                    ((hash[offset] & 0x7f) << 24)
-                    | ((hash[offset + 1] & 0xff) << 16)
-                    | ((hash[offset + 2] & 0xff) << 8)
-                    | (hash[offset + 3] & 0xff);
-                return (binary % 1_000_000).ToString("D6");
-            }
+            Span<byte> counter = stackalloc byte[sizeof(long)];
+            BinaryPrimitives.WriteInt64BigEndian(counter, timeStep);
+            Span<byte> hash = stackalloc byte[HMACSHA256.HashSizeInBytes];
+            HMACSHA256.HashData(secret, counter, hash);
+            int offset = hash[^1] & 0x0f;
+            int binary = BinaryPrimitives.ReadInt32BigEndian(hash.Slice(offset, sizeof(int))) & 0x7fffffff;
+            return (binary % 1_000_000).ToString("D6");
         }
 
         private static string Base32Encode(byte[] data)

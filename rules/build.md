@@ -46,7 +46,13 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 
 > `Ink Canvas/InkCanvasForClass_*_wpftmp.csproj`、`InkCanvas.Controls/*_wpftmp.csproj` 是 WPF 编译中间产物，**不是真实项目，不要改**。
 
-NativeInk 实验源代码保留但默认构建禁用，不需要 Vortice 包；IACoreHelper 保持 net472/x86。
+NativeInk 实验源代码保留但默认构建禁用，不需要 Vortice 包。
+
+### .NET 10 现代化边界
+
+五个现代项目统一使用 .NET 10；SDK 由 `global.json` 选择 10.0 稳定版本。密码派生/恒时比较、随机字节、哈希、NTP socket 与进程信息使用运行时内置 API。Core.Tests 覆盖旧 SHA1 密码迁移、SHA256/TOTP 固定向量、PPT 路径哈希兼容及本地 UDP 的解码/取消行为。不要仅为更新语法改写持久化协议、哈希算法或 Office COM 集成。
+
+**IACoreHelper 是明确保留的 net472/x86 兼容宿主，不属于已迁移的 .NET 10 项目。** 捆绑的 IAWinFX/IALoader/IACore 可以在 .NET 10 x86 中加载并构造 `InkAnalyzer`，但实测在 `Analyze()` 处挂起（形状与文字均复现，STA/MTA/Dispatcher 泵均不能解决）；相同输入在 CLR4/x86 下约一秒返回 Circle。挂起栈位于旧混合模式 `IALoader!<Module>.__crt_dll_initialize()`。不能以“能编译/能加载 DLL”代替完整识别测试，也不能仅修改 TFM 后发布；主程序自包含发布也仍需 .NET Framework 4.7.2+，并随 helper 部署其 `.exe.config`。迁移此宿主必须先解决旧分析引擎的运行时兼容性，并验证现有 IPC、识别上下文提示及 x86/ARM64 发布链路。
 
 ## 主项目 MSBuild 目标（改动构建流程前必读）
 

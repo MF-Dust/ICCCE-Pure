@@ -31,7 +31,7 @@ namespace Ink_Canvas.Helpers
 
                 (Application.Current as App)?.ReleaseMutexForRestart();
 
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
 
                 if (asAdmin)
                 {
@@ -107,7 +107,7 @@ namespace Ink_Canvas.Helpers
                 {
                     if (useProcessToken)
                     {
-                        started = UIAccessHelper.RestartAsNormalUserWithUIAccess_ProcessToken(sourcePid: (uint)Process.GetCurrentProcess().Id);
+                        started = UIAccessHelper.RestartAsNormalUserWithUIAccess_ProcessToken(sourcePid: (uint)Environment.ProcessId);
                     }
                     else
                     {
@@ -116,12 +116,12 @@ namespace Ink_Canvas.Helpers
                 }
                 else
                 {
-                    string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                    string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
                     ProcessStartInfo psi;
 
                     if (useProcessToken)
                     {
-                        int currentPid = Process.GetCurrentProcess().Id;
+                        int currentPid = Environment.ProcessId;
                         psi = new ProcessStartInfo(exePath)
                         {
                             Arguments = $"--enable-uia-topmost-helper --uia-source-pid {currentPid}",

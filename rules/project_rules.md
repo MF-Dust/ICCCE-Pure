@@ -13,7 +13,7 @@
 | `InkCanvas.NativeInk.Tests/` | 原生墨迹手动验证程序（net10.0-windows10.0.19041.0） |
 | `InkCanvas.Core.Tests/` | 核心单元测试（net10.0-windows10.0.19041.0） |
 
-PPT 联动统一使用主程序内的 ROT/Office COM；智慧模式区域类型位于 `Ink Canvas/Models/SmartRegion.cs`。旧 `pptLinkMode` 数值与字符串仅作为兼容反序列化入口，运行时统一为 ROT。IACore 保持 net472/x86，NativeInk 实验源默认禁用且不需要 Vortice 包。
+PPT 联动统一使用主程序内的 ROT/Office COM；智慧模式区域类型位于 `Ink Canvas/Models/SmartRegion.cs`。旧 `pptLinkMode` 数值与字符串仅作为兼容反序列化入口，运行时统一为 ROT。IACore 是 net472/x86 兼容例外（.NET 10 实测 Analyze 挂起，详见 build.md），不能仅改 TFM；NativeInk 实验源默认禁用且不需要 Vortice 包。
 
 ## 规则目录
 

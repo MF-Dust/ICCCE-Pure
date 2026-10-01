@@ -1,4 +1,3 @@
-using OSVersionExtension;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -24,7 +23,7 @@ namespace Ink_Canvas.Helpers
         }
 
         public static bool IsApiAvailable =>
-            OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows10;
+            System.OperatingSystem.IsWindowsVersionAtLeast(10);
 
         /// <summary>
         /// 启动阶段不再预热线程内 WinRT 手写管线。历史上曾用 <see cref="WinRtInkShapeRecognizer.CreateMinimalWarmupStrokeCollection"/> 跑全链路，

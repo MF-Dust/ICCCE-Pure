@@ -1,6 +1,5 @@
 using Microsoft.Win32;
 using System;
-using System.Diagnostics;
 
 namespace Ink_Canvas.Helpers
 {
@@ -13,7 +12,7 @@ namespace Ink_Canvas.Helpers
         {
             try
             {
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
 
                 // 使用 CurrentUser\Software\Classes 代替 ClassesRoot，无需管理员权限
                 using (RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Classes\" + SchemeName))
@@ -94,7 +93,7 @@ namespace Ink_Canvas.Helpers
 
                         if (string.IsNullOrEmpty(registeredExePath)) return false;
 
-                        string currentExePath = Process.GetCurrentProcess().MainModule.FileName;
+                        string currentExePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
 
                         try
                         {

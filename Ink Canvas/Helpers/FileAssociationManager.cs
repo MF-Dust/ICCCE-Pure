@@ -1,7 +1,6 @@
 using Ink_Canvas.Properties;
 using Microsoft.Win32;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Security;
 using System.Text;
@@ -38,7 +37,7 @@ namespace Ink_Canvas.Helpers
         {
             try
             {
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
 
                 // 注册文件类型
                 using (RegistryKey fileTypeKey = Registry.ClassesRoot.CreateSubKey(FileTypeName))
@@ -142,7 +141,7 @@ namespace Ink_Canvas.Helpers
                             if (string.IsNullOrEmpty(command)) return false;
 
                             // 检查命令是否指向当前应用程序
-                            string currentExePath = Process.GetCurrentProcess().MainModule.FileName;
+                            string currentExePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
                             return command.Contains(currentExePath);
                         }
                     }

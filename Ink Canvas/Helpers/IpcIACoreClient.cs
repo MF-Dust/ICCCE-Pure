@@ -46,7 +46,7 @@ namespace Ink_Canvas.Helpers
 
         public bool IsHelperExecutableAvailable => File.Exists(HelperExePath);
 
-        private int CurrentProcessId => Process.GetCurrentProcess().Id;
+        private int CurrentProcessId => Environment.ProcessId;
 
         private string PipeName =>
             string.Format(PipeNameFormat, CurrentProcessId);

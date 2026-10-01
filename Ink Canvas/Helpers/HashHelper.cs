@@ -19,11 +19,9 @@ namespace Ink_Canvas.Helpers
             try
             {
                 if (string.IsNullOrEmpty(filePath)) return "unknown";
-                using (var md5 = MD5.Create())
-                {
-                    byte[] hash = md5.ComputeHash(Encoding.UTF8.GetBytes(filePath));
-                    return BitConverter.ToString(hash).Replace("-", "").Substring(0, 8);
-                }
+                // Persisted PPT folder identifiers depend on this MD5 prefix; this is not a security hash.
+                byte[] hash = MD5.HashData(Encoding.UTF8.GetBytes(filePath));
+                return Convert.ToHexString(hash.AsSpan(0, 4));
             }
             catch (Exception ex)
             {

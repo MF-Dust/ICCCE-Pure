@@ -390,7 +390,7 @@ namespace Ink_Canvas
                 try
                 {
                     // 启动新实例
-                    string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                    string exePath = Environment.ProcessPath ?? throw new InvalidOperationException("The current executable path is unavailable.");
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = exePath;
                     startInfo.UseShellExecute = true;

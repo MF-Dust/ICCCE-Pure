@@ -83,6 +83,7 @@ internal static class Program
         CheckRemovedFeatureSettings();
         CheckRemovedLiquidGlass();
         CheckPptLinkMode();
+        ModernRuntimeChecks.Run();
         PersistenceChecks.Run(window, canvas);
         Console.WriteLine("Core save/autosave/layout/settings regression checks passed.");
     }

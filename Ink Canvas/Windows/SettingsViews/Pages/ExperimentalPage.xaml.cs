@@ -1,6 +1,5 @@
 using Ink_Canvas.Helpers;
 using Ink_Canvas.Windows.SettingsViews.Helpers;
-using OSVersionExtension;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -71,7 +70,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 SettingsManager.Settings.Advanced.IsEnableEdgeGestureUtil = CardEdgeGestureUtil.IsOn;
                 SettingsManager.SaveSettingsToFile();
 
-                if (OSVersion.GetOperatingSystem() >= OSVersionExtension.OperatingSystem.Windows10)
+                if (System.OperatingSystem.IsWindowsVersionAtLeast(10))
                 {
                     var window = Application.Current.MainWindow;
                     if (window != null)

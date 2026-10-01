@@ -1,5 +1,6 @@
 using Ink_Canvas.Helpers;
 using System;
+using System.Buffers.Binary;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -147,28 +148,30 @@ namespace Ink_Canvas
         /// <remarks>
         /// 使用NTP协议从国家授时中心服务器获取网络时间
         /// </remarks>
-        private async Task<DateTime> GetNetworkTimeAsync()
+        private static async Task<DateTime> GetNetworkTimeAsync(string ntpServer, int port, System.Threading.CancellationToken cancellationToken)
         {
             try
             {
-                const string ntpServer = "ntp.ntsc.ac.cn";
                 var ntpData = new byte[48];
                 ntpData[0] = 0x1B;
-                var addresses = await Dns.GetHostAddressesAsync(ntpServer);
-                var ipEndPoint = new IPEndPoint(addresses[0], 123);
-                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp))
+                var addresses = await Dns.GetHostAddressesAsync(ntpServer, cancellationToken).ConfigureAwait(false);
+                var ipEndPoint = new IPEndPoint(addresses[0], port);
+                using (var socket = new Socket(ipEndPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp))
                 {
-                    socket.ReceiveTimeout = 5000;
-                    socket.Connect(ipEndPoint);
-                    await Task.Factory.FromAsync(socket.BeginSend(ntpData, 0, ntpData.Length, SocketFlags.None, null, socket), socket.EndSend);
-                    await Task.Factory.FromAsync(socket.BeginReceive(ntpData, 0, ntpData.Length, SocketFlags.None, null, socket), socket.EndReceive);
+                    await socket.ConnectAsync(ipEndPoint, cancellationToken).ConfigureAwait(false);
+                    await socket.SendAsync(ntpData.AsMemory(), SocketFlags.None, cancellationToken).ConfigureAwait(false);
+                    int received = await socket.ReceiveAsync(ntpData.AsMemory(), SocketFlags.None, cancellationToken).ConfigureAwait(false);
+                    if (received < ntpData.Length) throw new InvalidDataException("Incomplete NTP reply.");
                 }
-                const byte serverReplyTime = 40;
-                ulong intPart = BitConverter.ToUInt32(ntpData.Skip(serverReplyTime).Take(4).Reverse().ToArray(), 0);
-                ulong fractPart = BitConverter.ToUInt32(ntpData.Skip(serverReplyTime + 4).Take(4).Reverse().ToArray(), 0);
+                ulong intPart = BinaryPrimitives.ReadUInt32BigEndian(ntpData.AsSpan(40, 4));
+                ulong fractPart = BinaryPrimitives.ReadUInt32BigEndian(ntpData.AsSpan(44, 4));
                 var milliseconds = (intPart * 1000) + ((fractPart * 1000) / 0x100000000L);
-                var networkDateTime = (new DateTime(1900, 1, 1)).AddMilliseconds((long)milliseconds);
+                var networkDateTime = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds((long)milliseconds);
                 return networkDateTime.ToLocalTime();
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
             }
             catch (Exception)
             {
@@ -341,22 +344,9 @@ namespace Ink_Canvas
             try
             {
 
-                // 添加超时机制，最多等待10秒
-                var timeoutTask = Task.Delay(10000);
-                var ntpTask = GetNetworkTimeAsync();
-
-                var completedTask = await Task.WhenAny(ntpTask, timeoutTask);
-
-                if (completedTask == timeoutTask)
-                {
-                    cachedNetworkTime = DateTime.Now;
-                    lastNtpSyncTime = DateTime.Now;
-                    useNetworkTime = false;
-                    networkTimeOffset = TimeSpan.Zero;
-                    return;
-                }
-
-                DateTime networkTime = await ntpTask;
+                // 超时直接取消 DNS/socket 操作，不遗留后台接收任务。
+                using var timeout = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(10));
+                DateTime networkTime = await GetNetworkTimeAsync("ntp.ntsc.ac.cn", 123, timeout.Token);
                 DateTime localTime = DateTime.Now;
 
                 cachedNetworkTime = networkTime;

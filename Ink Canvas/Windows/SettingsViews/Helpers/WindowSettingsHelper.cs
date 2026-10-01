@@ -207,7 +207,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
 
                             if (useProcessToken)
                             {
-                                started = UIAccessHelper.RestartAsNormalUserWithUIAccess_ProcessToken(sourcePid: (uint)Process.GetCurrentProcess().Id);
+                                started = UIAccessHelper.RestartAsNormalUserWithUIAccess_ProcessToken(sourcePid: (uint)Environment.ProcessId);
                             }
                             else
                             {
