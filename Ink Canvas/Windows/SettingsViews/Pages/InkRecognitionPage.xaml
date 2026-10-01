@@ -1,6 +1,7 @@
 <ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties" x:Class="Ink_Canvas.Windows.SettingsViews.Pages.InkRecognitionPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -12,17 +13,12 @@
       mc:Ignorable="d"
       Title="{x:Static props:CanvasStrings.InkRecog_Title}">
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
                 <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                       BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                       TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
             <Grid>
                 <ikw:SimpleStackPanel MaxWidth="1000" HorizontalAlignment="Stretch"
@@ -33,7 +29,7 @@
 
                     <controls:LabeledSettingsCard x:Name="CardEnableInkToShape"
                             Header="{x:Static props:CanvasStrings.InkRecog_EnableInkRecognition}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Draw}"
+                            MaterialIcon="Draw"
                             SwitchName="ToggleSwitchEnableInkToShape"
                             Toggled="ToggleSwitchEnableInkToShape_Toggled" />
 
@@ -50,7 +46,7 @@
                     <controls:LabeledSettingsCard x:Name="CardEnableWinRtHandwritingStrokeBeautify"
                             Header="{x:Static props:CanvasStrings.InkRecog_HandwritingBeautify}"
                             Description="{x:Static props:CanvasStrings.InkRecog_HandwritingBeautifyHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.PenWorkspace}"
+                            MaterialIcon="DrawPen"
                             SwitchName="ToggleSwitchEnableWinRtHandwritingStrokeBeautify"
                             Toggled="ToggleSwitchEnableWinRtHandwritingStrokeBeautify_Toggled" />
 
@@ -79,7 +75,7 @@
                             Header="{x:Static props:CanvasStrings.InkRecog_BlockRectFakePressure}"
                             ShowWhen="{Binding IsOn, ElementName=CardEnableInkToShape}"
                             d:Visibility="Visible"
-                            Icon="{x:Static ui:SegoeFluentIcons.RectangularClipping}"
+                            MaterialIcon="CropFree"
                             SwitchName="ToggleSwitchEnableInkToShapeNoFakePressureRectangle"
                             Toggled="ToggleSwitchEnableInkToShapeNoFakePressureRectangle_Toggled" />
 
@@ -87,7 +83,7 @@
                             Header="{x:Static props:CanvasStrings.InkRecog_BlockTriFakePressure}"
                             ShowWhen="{Binding IsOn, ElementName=CardEnableInkToShape}"
                             d:Visibility="Visible"
-                            Icon="{x:Static ui:SegoeFluentIcons.IncidentTriangle}"
+                            MaterialIcon="AlertOutline"
                             SwitchName="ToggleSwitchEnableInkToShapeNoFakePressureTriangle"
                             Toggled="ToggleSwitchEnableInkToShapeNoFakePressureTriangle_Toggled" />
 
@@ -96,7 +92,7 @@
                             IsExpanded="{Binding IsOn, ElementName=CardEnableInkToShape, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}" />
+                            <materialDesign:PackIcon Kind="CogOutline"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:SettingsExpander.Items>
                             <ui:SettingsCard ContentAlignment="Left">
@@ -125,7 +121,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchAutoStraightenLine, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.LineDisplay}" />
+                            <materialDesign:PackIcon Kind="VectorLine"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchAutoStraightenLine"
                                 Toggled="ToggleSwitchAutoStraightenLine_Toggled" />
@@ -175,7 +171,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchLineEndpointSnapping, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}" />
+                            <materialDesign:PackIcon Kind="LinkVariant"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchLineEndpointSnapping"
                                 Toggled="ToggleSwitchLineEndpointSnapping_Toggled" />

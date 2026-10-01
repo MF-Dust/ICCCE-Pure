@@ -1,6 +1,7 @@
 <ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties" x:Class="Ink_Canvas.Windows.SettingsViews.Pages.PowerPointPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -13,17 +14,12 @@
       Title="{x:Static props:NavStrings.Nav_PPT_Settings}">
 
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
                 <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                    BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                    TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
             <Grid>
                 <ikw:SimpleStackPanel MaxWidth="1000"
@@ -34,13 +30,13 @@
 
                     <controls:LabeledSettingsCard x:Name="CardSupportPowerPoint"
                             Header="{x:Static props:PPTStrings.SupportPowerPoint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Slideshow}"
+                            MaterialIcon="PresentationPlay"
                             Toggled="ToggleSwitchSupportPowerPoint_Toggled"/>
 
                     <ui:SettingsCard x:Name="CardPPTArchitecture"
                             Header="{x:Static props:PPTStrings.PPTArchitecture}">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}" />
+                            <materialDesign:PackIcon Kind="LinkVariant"  Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                         <ComboBox x:Name="ComboBoxPPTArchitecture"
                                   SelectionChanged="ComboBoxPPTArchitecture_SelectionChanged">
@@ -52,29 +48,29 @@
 
                     <controls:LabeledSettingsCard x:Name="CardPowerPointEnhancement"
                             Header="{x:Static props:PPTStrings.Enhancement}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Puzzle}"
+                            MaterialIcon="PuzzleOutline"
                             Toggled="ToggleSwitchPowerPointEnhancement_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardSkipAnimationsWhenGoNext"
                             Header="{x:Static props:PPTStrings.SkipAnimations}"
-                            Icon="{x:Static ui:SegoeFluentIcons.FastForward}"
+                            MaterialIcon="FastForward"
                             Toggled="ToggleSwitchSkipAnimationsWhenGoNext_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardEnableSmartMode"
                             Header="{x:Static props:PPTStrings.SmartMode}"
                             Description="{x:Static props:PPTStrings.SmartModeHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}"
+                            MaterialIcon="CursorDefaultClickOutline"
                             Toggled="ToggleSwitchEnableSmartMode_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardSupportWPS"
                             Header="{x:Static props:PPTStrings.SupportWPS}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Document}"
+                            MaterialIcon="FileDocumentOutline"
                             Toggled="ToggleSwitchSupportWPS_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardEnableWppProcessKill"
                             Header="{x:Static props:PPTStrings.KillWppProcess}"
                             Description="{x:Static props:PPTStrings.KillWppHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Cancel}"
+                            MaterialIcon="Close"
                             Toggled="ToggleSwitchEnableWppProcessKill_Toggled"/>
 
                     <TextBlock Text="{x:Static props:PPTStrings.FlipButtonsTitle}" Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"/>
@@ -86,14 +82,14 @@
                             Click="OnCardClicked"
                             IsEnabled="True">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PreviewLink}"/>
+                            <materialDesign:PackIcon Kind="OpenInNew" Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                     </ui:SettingsCard>
 
                     <controls:LabeledSettingsCard x:Name="CardEnablePPTButtonPageClickable"
                             Header="{x:Static props:PPTStrings.PageButtonClickable}"
                             Description="{x:Static props:PPTStrings.PageButtonClickableHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}"
+                            MaterialIcon="CursorDefaultClickOutline"
                             Toggled="ToggleSwitchEnablePPTButtonPageClickable_OnToggled"/>
 
                     <ui:SettingsExpander x:Name="ExpanderEnablePPTButtonEnhancedPreview"
@@ -102,7 +98,7 @@
                             Visibility="{Binding IsOn, ElementName=CardEnablePPTButtonPageClickable, Converter={StaticResource BooleanToVisibilityConverter}}"
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchEnablePPTButtonEnhancedPreview, Mode=OneWay}">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}"/>
+                            <materialDesign:PackIcon Kind="CursorDefaultClickOutline" Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchEnablePPTButtonEnhancedPreview"
                                 d:IsOn="True"
@@ -119,7 +115,7 @@
                     <controls:LabeledSettingsCard x:Name="CardEnablePPTButtonLongPressPageTurn"
                             Header="{x:Static props:PPTStrings.LongPressPageTurn}"
                             Description="{x:Static props:PPTStrings.LongPressPageTurnHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Touch}"
+                            MaterialIcon="GestureTap"
                             Visibility="{Binding IsOn, ElementName=CardShowPPTButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Toggled="ToggleSwitchEnablePPTButtonLongPressPageTurn_OnToggled"/>
 
@@ -127,32 +123,32 @@
 
                     <controls:LabeledSettingsCard x:Name="CardShowCanvasAtNewSlideShow"
                             Header="{x:Static props:PPTStrings.EnterAnnotationOnShow}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Edit}"
+                            MaterialIcon="Pencil"
                             Toggled="ToggleSwitchShowCanvasAtNewSlideShow_Toggled"/>
 
                     <TextBlock Text="{x:Static props:NavStrings.Nav_PPT_Settings}" Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"/>
 
                     <controls:LabeledSettingsCard x:Name="CardEnableTwoFingerGestureInPresentationMode"
                             Header="{x:Static props:PPTStrings.TwoFingerGesture}"
-                            Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}"
+                            MaterialIcon="CursorDefaultClickOutline"
                             Toggled="ToggleSwitchEnableTwoFingerGestureInPresentationMode_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardEnableFingerGestureSlideShowControl"
                             Header="{x:Static props:PPTStrings.FingerGestureSlide}"
                             Description="{x:Static props:PPTStrings.FingerGestureSlideHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Handwriting}"
+                            MaterialIcon="Draw"
                             Toggled="ToggleSwitchEnableFingerGestureSlideShowControl_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardShowPPTSidebarByDefault"
                             Header="{x:Static props:PPTStrings.ShowQuickPanelInShow}"
                             Description="{x:Static props:PPTStrings.ShowQuickPanelInShowHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.OpenPane}"
+                            MaterialIcon="DockLeft"
                             Toggled="ToggleSwitchShowPPTSidebarByDefault_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardShowPPTModePrompt"
                             Header="{x:Static props:PPTStrings.PPT_ModePrompt_Setting}"
                             Description="{x:Static props:PPTStrings.PPT_ModePrompt_SettingHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Info}"
+                            MaterialIcon="InformationOutline"
                             Toggled="ToggleSwitchShowPPTModePrompt_Toggled"/>
 
                     <TextBlock Text="{x:Static props:PPTStrings.AutoScreenshot}" Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"/>
@@ -160,13 +156,13 @@
                     <controls:LabeledSettingsCard x:Name="CardAutoSaveScreenShotInPowerPoint"
                             Header="{x:Static props:PPTStrings.AutoScreenshot}"
                             Description="{x:Static props:PPTStrings.AutoScreenshotHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Camera}"
+                            MaterialIcon="CameraOutline"
                             Toggled="ToggleSwitchAutoSaveScreenShotInPowerPoint_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardAutoSaveStrokesInPowerPoint"
                             Header="{x:Static props:PPTStrings.AutoSaveStrokes}"
                             Description="{x:Static props:PPTStrings.AutoSaveStrokesHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Save}"
+                            MaterialIcon="ContentSaveOutline"
                             Toggled="ToggleSwitchAutoSaveStrokesInPowerPoint_Toggled"/>
 
                     <TextBlock Text="{x:Static props:PPTStrings.RememberLastPage}" Style="{StaticResource SettingsSectionHeaderTextBlockStyle}"/>
@@ -174,22 +170,22 @@
                     <controls:LabeledSettingsCard x:Name="CardNotifyPreviousPage"
                             Header="{x:Static props:PPTStrings.RememberLastPage}"
                             Description="{x:Static props:PPTStrings.RememberLastPageHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.History}"
+                            MaterialIcon="History"
                             Toggled="ToggleSwitchNotifyPreviousPage_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardAlwaysGoToFirstPageOnReenter"
                             Header="{x:Static props:PPTStrings.GoToFirstPageOnReenter}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Rewind}"
+                            MaterialIcon="Rewind"
                             Toggled="ToggleSwitchAlwaysGoToFirstPageOnReenter_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardNotifyHiddenPage"
                             Header="{x:Static props:PPTStrings.NotifyHiddenPage}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Hide}"
+                            MaterialIcon="EyeOffOutline"
                             Toggled="ToggleSwitchNotifyHiddenPage_Toggled"/>
 
                     <controls:LabeledSettingsCard x:Name="CardNotifyAutoPlayPresentation"
                             Header="{x:Static props:PPTStrings.NotifyAutoPlay}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Play}"
+                            MaterialIcon="PlayOutline"
                             Toggled="ToggleSwitchNotifyAutoPlayPresentation_Toggled"/>
 
                     <Rectangle Height="48" />

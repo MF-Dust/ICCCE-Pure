@@ -1,4 +1,5 @@
 using iNKORE.UI.WPF.Modern.Common.IconKeys;
+using MaterialDesignThemes.Wpf;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,6 +26,15 @@ namespace Ink_Canvas.Controls
         {
             get => (string)GetValue(DescriptionProperty);
             set => SetValue(DescriptionProperty, value);
+        }
+
+        public static readonly DependencyProperty MaterialIconProperty = DependencyProperty.Register(
+            nameof(MaterialIcon), typeof(PackIconKind?), typeof(LabeledSettingsCard), new PropertyMetadata(null, OnIconChanged));
+
+        public PackIconKind? MaterialIcon
+        {
+            get => (PackIconKind?)GetValue(MaterialIconProperty);
+            set => SetValue(MaterialIconProperty, value);
         }
 
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
@@ -84,6 +94,10 @@ namespace Ink_Canvas.Controls
                     Width = 16,
                     Height = 16,
                 };
+            }
+            else if (MaterialIcon.HasValue)
+            {
+                SettingsCard.HeaderIcon = new PackIcon { Kind = MaterialIcon.Value, Width = 20, Height = 20 };
             }
             else if (Icon.HasValue)
             {

@@ -5,11 +5,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              mc:Ignorable="d">
 
-    <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+    <Border Background="{DynamicResource MaterialDesign.Brush.Card.Background}"
+            BorderBrush="{DynamicResource MaterialDesign.Brush.Card.Border}"
             BorderThickness="1" CornerRadius="6" Padding="4"
             MinWidth="120">
         <Border.Effect>
@@ -23,7 +22,7 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+                                <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Background}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -35,7 +34,7 @@
                            Margin="0,0,8,0" VerticalAlignment="Center"/>
                     <TextBlock Text="{x:Static fb:FloatingBarStrings.FloatingBar_Whiteboard}"
                                FontSize="12"
-                               Foreground="{DynamicResource {x:Static ui:ThemeKeys.TextFillColorPrimaryBrushKey}}"
+                               Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
@@ -47,7 +46,7 @@
                     <Style TargetType="Border">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}"/>
+                                <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Background}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -59,7 +58,7 @@
                            Margin="0,0,8,0" VerticalAlignment="Center"/>
                     <TextBlock Text="{x:Static fb:FloatingBarStrings.FloatingBar_MiniWhiteboard}"
                                FontSize="12"
-                               Foreground="{DynamicResource {x:Static ui:ThemeKeys.TextFillColorPrimaryBrushKey}}"
+                               Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>

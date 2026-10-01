@@ -13,16 +13,11 @@
       Title="{x:Static props:AdvancedStrings.Experimental}">
 
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-            <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
-            <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                TargetType="TextBlock">
-                <Style.Setters>
-                    <Setter Property="Margin" Value="1,30,0,6" />
-                </Style.Setters>
-            </Style>
+            <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
+            <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
         </FrameworkElement.Resources>
             <Grid>
                 <ikw:SimpleStackPanel MaxWidth="1000"
@@ -32,35 +27,35 @@
                     <controls:LabeledSettingsCard x:Name="CardFullScreenHelper"
                             Header="{x:Static props:AdvancedStrings.FullScreenHelper}"
                             Description="{x:Static props:AdvancedStrings.FullScreenHelperHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.FullScreen}"
+                            MaterialIcon="Fullscreen"
                             SwitchName="ToggleSwitchFullScreenHelper"
                             Toggled="ToggleSwitchFullScreenHelper_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardEdgeGestureUtil"
                             Header="{x:Static props:AdvancedStrings.EdgeGestureUtil}"
                             Description="{x:Static props:AdvancedStrings.EdgeGestureUtilHint_Part1}"
-                            Icon="{x:Static ui:SegoeFluentIcons.AlignLeft}"
+                            MaterialIcon="FormatAlignLeft"
                             SwitchName="ToggleSwitchEdgeGestureUtil"
                             Toggled="ToggleSwitchEdgeGestureUtil_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardForceFullScreen"
                             Header="{x:Static props:AdvancedStrings.ForceFullScreen}"
                             Description="{x:Static props:AdvancedStrings.ForceFullScreenHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Video}"
+                            MaterialIcon="VideoOutline"
                             SwitchName="ToggleSwitchForceFullScreen"
                             Toggled="ToggleSwitchForceFullScreen_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardDPIChangeDetection"
                             Header="{x:Static props:AdvancedStrings.DPIChangeDetection}"
                             Description="{x:Static props:AdvancedStrings.DPIChangeDetectionHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.View}"
+                            MaterialIcon="EyeOutline"
                             SwitchName="ToggleSwitchDPIChangeDetection"
                             Toggled="ToggleSwitchDPIChangeDetection_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardResolutionChangeDetection"
                             Header="{x:Static props:AdvancedStrings.ResolutionChangeDetection}"
                             Description="{x:Static props:AdvancedStrings.ResolutionChangeDetectionHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Accept}"
+                            MaterialIcon="Check"
                             SwitchName="ToggleSwitchResolutionChangeDetection"
                             Toggled="ToggleSwitchResolutionChangeDetection_Toggled" />
 

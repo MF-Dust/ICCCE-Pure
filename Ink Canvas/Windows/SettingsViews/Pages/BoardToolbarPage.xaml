@@ -1,7 +1,8 @@
 <ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties"
           x:Class="Ink_Canvas.Windows.SettingsViews.Pages.BoardToolbarPage"
           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
           xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -32,17 +33,17 @@
         <DataTemplate x:Key="GroupChildItemTemplate" DataType="{x:Type board:BoardToolbarComponentEntry}">
             <Border Cursor="Hand">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <ui:FontIcon touch:TouchAwareDragDropHelper.IsGripHandle="True"
-                                 Icon="{x:Static ui:FluentSystemIcons.ReOrder_16_Regular}" FontSize="16"
+                    <materialDesign:PackIcon touch:TouchAwareDragDropHelper.IsGripHandle="True"
+                                 Kind="ReorderHorizontal" Width="16" Height="16"
                                  Cursor="SizeAll" VerticalAlignment="Center" Margin="-6,0,0,0"
                                  RenderTransformOrigin="0.5,0.5">
-                        <ui:FontIcon.RenderTransform>
+                        <materialDesign:PackIcon.RenderTransform>
                             <RotateTransform Angle="90"/>
-                        </ui:FontIcon.RenderTransform>
-                    </ui:FontIcon>
+                        </materialDesign:PackIcon.RenderTransform>
+                    </materialDesign:PackIcon>
                     <Grid Width="16" Height="16" Margin="2,0,4,0" VerticalAlignment="Center">
                         <Path Data="{Binding Id, Converter={StaticResource IdToPathDataConverter}}" Width="16" Height="16" Stretch="Uniform"
-                              Fill="{DynamicResource {x:Static ui:ThemeKeys.TextFillColorPrimaryBrushKey}}"
+                              Fill="{DynamicResource MaterialDesign.Brush.Foreground}"
                               Visibility="{Binding Id, Converter={StaticResource IdToIconVisibilityConverter}}"/>
                         <ui:FontIcon Icon="{Binding Id, Converter={StaticResource IdToIconKeyConverter}}" FontSize="16"
                                      Visibility="{Binding Id, Converter={StaticResource IdToIconVisibilityConverter}, ConverterParameter=fontIcon}"/>
@@ -55,7 +56,7 @@
                             VerticalAlignment="Center"
                             Cursor="Hand"
                             Visibility="Collapsed">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Delete_16_Regular}" FontSize="16" Foreground="IndianRed"/>
+                        <materialDesign:PackIcon Kind="DeleteOutline" Foreground="IndianRed" Width="16"  Height="16" />
                     </Button>
                 </StackPanel>
             </Border>
@@ -73,12 +74,12 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ui:FontIcon Grid.Column="0" touch:TouchAwareDragDropHelper.IsGripHandle="True"
-                                 Icon="{x:Static ui:FluentSystemIcons.ReOrderDotsVertical_24_Filled}" FontSize="16"
-                                 Cursor="SizeAll" Margin="-1,0,2,0" VerticalAlignment="Center"/>
+                    <materialDesign:PackIcon Grid.Column="0" touch:TouchAwareDragDropHelper.IsGripHandle="True"
+                                 Kind="DragVertical"
+                                 Cursor="SizeAll" Margin="-1,0,2,0" VerticalAlignment="Center" Width="16"  Height="16" />
                     <Grid Grid.Column="1" Width="20" Height="20" Margin="0,0,8,0" VerticalAlignment="Center">
                         <Path Data="{Binding Id, Converter={StaticResource IdToPathDataConverter}}" Width="20" Height="20" Stretch="Uniform"
-                              Fill="{DynamicResource {x:Static ui:ThemeKeys.TextFillColorPrimaryBrushKey}}"
+                              Fill="{DynamicResource MaterialDesign.Brush.Foreground}"
                               Visibility="{Binding Id, Converter={StaticResource IdToIconVisibilityConverter}}"/>
                         <ui:FontIcon Icon="{Binding Id, Converter={StaticResource IdToIconKeyConverter}}" FontSize="20"
                                      Visibility="{Binding Id, Converter={StaticResource IdToIconVisibilityConverter}, ConverterParameter=fontIcon}"/>
@@ -109,15 +110,15 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ui:FontIcon Grid.Column="0" touch:TouchAwareDragDropHelper.IsGripHandle="True"
+                    <materialDesign:PackIcon Grid.Column="0" touch:TouchAwareDragDropHelper.IsGripHandle="True"
                                  touch:TouchAwareDragDropHelper.IsExplicitVisible="True"
-                                 Icon="{x:Static ui:FluentSystemIcons.ReOrder_20_Regular}" FontSize="16"
+                                 Kind="ReorderHorizontal" Width="16" Height="16"
                                  Cursor="SizeAll" Margin="-2,0,4,0" VerticalAlignment="Stretch"
                                  RenderTransformOrigin="0.5,0.5">
-                        <ui:FontIcon.RenderTransform>
+                        <materialDesign:PackIcon.RenderTransform>
                             <RotateTransform Angle="90"/>
-                        </ui:FontIcon.RenderTransform>
-                    </ui:FontIcon>
+                        </materialDesign:PackIcon.RenderTransform>
+                    </materialDesign:PackIcon>
                     <ListView Grid.Column="1" ItemsSource="{Binding Components}"
                              ItemTemplate="{StaticResource GroupChildItemTemplate}"
                              dd:DragDrop.IsDragSource="True"
@@ -141,13 +142,13 @@
                                     Background="Transparent" BorderThickness="0"
                                     ToolTip="{x:Static props:FloatingBarStrings.BoardToolbarPage_AddGroup2}"
                                     Cursor="Hand">
-                                <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Add_16_Regular}" FontSize="12"/>
+                                <materialDesign:PackIcon Kind="Plus" Width="12"  Height="12" />
                             </Button>
                             <Button Click="RemoveGroup_Click" Padding="4,2"
                                     Background="Transparent" BorderThickness="0"
                                     ToolTip="{x:Static props:FloatingBarStrings.BoardToolbarPage_DeleteProfile}"
                                     Cursor="Hand">
-                                <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Delete_16_Regular}" FontSize="12"/>
+                                <materialDesign:PackIcon Kind="DeleteOutline" Width="12"  Height="12" />
                             </Button>
                         </StackPanel>
                     </Border>
@@ -176,23 +177,23 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
                     <Button Click="ButtonRefreshConfig_Click" Style="{StaticResource BorderlessIconButtonStyle}" Padding="8,6" Margin="0,0,4,0"
                             ToolTip="{x:Static props:FloatingBarStrings.ToolbarPage_RefreshProfile}">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.ArrowSync_16_Regular}"/>
+                        <materialDesign:PackIcon Kind="Sync" Width="20"  Height="20" />
                     </Button>
                     <Button Click="ButtonNewConfig_Click" Style="{StaticResource BorderlessIconButtonStyle}" Padding="8,6" Margin="0,0,4,0"
                             ToolTip="{x:Static props:FloatingBarStrings.ToolbarPage_NewProfile}">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Add_16_Regular}"/>
+                        <materialDesign:PackIcon Kind="Plus" Width="20"  Height="20" />
                     </Button>
                     <Button Click="ButtonDuplicateConfig_Click" Style="{StaticResource BorderlessIconButtonStyle}" Padding="8,6" Margin="0,0,4,0"
                             ToolTip="{x:Static props:FloatingBarStrings.ToolbarPage_DuplicateProfile}">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Copy_16_Regular}"/>
+                        <materialDesign:PackIcon Kind="ContentCopy" Width="20"  Height="20" />
                     </Button>
                     <Button Click="ButtonDeleteConfig_Click" Style="{StaticResource BorderlessIconButtonStyle}" Padding="8,6" Margin="0,0,4,0"
                             ToolTip="{x:Static props:FloatingBarStrings.ToolbarPage_DeleteProfile}">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.Delete_16_Regular}"/>
+                        <materialDesign:PackIcon Kind="DeleteOutline" Width="20"  Height="20" />
                     </Button>
                     <Button Click="ButtonOpenConfigFolder_Click" Style="{StaticResource BorderlessIconButtonStyle}" Padding="8,6"
                             ToolTip="{x:Static props:FloatingBarStrings.ToolbarPage_OpenConfigFolder}">
-                        <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.FolderOpen_16_Regular}"/>
+                        <materialDesign:PackIcon Kind="FolderOpenOutline" Width="20"  Height="20" />
                     </Button>
                 </StackPanel>
             </DockPanel>
@@ -253,7 +254,7 @@
 
         <!-- ===== Section 3: 组件库 / 组件设置 ===== -->
         <TabControl Grid.Row="3" x:Name="SettingsTabControl" Margin="0,4,0,0"
-                    Style="{StaticResource {x:Static ui:ThemeKeys.TabControlPivotStyleKey}}"
+                    Style="{StaticResource MaterialDesignTabControl}"
                     SelectedIndex="{Binding SettingsTabIndex}">
 
             <!-- Tab 1: 组件库 -->

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 mc:Ignorable="d"
              d:DesignHeight="68"
              d:DesignWidth="600">
@@ -13,7 +14,7 @@ mc:Ignorable="d"
                      Header="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
                      Description="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <ui:SettingsCard.HeaderIcon>
-            <ui:FontIcon x:Name="HeaderFontIcon" Icon="{x:Static ui:SegoeFluentIcons.KeyboardStandard}" />
+            <materialDesign:PackIcon x:Name="HeaderFontIcon" Kind="KeyboardOutline" Width="20" Height="20" />
         </ui:SettingsCard.HeaderIcon>
         <Button x:Name="BtnSetHotkey"
                 MinWidth="120"

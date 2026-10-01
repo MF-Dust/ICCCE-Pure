@@ -4,38 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
-             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" d:Width="300">
-    <Grid Margin="12,8,10,5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <ikw:SimpleStackPanel x:Name="TabsPanel" Grid.Column="0"
-                              Orientation="Horizontal" VerticalAlignment="Center"
-                              Spacing="4" />
-        <Button x:Name="CloseButton" Grid.Column="1"
-                Cursor="Hand" VerticalAlignment="Center"
-                Padding="4" MinWidth="28" MinHeight="28"
-                Background="Transparent" BorderThickness="0">
-            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChromeCloseContrast}"
-                         Foreground="{DynamicResource FloatingBarPopupTitleForegroundBrush}" FontSize="16" />
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="RootBorder" Background="{TemplateBinding Background}"
-                            CornerRadius="4" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="#22DC2626" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="RootBorder" Property="Background" Value="#44DC2626" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>
-    </Grid>
+    <Border Background="{DynamicResource FloatingBarPopupInnerBackgroundBrush}"
+            CornerRadius="20,20,0,0" Padding="12,6,10,6">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ikw:SimpleStackPanel x:Name="TabsPanel" Grid.Column="0"
+                                  Orientation="Horizontal" VerticalAlignment="Center"
+                                  Spacing="4" />
+            <Button x:Name="CloseButton" Grid.Column="1"
+                    Style="{DynamicResource MaterialDesignIconButton}"
+                    Cursor="Hand" VerticalAlignment="Center"
+                    Width="40" Height="40" MinWidth="40" MinHeight="40"
+                    Padding="0" Background="Transparent" BorderThickness="0"
+                    AutomationProperties.Name="{Binding Text, Source={x:Static SystemCommands.CloseWindowCommand}}">
+                <materialDesign:PackIcon Kind="Close"
+                                         Foreground="{DynamicResource FloatingBarPopupTitleForegroundBrush}"
+                                         Width="16" Height="16" />
+            </Button>
+        </Grid>
+    </Border>
 </UserControl>

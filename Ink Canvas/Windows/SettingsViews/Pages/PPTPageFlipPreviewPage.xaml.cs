@@ -7,7 +7,6 @@ using System.Windows.Interop;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.WindowsAndMessaging;
-using NavigationViewPaneDisplayMode = iNKORE.UI.WPF.Modern.Controls.NavigationViewPaneDisplayMode;
 using Page = iNKORE.UI.WPF.Modern.Controls.Page;
 
 namespace Ink_Canvas.Windows.SettingsViews.Pages
@@ -15,7 +14,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
     public partial class PPTPageFlipPreviewPage : Page
     {
         private bool _isLoaded = false;
-        private NavigationViewPaneDisplayMode _originalPaneDisplayMode;
+        private bool _originalNavigationDrawerOpen;
         private bool _originalIsInPPTPresentationMode;
         private ToolbarPosition _originalToolbarPosition;
         private DelayAction _sliderDelayAction = new DelayAction();
@@ -42,8 +41,8 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             var settingsWindow = Window.GetWindow(this) as SettingsWindow;
             if (settingsWindow != null)
             {
-                _originalPaneDisplayMode = settingsWindow.NavigationViewControl.PaneDisplayMode;
-                settingsWindow.NavigationViewControl.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftMinimal;
+                _originalNavigationDrawerOpen = settingsWindow.IsNavigationDrawerOpen;
+                settingsWindow.IsNavigationDrawerOpen = false;
                 settingsWindow.Closed += SettingsWindow_Closed;
 
                 // Temporarily set SettingsWindow topmost to ensure it stays in front of MainWindow
@@ -117,7 +116,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             var settingsWindow = Window.GetWindow(this) as SettingsWindow;
             if (settingsWindow != null)
             {
-                settingsWindow.NavigationViewControl.PaneDisplayMode = _originalPaneDisplayMode;
+                settingsWindow.IsNavigationDrawerOpen = _originalNavigationDrawerOpen;
                 settingsWindow.Closed -= SettingsWindow_Closed;
                 settingsWindow.Topmost = _originalSettingsWindowTopmost;
             }

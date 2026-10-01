@@ -176,7 +176,7 @@ namespace Ink_Canvas.Controls.Toolbar.BoardToolbar
 
             var border = new Border
             {
-                CornerRadius = new CornerRadius(5, 5, 5, 5),
+                CornerRadius = new CornerRadius(18),
                 Margin = new Thickness(0),
                 Child = panel
             };

@@ -2,6 +2,7 @@ using Ink_Canvas.Controls;
 using Ink_Canvas.Controls.Toolbar.FloatingToolbar;
 using Ink_Canvas.Helpers;
 using iNKORE.UI.WPF.Modern;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -51,6 +52,16 @@ namespace Ink_Canvas
 
             var rd1 = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
             Application.Current.Resources.MergedDictionaries.Add(rd1);
+
+            var palette = new MaterialDesignThemes.Wpf.PaletteHelper();
+            var materialTheme = palette.GetTheme();
+            materialTheme.SetBaseTheme(isLightTheme
+                ? MaterialDesignThemes.Wpf.BaseTheme.Light
+                : MaterialDesignThemes.Wpf.BaseTheme.Dark);
+            materialTheme.SetPrimaryColor((Color)Application.Current.FindResource("MaterialPrimaryColor"));
+            materialTheme.SetSecondaryColor((Color)Application.Current.FindResource("MaterialSecondaryColor"));
+            palette.SetTheme(materialTheme);
+
             FloatingBarThemeService?.ApplyBuiltInTheme();
 
             _ = Task.Run(async () =>

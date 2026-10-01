@@ -759,8 +759,8 @@ namespace Ink_Canvas.Controls.Toolbar.FloatingToolbar
                 Visibility = Visibility.Visible,
                 Height = orientation == Orientation.Horizontal ? 58 : double.NaN,
                 Width = orientation == Orientation.Vertical ? 58 : double.NaN,
-                CornerRadius = new CornerRadius(8),
-                BorderThickness = new Thickness(2),
+                CornerRadius = new CornerRadius(18),
+                BorderThickness = new Thickness(1),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 Child = contentPanel,
                 Tag = ContentBorderTag
@@ -797,8 +797,8 @@ namespace Ink_Canvas.Controls.Toolbar.FloatingToolbar
                     MinHeight = orientation == Orientation.Vertical ? 58 : 0,
                     Height = orientation == Orientation.Horizontal ? 58 : double.NaN,
                     Width = orientation == Orientation.Vertical ? 58 : double.NaN,
-                    CornerRadius = new CornerRadius(8),
-                    BorderThickness = new Thickness(2),
+                    CornerRadius = new CornerRadius(18),
+                    BorderThickness = new Thickness(1),
                     Child = contentPanel,
                     Tag = ContentBorderTag
                 };
@@ -829,8 +829,8 @@ namespace Ink_Canvas.Controls.Toolbar.FloatingToolbar
                     MinWidth = 0,
                     Height = orientation == Orientation.Horizontal ? 58 : double.NaN,
                     Width = orientation == Orientation.Vertical ? 58 : double.NaN,
-                    CornerRadius = new CornerRadius(8),
-                    BorderThickness = new Thickness(2),
+                    CornerRadius = new CornerRadius(18),
+                    BorderThickness = new Thickness(1),
                     Child = contentPanel,
                     Tag = ContentBorderTag
                 };

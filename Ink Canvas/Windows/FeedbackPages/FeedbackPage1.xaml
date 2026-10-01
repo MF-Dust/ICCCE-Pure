@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
     xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:props="clr-namespace:Ink_Canvas.Properties"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="600">
@@ -18,7 +19,7 @@
                              Header="{x:Static props:FeedbackStrings.Page1_SoftwareInfo}"
                              Description="{x:Static props:FeedbackStrings.Page1_SoftwareInfoDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.AppIconDefault}"/>
+                    <materialDesign:PackIcon Kind="Application" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <ui:SettingsExpander.Items>
                     <ui:SettingsCard ContentAlignment="Left">
@@ -32,7 +33,7 @@
                              Header="{x:Static props:FeedbackStrings.Page1_SystemInfo}"
                              Description="{x:Static props:FeedbackStrings.Page1_SystemInfoDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PC1}"/>
+                    <materialDesign:PackIcon Kind="DesktopClassic" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <ui:SettingsExpander.Items>
                     <ui:SettingsCard ContentAlignment="Left">
@@ -50,7 +51,7 @@
                              Header="{x:Static props:FeedbackStrings.Page1_Config}"
                              Description="{x:Static props:FeedbackStrings.Page1_ConfigDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>
+                    <materialDesign:PackIcon Kind="CogOutline" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <ui:SettingsExpander.Items>
                     <ui:SettingsCard ContentAlignment="Left">

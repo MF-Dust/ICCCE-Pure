@@ -1,6 +1,7 @@
 <ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties" x:Class="Ink_Canvas.Windows.SettingsViews.Pages.StoragePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -11,16 +12,11 @@
       Title="{x:Static props:StorageStrings.Storage_Title}">
 
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                    BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                    TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
 
             <ikw:SimpleStackPanel MaxWidth="1000"
@@ -31,8 +27,8 @@
                            Text="{x:Static props:StorageStrings.Storage_Title}" />
 
                 <!-- 概览卡片 -->
-                <Border Background="{DynamicResource {x:Static ui:ThemeKeys.LayerFillColorDefaultBrushKey}}"
-                        BorderBrush="{DynamicResource {x:Static ui:ThemeKeys.CardStrokeColorDefaultBrushKey}}"
+                <Border Background="{DynamicResource MaterialDesign.Brush.Card.Background}"
+                        BorderBrush="{DynamicResource MaterialDesign.Brush.Card.Border}"
                         CornerRadius="4" BorderThickness="1" Padding="20,16">
                     <ikw:SimpleStackPanel Spacing="12">
                         <Grid>
@@ -133,7 +129,7 @@
                                      Description="{x:Static props:StorageStrings.Storage_Core_Desc}"
                                      IsExpanded="True">
                     <ui:SettingsExpander.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Settings}"/>
+                        <materialDesign:PackIcon Kind="CogOutline" Width="20"  Height="20" />
                     </ui:SettingsExpander.HeaderIcon>
                     <TextBlock x:Name="CoreSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     <ui:SettingsExpander.Items>
@@ -146,7 +142,7 @@
                                  Header="{x:Static props:StorageStrings.Storage_Logs_Header}"
                                  Description="{x:Static props:StorageStrings.Storage_Logs_Desc}">
                     <ui:SettingsCard.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.OpenFile}"/>
+                        <materialDesign:PackIcon Kind="FolderOpenOutline" Width="20"  Height="20" />
                     </ui:SettingsCard.HeaderIcon>
                     <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                         <TextBlock x:Name="LogsSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -159,7 +155,7 @@
                                  Header="{x:Static props:StorageStrings.Storage_Legend_Ink}"
                                  Description="{x:Static props:StorageStrings.Storage_Ink_Desc}">
                     <ui:SettingsCard.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}"/>
+                        <materialDesign:PackIcon Kind="Pencil" Width="20"  Height="20" />
                     </ui:SettingsCard.HeaderIcon>
                     <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                         <TextBlock x:Name="InkSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -172,7 +168,7 @@
                                  Header="{x:Static props:StorageStrings.Storage_Legend_Backups}"
                                  Description="{x:Static props:StorageStrings.Storage_Backups_Desc}">
                     <ui:SettingsCard.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Cloud}"/>
+                        <materialDesign:PackIcon Kind="CloudOutline" Width="20"  Height="20" />
                     </ui:SettingsCard.HeaderIcon>
                     <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
                         <TextBlock x:Name="BackupsSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -186,7 +182,7 @@
                                      Description="{x:Static props:StorageStrings.Storage_Custom_Desc}"
                                      IsExpanded="True">
                     <ui:SettingsExpander.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Photo}"/>
+                        <materialDesign:PackIcon Kind="ImageOutline" Width="20"  Height="20" />
                     </ui:SettingsExpander.HeaderIcon>
                     <TextBlock x:Name="CustomSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     <ui:SettingsExpander.Items>
@@ -199,7 +195,7 @@
                                  Header="{x:Static props:StorageStrings.Storage_Legend_Other}"
                                  Description="{x:Static props:StorageStrings.Storage_Other_Desc}">
                     <ui:SettingsCard.HeaderIcon>
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.More}"/>
+                        <materialDesign:PackIcon Kind="DotsHorizontal" Width="20"  Height="20" />
                     </ui:SettingsCard.HeaderIcon>
                     <TextBlock x:Name="OtherSizeText" Text="—" FontWeight="SemiBold" VerticalAlignment="Center"/>
                 </ui:SettingsCard>

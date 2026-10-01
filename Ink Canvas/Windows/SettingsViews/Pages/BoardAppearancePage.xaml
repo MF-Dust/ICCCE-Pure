@@ -1,6 +1,7 @@
 ﻿<ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties" x:Class="Ink_Canvas.Windows.SettingsViews.Pages.BoardAppearancePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -12,16 +13,11 @@
       Title="{x:Static props:NavStrings.Nav_BoardAppearance}">
 
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                    BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                    TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
             <Grid>
                 <ikw:SimpleStackPanel MaxWidth="1000"
@@ -33,13 +29,13 @@
 
                     <controls:LabeledSettingsCard x:Name="CardEnableTimeDisplayInWhiteboardMode"
                             Header="{x:Static props:ThemeStrings.Theme_ShowTimeInWhiteboard}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Pinned}"
+                            MaterialIcon="PinOutline"
                             SwitchName="ToggleSwitchEnableTimeDisplayInWhiteboardMode"
                             Toggled="ToggleSwitchEnableTimeDisplayInWhiteboardMode_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardShowPenColorOnBoardToolbarIcon"
                             Header="{x:Static props:ThemeStrings.Theme_ShowPenColorOnBoardToolbarIcon}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Draw}"
+                            MaterialIcon="Draw"
                             SwitchName="ToggleSwitchShowPenColorOnBoardToolbarIcon"
                             Toggled="ToggleSwitchShowPenColorOnBoardToolbarIcon_Toggled" />
 
@@ -49,7 +45,7 @@
                     <ui:SettingsExpander Header="{x:Static props:ThemeStrings.Theme_BoardToolbarOpacity}"
                                          IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EaseOfAccess}" />
+                            <materialDesign:PackIcon Kind="Human"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:SettingsExpander.Items>
                             <ui:SettingsCard Header="{x:Static props:ThemeStrings.Theme_BoardToolbarOpacityLeft}">
@@ -91,7 +87,7 @@
                     <Rectangle Height="16" />
                     <ui:SettingsCard Header="{x:Static props:ThemeStrings.Theme_BoardMenuOpacity}">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PreviewLink}" />
+                            <materialDesign:PackIcon Kind="OpenInNew"  Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                         <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="8">
                             <TextBlock x:Name="BoardMenuOpacityText"
@@ -110,7 +106,7 @@
                     <ui:SettingsExpander Header="{x:Static props:ThemeStrings.Theme_BlackboardScale80}"
                                          IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.BackToWindow}" />
+                            <materialDesign:PackIcon Kind="FullscreenExit"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:SettingsExpander.Items>
                             <ui:SettingsCard Header="{x:Static props:ThemeStrings.Theme_BoardScaleLeft}">

@@ -18,12 +18,6 @@ namespace Ink_Canvas.Controls
 
     public partial class PopupTabTitleBar : UserControl
     {
-        private static readonly SolidColorBrush SelectedBackground =
-            new SolidColorBrush(Color.FromArgb(40, 59, 130, 246));
-
-        private static readonly SolidColorBrush UnselectedBackground =
-            new SolidColorBrush(Colors.Transparent);
-
         public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(
             nameof(SelectedIndex), typeof(int), typeof(PopupTabTitleBar),
             new PropertyMetadata(0, OnSelectedIndexChanged));
@@ -74,26 +68,34 @@ namespace Ink_Canvas.Controls
             UpdateTabVisuals();
         }
 
-        private Border CreateTabElement(PopupTabItem tabItem, int index)
+        private Button CreateTabElement(PopupTabItem tabItem, int index)
         {
-            var border = new Border
+            var button = new Button
             {
-                Height = 28,
-                CornerRadius = new CornerRadius(4),
-                Background = UnselectedBackground,
-                Tag = index,
+                Height = 36,
+                MinWidth = 0,
+                Padding = new Thickness(0),
+                BorderThickness = new Thickness(0),
+                Background = Brushes.Transparent,
                 Cursor = Cursors.Hand
             };
-
-            border.MouseUp += (s, e) =>
+            button.SetResourceReference(StyleProperty, "MaterialDesignFlatButton");
+            System.Windows.Automation.AutomationProperties.SetName(button, tabItem.Header ?? string.Empty);
+            button.Click += (s, e) =>
             {
                 if (SelectedIndex != index)
-                {
                     SelectedIndex = index;
-                }
                 e.Handled = true;
             };
 
+            var border = new Border
+            {
+                Height = 36,
+                CornerRadius = new CornerRadius(10),
+                Background = Brushes.Transparent,
+                Tag = index,
+                Padding = new Thickness(8, 0, 8, 0)
+            };
             var grid = new Grid();
             grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
@@ -122,10 +124,10 @@ namespace Ink_Canvas.Controls
                 FontWeight = FontWeights.Medium,
                 FontSize = 14,
                 TextAlignment = TextAlignment.Center,
-                Text = tabItem.Header ?? "",
+                Text = tabItem.Header ?? string.Empty,
                 Margin = new Thickness(4, 0, 4, 0)
             };
-            text.SetResourceReference(TextBlock.ForegroundProperty, "FloatBarForeground");
+            text.SetResourceReference(TextBlock.ForegroundProperty, "FloatingBarForegroundBrush");
             contentPanel.Children.Add(text);
 
             Grid.SetRow(contentPanel, 0);
@@ -135,18 +137,18 @@ namespace Ink_Canvas.Controls
             {
                 Height = 3,
                 CornerRadius = new CornerRadius(1.5),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Background = new SolidColorBrush(Color.FromRgb(0x3b, 0x82, 0xf6)),
+                Margin = new Thickness(12, 0, 12, 0),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
                 Visibility = Visibility.Collapsed
             };
+            indicator.SetResourceReference(Border.BackgroundProperty, "FloatingBarAccentBrush");
 
             Grid.SetRow(indicator, 1);
             grid.Children.Add(indicator);
-
             border.Child = grid;
-            border.Padding = new Thickness(8, 0, 8, 0);
+            button.Content = border;
 
-            return border;
+            return button;
         }
 
         private void UpdateTabVisuals()
@@ -155,12 +157,15 @@ namespace Ink_Canvas.Controls
                 return;
             for (int i = 0; i < TabsPanel.Children.Count; i++)
             {
-                if (!(TabsPanel.Children[i] is Border border)) continue;
-                if (!(border.Child is Grid grid)) continue;
+                if (!(TabsPanel.Children[i] is Button button)) continue;
+                if (!(button.Content is Border border) || !(border.Child is Grid grid)) continue;
 
                 bool isSelected = (i == SelectedIndex);
 
-                border.Background = isSelected ? SelectedBackground : UnselectedBackground;
+                if (isSelected)
+                    border.SetResourceReference(Border.BackgroundProperty, "FloatingBarPopupHoverBrush");
+                else
+                    border.Background = Brushes.Transparent;
 
                 if (grid.Children.Count >= 2)
                 {

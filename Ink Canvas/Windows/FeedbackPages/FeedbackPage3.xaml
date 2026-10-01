@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
     xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:props="clr-namespace:Ink_Canvas.Properties"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="600">
@@ -20,7 +21,7 @@
                              Header="{x:Static props:FeedbackStrings.Page3_Feishu}"
                              Description="{x:Static props:FeedbackStrings.Page3_FeishuDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Feedback}"/>
+                    <materialDesign:PackIcon Kind="CommentFeedbackOutline" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <Button x:Name="BtnOpenFeishuForm"
                         Content="{x:Static props:FeedbackStrings.Page3_OpenFeishu}">
@@ -33,7 +34,7 @@
                                      Header="{x:Static props:FeedbackStrings.Page3_CopyFeishuUrl}"
                                      IsClickEnabled="True">
                         <ui:SettingsCard.ActionIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Copy}"/>
+                            <materialDesign:PackIcon Kind="ContentCopy" Width="16" Height="16"/>
                         </ui:SettingsCard.ActionIcon>
                     </ui:SettingsCard>
                 </ui:SettingsExpander.Items>
@@ -44,7 +45,7 @@
                              Header="{x:Static props:FeedbackStrings.Page3_PastebinUpload}"
                              Description="{x:Static props:FeedbackStrings.Page3_PastebinUploadDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Cloud}"/>
+                    <materialDesign:PackIcon Kind="CloudUploadOutline" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <Button x:Name="BtnUploadPastebin"
                         Content="{x:Static props:FeedbackStrings.Page3_UploadToPastebin}">
@@ -68,7 +69,7 @@
                                      Header=""
                                      Visibility="Collapsed">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Link}"/>
+                            <materialDesign:PackIcon Kind="LinkVariant" Width="20" Height="20"/>
                         </ui:SettingsCard.HeaderIcon>
                         <Button x:Name="BtnCopyPasteUrl"
                                 Content="{x:Static props:FeedbackStrings.Page3_CopyPastebinUrl}">
@@ -85,7 +86,7 @@
                              Header="{x:Static props:FeedbackStrings.Page3_GitHub}"
                              Description="{x:Static props:FeedbackStrings.Page3_GitHubDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Mail}"/>
+                    <materialDesign:PackIcon Kind="Github" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <Button x:Name="BtnOpenGitHubIssue"
                         Content="{x:Static props:FeedbackStrings.Page3_OpenGitHub}">
@@ -98,7 +99,7 @@
                                      Header="{x:Static props:FeedbackStrings.Page3_CopyIssueUrl}"
                                      IsClickEnabled="True">
                         <ui:SettingsCard.ActionIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Copy}"/>
+                            <materialDesign:PackIcon Kind="ContentCopy" Width="16" Height="16"/>
                         </ui:SettingsCard.ActionIcon>
                     </ui:SettingsCard>
                 </ui:SettingsExpander.Items>
@@ -109,7 +110,7 @@
                              Header="{x:Static props:FeedbackStrings.Page3_Markdown}"
                              Description="{x:Static props:FeedbackStrings.Page3_MarkdownDesc}">
                 <ui:SettingsExpander.HeaderIcon>
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Code}"/>
+                    <materialDesign:PackIcon Kind="CodeTags" Width="20" Height="20"/>
                 </ui:SettingsExpander.HeaderIcon>
                 <Button x:Name="BtnCopyMarkdown"
                         Content="{x:Static props:FeedbackStrings.Page3_CopyMarkdown}">

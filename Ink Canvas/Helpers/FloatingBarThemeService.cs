@@ -42,9 +42,12 @@ namespace Ink_Canvas.Helpers
             dictionary["FloatingBarBackgroundBrush"] = Application.Current.TryFindResource("FloatBarBackground") ?? new SolidColorBrush(Color.FromArgb(0xF2, 0x1A, 0x1C, 0x1E));
             dictionary["FloatingBarForegroundBrush"] = Application.Current.TryFindResource("FloatBarForeground") ?? Brushes.White;
             dictionary["FloatingBarBorderBrush"] = Application.Current.TryFindResource("FloatBarBorderBrush") ?? Brushes.White;
-            dictionary["FloatingBarAccentBrush"] = new SolidColorBrush(Color.FromRgb(37, 99, 235));
-            dictionary["FloatingBarButtonHoverBrush"] = new SolidColorBrush(Color.FromArgb(0x22, 0x25, 0x63, 0xEB));
-            dictionary["FloatingBarButtonPressedBrush"] = new SolidColorBrush(Color.FromArgb(0x44, 0x25, 0x63, 0xEB));
+            dictionary["FloatingBarAccentBrush"] = Application.Current.FindResource("MaterialDesign.Brush.Primary");
+            dictionary["FloatingBarButtonHoverBrush"] = Application.Current.TryFindResource("FloatBarButtonBackgroundPointerOverKey")
+                ?? Application.Current.FindResource("FloatingBarButtonHoverBrush");
+            dictionary["FloatingBarButtonPressedBrush"] = Application.Current.TryFindResource("FloatBarButtonButtonBackgroundPressedKey")
+                ?? Application.Current.FindResource("FloatingBarButtonPressedBrush");
+            dictionary["FloatingBarPopupHoverBrush"] = dictionary["FloatingBarButtonHoverBrush"];
             dictionary["FloatingBarPopupBackgroundBrush"] = Application.Current.TryFindResource("ToolsPopupBackground") ?? dictionary["FloatingBarBackgroundBrush"];
             dictionary["FloatingBarPopupInnerBackgroundBrush"] = Application.Current.TryFindResource("ToolsPopupInnerBackground") ?? dictionary["FloatingBarBackgroundBrush"];
             dictionary["FloatingBarPopupInnerBorderBrush"] = Application.Current.TryFindResource("ToolsPopupInnerBorderBrush") ?? dictionary["FloatingBarBorderBrush"];

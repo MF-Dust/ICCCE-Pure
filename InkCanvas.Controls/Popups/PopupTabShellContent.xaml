@@ -3,20 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              xmlns:controls="clr-namespace:Ink_Canvas.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
-    <Border CornerRadius="8" Background="{DynamicResource FloatingBarBackgroundBrush}"
-            BorderBrush="{DynamicResource FloatingBarAccentBrush}" BorderThickness="3">
-        <ikw:SimpleStackPanel Margin="-1">
+    <materialDesign:Card Background="{DynamicResource FloatingBarPopupBackgroundBrush}"
+                         BorderBrush="{DynamicResource FloatingBarPopupInnerBorderBrush}"
+                         BorderThickness="1" Padding="0" UniformCornerRadius="20"
+                         materialDesign:ElevationAssist.Elevation="Dp1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <controls:PopupTabTitleBar x:Name="TabTitleBar" />
-            <Border Margin="9,0,9,9" BorderBrush="{DynamicResource FloatingBarPopupInnerBorderBrush}"
-                    Background="{DynamicResource FloatingBarPopupInnerBackgroundBrush}" BorderThickness="2"
-                    CornerRadius="4">
-                <Grid Margin="1">
-                    <ContentPresenter x:Name="ContentArea" />
-                </Grid>
-            </Border>
-        </ikw:SimpleStackPanel>
-    </Border>
+            <ContentPresenter x:Name="ContentArea" Grid.Row="1" Margin="10,4,10,10" />
+        </Grid>
+    </materialDesign:Card>
 </UserControl>

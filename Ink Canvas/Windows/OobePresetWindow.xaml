@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="{x:Static props:OobeStrings.Oobe_PresetTitle}"
         Height="560" Width="680"
@@ -88,10 +89,10 @@
                         Margin="0,0,14,0"
                         CornerRadius="10"
                         Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Repair}"
-                                 FontSize="22"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center" />
+                    <materialDesign:PackIcon Kind="Wrench"
+                                             Width="22" Height="22"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center" />
                 </Border>
                 <ikw:SimpleStackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
                     <TextBlock Style="{DynamicResource TitleTextBlockStyle}"
@@ -136,11 +137,11 @@
                                 CornerRadius="8"
                                 Margin="0,0,14,0"
                                 Background="{DynamicResource SystemControlBackgroundAccentBrush}">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Slideshow}"
-                                         FontSize="20"
-                                         Foreground="White"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center" />
+                            <materialDesign:PackIcon Kind="PresentationPlay"
+                                                     Width="20" Height="20"
+                                                     Foreground="White"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center" />
                         </Border>
                         <ikw:SimpleStackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
                             <TextBlock Style="{DynamicResource BodyStrongTextBlockStyle}"
@@ -167,14 +168,14 @@
                                 </Border>
                             </ikw:SimpleStackPanel>
                         </ikw:SimpleStackPanel>
-                        <ui:FontIcon x:Name="IconStandard"
-                                     Grid.Column="2"
-                                     Icon="{x:Static ui:SegoeFluentIcons.RadioBullet}"
-                                     FontSize="20"
-                                     Margin="12,0,0,0"
-                                     Opacity="0"
-                                     Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
-                                     VerticalAlignment="Center" />
+                        <materialDesign:PackIcon x:Name="IconStandard"
+                                                 Grid.Column="2"
+                                                 Kind="RadioboxMarked"
+                                                 Width="20" Height="20"
+                                                 Margin="12,0,0,0"
+                                                 Opacity="0"
+                                                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                                                 VerticalAlignment="Center" />
                     </Grid>
                 </Border>
 
@@ -202,11 +203,11 @@
                                 CornerRadius="8"
                                 Margin="0,0,14,0"
                                 Background="#FF6366F1">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}"
-                                         FontSize="20"
-                                         Foreground="White"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center" />
+                            <materialDesign:PackIcon Kind="Pencil"
+                                                     Width="20" Height="20"
+                                                     Foreground="White"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center" />
                         </Border>
                         <ikw:SimpleStackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
                             <TextBlock Style="{DynamicResource BodyStrongTextBlockStyle}"
@@ -233,14 +234,14 @@
                                 </Border>
                             </ikw:SimpleStackPanel>
                         </ikw:SimpleStackPanel>
-                        <ui:FontIcon x:Name="IconLite"
-                                     Grid.Column="2"
-                                     Icon="{x:Static ui:SegoeFluentIcons.RadioBullet}"
-                                     FontSize="20"
-                                     Margin="12,0,0,0"
-                                     Opacity="0"
-                                     Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
-                                     VerticalAlignment="Center" />
+                        <materialDesign:PackIcon x:Name="IconLite"
+                                                 Grid.Column="2"
+                                                 Kind="RadioboxMarked"
+                                                 Width="20" Height="20"
+                                                 Margin="12,0,0,0"
+                                                 Opacity="0"
+                                                 Foreground="{DynamicResource SystemControlForegroundAccentBrush}"
+                                                 VerticalAlignment="Center" />
                     </Grid>
                 </Border>
 
@@ -273,7 +274,7 @@
                         Margin="0,0,8,0"
                         Click="BtnCancel_Click">
                     <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Back}" FontSize="12" />
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="12" Height="12" />
                         <TextBlock Text="{x:Static props:OobeStrings.Oobe_PresetBack}" />
                     </ikw:SimpleStackPanel>
                 </Button>
@@ -286,7 +287,7 @@
                         Style="{DynamicResource AccentButtonStyle}"
                         Click="BtnApply_Click">
                     <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Accept}" FontSize="12" />
+                        <materialDesign:PackIcon Kind="Check" Width="12" Height="12" />
                         <TextBlock Text="{x:Static props:OobeStrings.Oobe_PresetApply}" />
                     </ikw:SimpleStackPanel>
                 </Button>

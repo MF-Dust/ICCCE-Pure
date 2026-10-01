@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -65,6 +66,12 @@ namespace Ink_Canvas.Windows.SettingsViews
 
         private bool _isNavigating = false;
 
+        public bool IsNavigationDrawerOpen
+        {
+            get => SettingsDrawer.IsLeftDrawerOpen;
+            set => SettingsDrawer.IsLeftDrawerOpen = value;
+        }
+
         /// <summary>
         /// 若为 true，则跳过 Loaded 中默认导航到 HomePage 的行为。
         /// 用于 URI 打开设置窗口时由调用方在 Show() 之前设置，避免覆盖外部指定的目标页。
@@ -94,8 +101,8 @@ namespace Ink_Canvas.Windows.SettingsViews
         {
             InitializeComponent();
 
-            ApplyCurrentTheme();
             global::Ink_Canvas.Helpers.WindowBackdropHelper.Apply(this, Helpers.SettingsManager.Settings);
+            SizeChanged += (_, _) => UpdateNavigationLayout();
 
             // 初始化内置页面映射
             _pageTypes = new Dictionary<string, Type>
@@ -130,7 +137,6 @@ namespace Ink_Canvas.Windows.SettingsViews
             };
 
             // 初始页面统一在 Loaded 阶段导航，避免构造阶段与深链接导航互相覆盖。
-            UpdateAppTitleBarMargin();
 
             this.Loaded += (sender, e) =>
             {
@@ -142,8 +148,6 @@ namespace Ink_Canvas.Windows.SettingsViews
                     if (!SuppressInitialNavigation)
                     {
                         NavigateToPage("HomePage");
-                        NavigationViewControl.SelectedItem = NavigationViewControl.MenuItems[0];
-                        NavigationViewControl.Header = NavStrings.Nav_Home;
                     }
 
                     Dispatcher.BeginInvoke(new Action(() =>
@@ -193,21 +197,13 @@ namespace Ink_Canvas.Windows.SettingsViews
                 {
                     SetMaxSizeOnly();
                 }
-                UpdateAppTitleBarMargin();
             };
 
-            this.SizeChanged += (sender, e) =>
-            {
-                if (NavigationViewControl.DisplayMode == NavigationViewDisplayMode.Minimal)
-                {
-                    UpdateAppTitleBarMargin();
-                }
-            };
+            CopyUriSnackbar.MessageQueue = new MaterialDesignThemes.Wpf.SnackbarMessageQueue();
         }
 
         public void RefreshTheme()
         {
-            ApplyCurrentTheme();
             global::Ink_Canvas.Helpers.WindowBackdropHelper.Apply(this, Helpers.SettingsManager.Settings);
         }
 
@@ -216,34 +212,14 @@ namespace Ink_Canvas.Windows.SettingsViews
             global::Ink_Canvas.Helpers.WindowBackdropHelper.Apply(this, backdropName);
         }
 
-        private void ApplyCurrentTheme()
+        private void UpdateNavigationLayout()
         {
-            try
-            {
-                int themeIndex = Helpers.SettingsManager.Settings.Appearance.Theme;
-                var elementTheme = themeIndex switch
-                {
-                    0 => iNKORE.UI.WPF.Modern.ElementTheme.Light,
-                    1 => iNKORE.UI.WPF.Modern.ElementTheme.Dark,
-                    _ => IsSystemThemeLight() ? iNKORE.UI.WPF.Modern.ElementTheme.Light : iNKORE.UI.WPF.Modern.ElementTheme.Dark,
-                };
-                iNKORE.UI.WPF.Modern.ThemeManager.SetRequestedTheme(this, elementTheme);
-            }
-            catch { }
-        }
-
-        private static bool IsSystemThemeLight()
-        {
-            try
-            {
-                using (var themeKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                    @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
-                {
-                    if (themeKey?.GetValue("AppsUseLightTheme") is int v) return v == 1;
-                }
-            }
-            catch { }
-            return false;
+            var mode = ActualWidth < 840
+                ? MaterialDesignThemes.Wpf.DrawerHostOpenMode.Modal
+                : MaterialDesignThemes.Wpf.DrawerHostOpenMode.Standard;
+            if (SettingsDrawer.OpenMode == mode) return;
+            SettingsDrawer.OpenMode = mode;
+            SettingsDrawer.IsLeftDrawerOpen = mode == MaterialDesignThemes.Wpf.DrawerHostOpenMode.Standard;
         }
 
         #region 修复触摸屏鼠标指针消失问题
@@ -337,38 +313,11 @@ namespace Ink_Canvas.Windows.SettingsViews
         #endregion
         #endregion
 
-        #region 导航逻辑优化（含页面缓存）
-        private void OnNavigationViewSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        #region Material/WPF navigation
+        private void NavigationTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (_isNavigating)
-            {
-                return;
-            }
-
-            if (args.IsSettingsSelected)
-            {
-                NavigateToPage("Settings");
-                NavigationViewControl.Header = NavStrings.Settings_Title;
-                return;
-            }
-
-            // 处理普通导航项
-            if (args.SelectedItem is NavigationViewItem selectedItem)
-            {
-                string tag = selectedItem.Tag as string;
-                if (!string.IsNullOrEmpty(tag) && _pageTypes.ContainsKey(tag))
-                {
-                    object cachedPage = null;
-                    _pages.TryGetValue(tag, out cachedPage);
-
-                    if (cachedPage == null || rootFrame.Content != cachedPage)
-                    {
-                        NavigateToPage(tag);
-                    }
-                    NavigationViewControl.Header = selectedItem.Content;
-
-                }
-            }
+            if (!_isNavigating && e.NewValue is TreeViewItem item && item.Tag is string tag && _pageTypes.ContainsKey(tag))
+                NavigateToPage(tag);
         }
 
         public void NavigateToPage(string pageTag)
@@ -382,95 +331,53 @@ namespace Ink_Canvas.Windows.SettingsViews
             try
             {
                 _isNavigating = true;
-
                 if (!_pages.TryGetValue(pageTag, out var cachedPage))
                 {
                     cachedPage = Activator.CreateInstance(pageType);
                     _pages.Add(pageTag, cachedPage);
                 }
-
-
-
-                rootFrame.NavigationUIVisibility = NavigationUIVisibility.Hidden;
-                rootFrame.RemoveBackEntry();
-                rootFrame.Navigate(cachedPage);
-                rootFrame.RemoveBackEntry();
+                if (!ReferenceEquals(rootFrame.Content, cachedPage))
+                    rootFrame.Navigate(cachedPage);
+                SelectNavigationTag(pageTag);
+                PageHeader.Text = GetNavigationHeader(pageTag);
+                if (SettingsDrawer.OpenMode == MaterialDesignThemes.Wpf.DrawerHostOpenMode.Modal)
+                    SettingsDrawer.IsLeftDrawerOpen = false;
             }
             catch (Exception ex)
             {
                 var detail = ex.ToString();
-                if (ex.InnerException != null)
-                {
-                    detail += "\nInnerException:\n" + ex.InnerException;
-                }
-
-                Ink_Canvas.Helpers.LogHelper.WriteLogToFile($"SettingsWindow: 导航到 {pageTag} 异常: {detail}", Ink_Canvas.Helpers.LogHelper.LogType.Error);
+                if (ex.InnerException != null) detail += "\nInnerException:\n" + ex.InnerException;
+                LogHelper.WriteLogToFile($"SettingsWindow: 导航到 {pageTag} 异常: {detail}", LogHelper.LogType.Error);
                 MessageBox.Show(string.Format(NavStrings.Nav_NavigateError, ex.InnerException?.Message ?? ex.Message), NavStrings.Nav_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            finally
-            {
-                _isNavigating = false;
-            }
+            finally { _isNavigating = false; }
         }
 
-
-        private void OnNavigationViewBackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (rootFrame.CanGoBack) rootFrame.GoBack();
         }
+
         private void OnRootFrameNavigated(object sender, NavigationEventArgs e)
         {
-            Type currentPageType = rootFrame.SourcePageType;
-            if (currentPageType == typeof(PPTPageFlipPreviewPage))
+            var type = e.Content?.GetType();
+            bool wasNavigating = _isNavigating;
+            _isNavigating = true;
+            if (type != null)
             {
-                NavigationViewControl.PaneDisplayMode = iNKORE.UI.WPF.Modern.Controls.NavigationViewPaneDisplayMode.LeftMinimal;
-            }
-            else
-            {
-                NavigationViewControl.PaneDisplayMode = iNKORE.UI.WPF.Modern.Controls.NavigationViewPaneDisplayMode.Auto;
-            }
-
-            if (_isNavigating)
-            {
-                return;
-            }
-
-            // 处理设置项的选中状态
-            if (currentPageType == typeof(SettingsPage))
-            {
-                NavigationViewControl.SelectedItem = NavigationViewControl.SettingsItem;
-                NavigationViewControl.Header = NavStrings.Settings_Title;
-                return;
-            }
-
-            // 同步其他页面的选中状态
-            foreach (var kvp in _pageTypes)
-            {
-                if (kvp.Value == currentPageType)
+                var tag = _pageTypes.FirstOrDefault(kv => kv.Value == type).Key;
+                if (!string.IsNullOrEmpty(tag))
                 {
-                    var targetItem = FindNavigationViewItemByTag(kvp.Key);
-                    if (targetItem != null && NavigationViewControl.SelectedItem != targetItem)
-                    {
-                        NavigationViewControl.SelectedItem = targetItem;
-                        NavigationViewControl.Header = targetItem.Content;
-                    }
-                    break;
+                    SelectNavigationTag(tag);
+                    PageHeader.Text = GetNavigationHeader(tag);
                 }
             }
-
-            // 重置当前页面的选中设置项（页面可在 Loaded 中再设置）
-
+            _isNavigating = wasNavigating;
             ApplySmoothScrollingToPage(e.Content as FrameworkElement);
             HookSettingsCardInputHandlers(e.Content as FrameworkElement);
-
-            // 应用 URI 处理器留下的待处理高亮 key（等待页面 Loaded 完成，确保可视树已构建）
             TryApplyPendingHighlight();
-
         }
 
-        /// <summary>
-        /// 如果有挂起的高亮 key，等待设置窗口 + 页面都加载并渲染完成后才触发高亮。
-        /// </summary>
         private void TryApplyPendingHighlight()
         {
             if (string.IsNullOrEmpty(_pendingHighlightKey)) return;
@@ -528,17 +435,45 @@ namespace Ink_Canvas.Windows.SettingsViews
             }
         }
 
+        private void SelectNavigationTag(string tag)
+        {
+            var item = FindNavigationViewItemByTag(tag);
+            if (item == null) return;
+            for (ItemsControl parent = ItemsControl.ItemsControlFromItemContainer(item); parent != null;
+                 parent = ItemsControl.ItemsControlFromItemContainer(parent))
+                if (parent is TreeViewItem group) group.IsExpanded = true;
+            item.IsSelected = true;
+        }
+
+        private string GetNavigationHeader(string tag) =>
+            FindNavigationViewItemByTag(tag)?.Header?.ToString() ?? (tag == "Settings" ? NavStrings.Settings_Title : tag);
+
+        private TreeViewItem FindNavigationViewItemByTag(string tag) =>
+            EnumerateNavigationItems(NavigationTree).FirstOrDefault(item => (item.Tag as string) == tag);
+
+        private static IEnumerable<TreeViewItem> EnumerateNavigationItems(ItemsControl parent)
+        {
+            foreach (var item in parent.Items)
+            {
+                if (item is TreeViewItem treeItem)
+                {
+                    yield return treeItem;
+                    foreach (var child in EnumerateNavigationItems(treeItem)) yield return child;
+                }
+            }
+        }
+
         private void ApplySmoothScrollingToPage(FrameworkElement root)
         {
             if (root == null) return;
-
+            // A Frame isolates page resource lookup from the window; share its settings-only scroll styles.
+            root.Resources[typeof(ScrollBar)] = Resources[typeof(ScrollBar)];
+            root.Resources[typeof(ScrollViewer)] = Resources[typeof(ScrollViewer)];
             var queue = new Queue<DependencyObject>();
-            if (root is DependencyObject rootDep) queue.Enqueue(rootDep);
-
+            queue.Enqueue(root);
             while (queue.Count > 0)
             {
                 var current = queue.Dequeue();
-
                 if (current is ScrollViewer sv)
                 {
                     sv.PanningMode = PanningMode.VerticalOnly;
@@ -546,83 +481,9 @@ namespace Ink_Canvas.Windows.SettingsViews
                     sv.PanningRatio = 1;
                     sv.ManipulationBoundaryFeedback += (s, e) => e.Handled = true;
                 }
-
-                var children = LogicalTreeHelper.GetChildren(current);
-                foreach (var child in children)
-                {
-                    if (child is DependencyObject childDep)
-                        queue.Enqueue(childDep);
-                }
+                foreach (var child in LogicalTreeHelper.GetChildren(current))
+                    if (child is DependencyObject dep) queue.Enqueue(dep);
             }
-        }
-
-        private void NavigationViewControl_DisplayModeChanged(NavigationView sender, NavigationViewDisplayModeChangedEventArgs args)
-        {
-            UpdateAppTitleBarMargin(sender);
-        }
-
-        private void UpdateAppTitleBarMargin()
-        {
-            UpdateAppTitleBarMargin(NavigationViewControl);
-        }
-
-        private void UpdateAppTitleBarMargin(NavigationView sender)
-        {
-            Thickness currMargin = AppTitleBar.Margin;
-            if (sender.DisplayMode == NavigationViewDisplayMode.Minimal)
-            {
-                AppTitleBar.Margin = new Thickness((sender.CompactPaneLength * 2), currMargin.Top, currMargin.Right, currMargin.Bottom);
-
-                // 当窗口宽度非常小时，隐藏图标和应用设置文字
-                if (this.ActualWidth < 400)
-                {
-                    AppTitle.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    AppTitle.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                AppTitleBar.Margin = new Thickness(sender.CompactPaneLength, currMargin.Top, currMargin.Right, currMargin.Bottom);
-                AppTitle.Visibility = Visibility.Visible;
-            }
-            AppTitleBar.Visibility = sender.PaneDisplayMode == NavigationViewPaneDisplayMode.Top ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private NavigationViewItem FindNavigationViewItemByTag(string tag)
-        {
-            // 遍历主菜单
-            foreach (var item in NavigationViewControl.MenuItems)
-            {
-                if (item is NavigationViewItem navItem)
-                {
-                    if (navItem.Tag as string == tag)
-                        return navItem;
-
-                    // 遍历子菜单，自动展开父项
-                    foreach (var childItem in navItem.MenuItems)
-                    {
-                        if (childItem is NavigationViewItem childNavItem && childNavItem.Tag as string == tag)
-                        {
-                            navItem.IsExpanded = true;
-                            return childNavItem;
-                        }
-                    }
-                }
-            }
-
-            // 遍历底部菜单
-            foreach (var item in NavigationViewControl.FooterMenuItems)
-            {
-                if (item is NavigationViewItem navItem && navItem.Tag as string == tag)
-                {
-                    return navItem;
-                }
-            }
-
-            return null;
         }
         #endregion
 
@@ -646,7 +507,7 @@ namespace Ink_Canvas.Windows.SettingsViews
 
             foreach (var item in GetAllNavigationItems())
             {
-                var text = item.Content?.ToString();
+                var text = item.Header?.ToString();
                 var tag = item.Tag as string;
                 if (!string.IsNullOrWhiteSpace(text) && !string.IsNullOrEmpty(tag))
                 {
@@ -738,12 +599,7 @@ namespace Ink_Canvas.Windows.SettingsViews
             if (entry == null) return;
 
             NavigateToPage(entry.PageTag);
-            var navItem = FindNavigationViewItemByTag(entry.PageTag);
-            if (navItem != null && NavigationViewControl.SelectedItem != navItem)
-            {
-                NavigationViewControl.SelectedItem = navItem;
-                NavigationViewControl.Header = navItem.Content;
-            }
+            SelectNavigationTag(entry.PageTag);
 
             if (entry.Target != null && entry.Target.TryGetTarget(out var fe))
             {
@@ -754,79 +610,61 @@ namespace Ink_Canvas.Windows.SettingsViews
             }
         }
 
-        private void OnControlsSearchBoxQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void OnControlsSearchBoxTextChanged(object sender, TextChangedEventArgs args)
         {
             EnsureSearchIndexBuilt();
-
-            string raw = (args.ChosenSuggestion as string) ?? args.QueryText;
-            if (string.IsNullOrWhiteSpace(raw)) return;
-
-            string query = raw.Trim();
-
-            var entry = _searchIndex.FirstOrDefault(e => e.Text.Equals(query, StringComparison.OrdinalIgnoreCase))
-                        ?? _searchIndex.FirstOrDefault(e => e.Text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0);
-
-            NavigateToSearchEntry(entry);
-        }
-
-        private void OnControlsSearchBoxTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-
-            EnsureSearchIndexBuilt();
-
-            string query = sender.Text?.Trim() ?? string.Empty;
+            var query = controlsSearchBox.Text?.Trim() ?? string.Empty;
             if (string.IsNullOrEmpty(query))
             {
-                sender.ItemsSource = null;
+                SearchSuggestions.ItemsSource = null;
+                SearchSuggestions.Visibility = Visibility.Collapsed;
                 return;
             }
-
-            var suggestions = _searchIndex
-                .Where(e => e.Text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
-                .Select(e => e.Text)
-                .Distinct()
-                .Take(50)
-                .ToList();
-
-            sender.ItemsSource = suggestions;
+            SearchSuggestions.ItemsSource = _searchIndex
+                .Where(entry => entry.Text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+                .Select(entry => entry.Text).Distinct().Take(50).ToList();
+            SearchSuggestions.Visibility = SearchSuggestions.Items.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        // 统一获取所有导航项（主菜单+子菜单+底部菜单）
-        private List<NavigationViewItem> GetAllNavigationItems()
+        private void ControlsSearchBox_KeyDown(object sender, KeyEventArgs e)
         {
-            var items = new List<NavigationViewItem>();
-
-            // 主菜单+子菜单
-            foreach (var item in NavigationViewControl.MenuItems)
+            if (e.Key == Key.Enter)
             {
-                if (item is NavigationViewItem navItem)
-                {
-                    items.Add(navItem);
-                    foreach (var child in navItem.MenuItems)
-                    {
-                        if (child is NavigationViewItem childNavItem)
-                            items.Add(childNavItem);
-                    }
-                }
+                NavigateToSearchText(controlsSearchBox.Text);
+                e.Handled = true;
             }
-
-            // 底部菜单
-            foreach (var item in NavigationViewControl.FooterMenuItems)
+            else if (e.Key == Key.Escape)
             {
-                if (item is NavigationViewItem navItem)
-                    items.Add(navItem);
+                SearchSuggestions.Visibility = Visibility.Collapsed;
+                controlsSearchBox.Clear();
             }
-
-            return items;
         }
+
+        private void SearchSuggestions_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SearchSuggestions.SelectedItem is string text)
+            {
+                NavigateToSearchText(text);
+                SearchSuggestions.SelectedItem = null;
+            }
+        }
+
+        private void NavigateToSearchText(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return;
+            EnsureSearchIndexBuilt();
+            var query = text.Trim();
+            var entry = _searchIndex.FirstOrDefault(item => item.Text.Equals(query, StringComparison.OrdinalIgnoreCase))
+                        ?? _searchIndex.FirstOrDefault(item => item.Text.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0);
+            NavigateToSearchEntry(entry);
+            SearchSuggestions.Visibility = Visibility.Collapsed;
+        }
+
+        private List<TreeViewItem> GetAllNavigationItems() => EnumerateNavigationItems(NavigationTree)
+            .Where(item => !string.IsNullOrEmpty(item.Tag as string)).ToList();
 
         #endregion
 
-        public NavigationView GetNavigationView()
-        {
-            return NavigationViewControl;
-        }
 
         /// <summary>
         /// 构造当前页面（或指定页面）的设置导航 URL。
@@ -849,7 +687,7 @@ namespace Ink_Canvas.Windows.SettingsViews
         /// </summary>
         private string GetCurrentPageTag()
         {
-            var t = rootFrame?.SourcePageType;
+            var t = rootFrame?.Content?.GetType();
             if (t == null) return null;
             foreach (var kv in _pageTypes)
             {
@@ -1186,7 +1024,7 @@ namespace Ink_Canvas.Windows.SettingsViews
 
                 try { Clipboard.SetText(uri); } catch { }
 
-                ShowCopyUriInfoBar();
+                ShowCopyUriSnackbar();
             }
             catch (Exception ex)
             {
@@ -1209,33 +1047,9 @@ namespace Ink_Canvas.Windows.SettingsViews
             return null;
         }
 
-        private DispatcherTimer _copyUriInfoBarTimer;
-
-        private void ShowCopyUriInfoBar()
+        private void ShowCopyUriSnackbar()
         {
-            try
-            {
-                if (CopyUriInfoBar == null) return;
-
-                CopyUriInfoBar.Message = NavStrings.Nav_CopySettingsUri_Copied;
-                CopyUriInfoBar.IsOpen = true;
-                CopyUriInfoBar.Visibility = Visibility.Visible;
-
-                _copyUriInfoBarTimer?.Stop();
-                _copyUriInfoBarTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2.5) };
-                _copyUriInfoBarTimer.Tick += (s, e) =>
-                {
-                    _copyUriInfoBarTimer.Stop();
-                    try
-                    {
-                        CopyUriInfoBar.IsOpen = false;
-                        CopyUriInfoBar.Visibility = Visibility.Collapsed;
-                    }
-                    catch { }
-                };
-                _copyUriInfoBarTimer.Start();
-            }
-            catch { }
+            CopyUriSnackbar.MessageQueue?.Enqueue(NavStrings.Nav_CopySettingsUri_Copied);
         }
 
         #endregion

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:c="clr-namespace:Ink_Canvas.Converter"
         xmlns:Controls="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         xmlns:controls="clr-namespace:Ink_Canvas.Controls;assembly=InkCanvas.Controls"
@@ -652,11 +653,11 @@
                                 ToolTip="{x:Static props:FloatingBarStrings.Board_PreviousPage}"
                                 MouseDown="Border_MouseDown"
                                 MouseUp="BorderPdfSidebarPagePrev_MouseUp">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChevronLeft}"
-                                         FontSize="14"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         Foreground="{DynamicResource FloatingBarForegroundBrush}" />
+                            <materialDesign:PackIcon Kind="ChevronLeft"
+                                                     Width="14" Height="14"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="{DynamicResource FloatingBarForegroundBrush}" />
                         </Border>
                         <Border Name="BorderPdfSidebarPageNext"
                                 Style="{StaticResource PdfSidebarNavButtonStyle}"
@@ -665,11 +666,11 @@
                                 ToolTip="{x:Static props:FloatingBarStrings.Board_NextPage}"
                                 MouseDown="Border_MouseDown"
                                 MouseUp="BorderPdfSidebarPageNext_MouseUp">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChevronRight}"
-                                         FontSize="14"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"
-                                         Foreground="{DynamicResource FloatingBarForegroundBrush}" />
+                            <materialDesign:PackIcon Kind="ChevronRight"
+                                                     Width="14" Height="14"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center"
+                                                     Foreground="{DynamicResource FloatingBarForegroundBrush}" />
                         </Border>
                         <TextBlock Text="{x:Static props:MainWindowStrings.Main_ContextPageTurn}"
                                    FontSize="9"
@@ -814,7 +815,7 @@
                             Width="50" Height="48" FontSize="26" Click="BtnWhiteBoardAdd_Click"
                             Foreground="{DynamicResource FloatingBarForegroundBrush}"
                             Background="{DynamicResource FloatingBarBackgroundBrush}">
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Add}" />
+                        <materialDesign:PackIcon Kind="Plus" Width="26" Height="26" />
                     </Button>
                     <Button Name="BtnWhiteBoardSwitchPrevious" FontFamily="Symbol"
                             Width="50" Height="48" FontSize="25" Click="BtnWhiteBoardSwitchPrevious_Click"
@@ -887,7 +888,7 @@
                             Foreground="{DynamicResource FloatingBarForegroundBrush}"
                             Background="{DynamicResource FloatingBarBackgroundBrush}"
                             IsEnabled="False">
-                        <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}" />
+                        <materialDesign:PackIcon Kind="DeleteOutline" Width="26" Height="26" />
                     </Button>
                 </ikw:SimpleStackPanel>
             </Grid>
@@ -953,8 +954,9 @@
                         <Border Name="BorderFloatingBarMoveControls" Margin="0" Padding="0"
                                 Width="58" Height="58"
                                 Background="{DynamicResource FloatingBarBackgroundBrush}"
-                                CornerRadius="8"
-                                BorderThickness="2"
+                                CornerRadius="18"
+                                Effect="{DynamicResource MaterialToolbarShadow}"
+                                BorderThickness="1"
                                 BorderBrush="{DynamicResource FloatingBarBorderBrush}"
                                 MouseDown="SymbolIconEmoji_MouseDown"
                                 MouseUp="SymbolIconEmoji_MouseUp">
@@ -968,14 +970,14 @@
                         <Border Name="SelectionBGFloatingBar"
                                 Visibility="Hidden"
                                 Width="44" Height="43"
-                                CornerRadius="4"
-                                Background="#303B82F6"
+                                CornerRadius="12"
+                                Background="{DynamicResource FloatingBarButtonPressedBrush}"
                                 Canvas.Left="0" Canvas.Top="0" />
                         <Border Name="IndicatorBarFloatingBar"
                                 Visibility="Hidden"
                                 Width="16" Height="3"
                                 CornerRadius="2"
-                                Background="#2563EB"
+                                Background="{DynamicResource FloatingBarAccentBrush}"
                                 Canvas.Left="14" Canvas.Bottom="2" />
                     </Canvas>
                 </Grid>
@@ -1015,7 +1017,7 @@
                                 Background="Transparent" BorderThickness="0"
                                 Click="IdleMiniBarAnnotate_Click">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}" FontSize="15" />
+                                <materialDesign:PackIcon Kind="Pencil" Width="15" Height="15" />
                                 <TextBlock Name="IdleMiniBarAnnotateText" Margin="6,0,0,0"
                                            VerticalAlignment="Center" FontSize="13"
                                            Text="{x:Static props:FloatingBarStrings.IdleMiniBar_StartAnnotate}" />
@@ -1027,7 +1029,7 @@
                                 Background="Transparent" BorderThickness="0"
                                 ToolTip="{x:Static props:FloatingBarStrings.IdleMiniBar_ClearPage}"
                                 Click="IdleMiniBarClear_Click">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}" FontSize="15" />
+                            <materialDesign:PackIcon Kind="DeleteOutline" Width="15" Height="15" />
                         </Button>
                         <Border Width="1" Height="20" Margin="4,0" VerticalAlignment="Center"
                                 Background="{DynamicResource FloatingBarBorderBrush}" Opacity="0.5" />
@@ -1036,14 +1038,14 @@
                                 Background="Transparent" BorderThickness="0"
                                 ToolTip="{x:Static props:FloatingBarStrings.IdleMiniBar_Whiteboard}"
                                 Click="IdleMiniBarWhiteboard_Click">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Draw}" FontSize="15" />
+                            <materialDesign:PackIcon Kind="Draw" Width="15" Height="15" />
                         </Button>
                         <Button Name="IdleMiniBarMoreButton"
                                 Width="34" Height="34" Padding="0" Margin="2,0,0,0"
                                 Background="Transparent" BorderThickness="0"
                                 ToolTip="{x:Static props:FloatingBarStrings.IdleMiniBar_More}"
                                 Click="IdleMiniBarMore_Click">
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.More}" FontSize="15" />
+                            <materialDesign:PackIcon Kind="DotsHorizontal" Width="15" Height="15" />
                         </Button>
                     </StackPanel>
                 </StackPanel>

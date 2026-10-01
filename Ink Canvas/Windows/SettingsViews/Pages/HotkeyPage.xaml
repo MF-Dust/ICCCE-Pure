@@ -13,16 +13,11 @@
       Title="{x:Static props:NavStrings.Nav_Shortcuts}">
 
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                    BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                    TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
 
             <Grid>
@@ -43,14 +38,14 @@
                     <controls:LabeledSettingsCard x:Name="CardEnableHotkeysInMouseMode"
                             Header="{x:Static props:HotkeyStrings.Hotkey_EnableHotkeysInMouseMode}"
                             Description="{x:Static props:HotkeyStrings.Hotkey_EnableHotkeysInMouseModeHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.KeyboardStandard}"
+                            MaterialIcon="KeyboardOutline"
                             SwitchName="ToggleSwitchEnableHotkeysInMouseMode"
                             Toggled="ToggleSwitchEnableHotkeysInMouseMode_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardPassThroughMouseWheelInDrawingMode"
                             Header="{x:Static props:HotkeyStrings.Hotkey_PassThroughMouseWheelInDrawingMode}"
                             Description="{x:Static props:HotkeyStrings.Hotkey_PassThroughMouseWheelInDrawingModeHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Mouse}"
+                            MaterialIcon="Mouse"
                             SwitchName="ToggleSwitchPassThroughMouseWheelInDrawingMode"
                             Toggled="ToggleSwitchPassThroughMouseWheelInDrawingMode_Toggled" />
 

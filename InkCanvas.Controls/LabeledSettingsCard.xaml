@@ -7,6 +7,8 @@
                      Description="{Binding Description, RelativeSource={RelativeSource AncestorType=UserControl}}"
                      Header="{Binding Header, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <ui:ToggleSwitch x:Name="ToggleSwitch"
+                         Style="{DynamicResource MaterialSettingsToggleSwitch}"
+                         AutomationProperties.Name="{Binding Header, RelativeSource={RelativeSource AncestorType=UserControl}}"
                          IsOn="{Binding IsOn, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}"
                          Toggled="ToggleSwitch_Toggled"/>
     </ui:SettingsCard>

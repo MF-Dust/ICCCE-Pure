@@ -6,6 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:controls="clr-namespace:Ink_Canvas.Controls;assembly=InkCanvas.Controls"
         mc:Ignorable="d"
         Title="{x:Static fb:FloatingBarStrings.FloatingBar_MiniWhiteboard}"
@@ -92,8 +93,9 @@
                 <Border x:Name="PenBtn" Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="PenBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_Pen}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Edit}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="Pencil" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 颜色选择 -->
@@ -108,8 +110,9 @@
                 <Border x:Name="EraserBtn" Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="EraserBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_Eraser}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EraseTool}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="Eraser" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 分隔线 -->
@@ -119,16 +122,18 @@
                 <Border x:Name="UndoBtn" Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="UndoBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_Undo}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Undo}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="Undo" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 清除 -->
                 <Border x:Name="ClearBtn" Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="ClearBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.MiniWhiteboard_Clear}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Delete}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="DeleteOutline" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 分隔线 -->
@@ -166,8 +171,9 @@
                 <Border Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="PrevPageBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_PreviousPage}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChevronLeft}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="ChevronLeft" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 页码 -->
@@ -180,16 +186,18 @@
                 <Border Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="NextPageBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_NextPage}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChevronRight}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="ChevronRight" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 新建页面 -->
                 <Border Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="AddPageBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.Board_NewPage}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Add}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="Plus" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
                 <!-- 分隔线 -->
@@ -199,8 +207,9 @@
                 <Border Style="{StaticResource MiniToolBtn}"
                         MouseLeftButtonUp="FoldBtn_Click"
                         ToolTip="{x:Static fb:FloatingBarStrings.FloatingBar_Hide}">
-                    <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.ChevronDown}" FontSize="14"
-                                 Foreground="{DynamicResource IconForeground}"/>
+                    <materialDesign:PackIcon Kind="ChevronDown" Width="14" Height="14"
+                                             Foreground="{DynamicResource IconForeground}"
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
             </StackPanel>

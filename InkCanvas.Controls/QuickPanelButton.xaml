@@ -6,20 +6,23 @@
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="32">
-    <ikw:SimpleStackPanel x:Name="ButtonPanel"
-                          MouseUp="ButtonPanel_MouseUp"
-                          Background="Transparent"
-                          Orientation="Vertical"
-                          HorizontalAlignment="Center"
-                          Width="32" Margin="0">
-        <Image x:Name="ButtonImage"
-               RenderOptions.BitmapScalingMode="HighQuality"
-               Height="17" Margin="0,3,0,0" />
-        <TextBlock x:Name="LabelTextBlock"
-                   Foreground="{DynamicResource FloatBarForeground}"
-                   FontSize="8"
-                   Margin="0,2,0,3"
-                   TextAlignment="Center"
-                   Visibility="Collapsed" />
-    </ikw:SimpleStackPanel>
+    <Border CornerRadius="12" Background="Transparent" Cursor="Hand"
+            AutomationProperties.Name="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <ikw:SimpleStackPanel x:Name="ButtonPanel"
+                              MouseUp="ButtonPanel_MouseUp"
+                              Background="Transparent"
+                              Orientation="Vertical"
+                              HorizontalAlignment="Center"
+                              Width="32" Margin="0">
+            <Image x:Name="ButtonImage"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   Height="17" Margin="0,3,0,0" />
+            <TextBlock x:Name="LabelTextBlock"
+                       Foreground="{DynamicResource FloatingBarForegroundBrush}"
+                       FontSize="8"
+                       Margin="0,2,0,3"
+                       TextAlignment="Center"
+                       Visibility="Collapsed" />
+        </ikw:SimpleStackPanel>
+    </Border>
 </UserControl>

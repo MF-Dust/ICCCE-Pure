@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
              mc:Ignorable="d">
-    <Border x:Name="ButtonBorder"
-            CornerRadius="4"
-            Background="Transparent" d:Background="Red">
+    <Border x:Name="ButtonBorder" CornerRadius="12" Background="Transparent" Cursor="Hand"
+            AutomationProperties.Name="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <ikw:SimpleStackPanel x:Name="ButtonPanel"
                               MouseDown="ButtonPanel_MouseDown"
                               MouseLeave="ButtonPanel_MouseLeave"
@@ -16,25 +15,25 @@
                               Orientation="Vertical"
                               HorizontalAlignment="Center"
                               Height="60" Width="48">
-            <Image x:Name="ButtonImage"
-                   Margin="9,9,9,0"
-                   Height="30" Width="30"
-                   RenderOptions.BitmapScalingMode="HighQuality">
-                <Image.Source>
-                    <DrawingImage>
-                        <DrawingImage.Drawing>
-                            <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
-                                <GeometryDrawing x:Name="IconGeometryInternal"
-                                                 Brush="{DynamicResource IconForeground}" />
-                            </DrawingGroup>
-                        </DrawingImage.Drawing>
-                    </DrawingImage>
-                </Image.Source>
-            </Image>
-            <Label x:Name="LabelControl"
-                   FontSize="14" d:Content="田田田"
-                   HorizontalAlignment="Center"
-                   Foreground="{DynamicResource FloatBarForeground}" />
+                <Image x:Name="ButtonImage"
+                       Margin="9,9,9,0"
+                       Height="30" Width="30"
+                       RenderOptions.BitmapScalingMode="HighQuality">
+                    <Image.Source>
+                        <DrawingImage>
+                            <DrawingImage.Drawing>
+                                <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                                    <GeometryDrawing x:Name="IconGeometryInternal"
+                                                     Brush="{DynamicResource FloatingBarForegroundBrush}" />
+                                </DrawingGroup>
+                            </DrawingImage.Drawing>
+                        </DrawingImage>
+                    </Image.Source>
+                </Image>
+                <Label x:Name="LabelControl"
+                       FontSize="14" d:Content="田田田"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource FloatingBarForegroundBrush}" />
         </ikw:SimpleStackPanel>
     </Border>
 </UserControl>

@@ -1,6 +1,7 @@
 <ui:Page xmlns:props="clr-namespace:Ink_Canvas.Properties" x:Class="Ink_Canvas.Windows.SettingsViews.Pages.CanvasPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Ink_Canvas.Windows.SettingsViews.Pages"
@@ -13,17 +14,12 @@
       mc:Ignorable="d"
       Title="{x:Static props:CanvasStrings.Canvas_GroupTitle}">
     <ScrollViewer PanningMode="VerticalFirst">
-        <Grid Margin="59,0,59,0">
+        <Grid Margin="24,0,24,24">
             <FrameworkElement.Resources>
-                <sys:Double x:Key="SettingsCardSpacing">4</sys:Double>
+                <sys:Double x:Key="SettingsCardSpacing">8</sys:Double>
                 <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                <Style x:Key="SettingsSectionHeaderTextBlockStyle"
-                       BasedOn="{StaticResource BodyStrongTextBlockStyle}"
-                       TargetType="TextBlock">
-                    <Style.Setters>
-                        <Setter Property="Margin" Value="1,30,0,6" />
-                    </Style.Setters>
-                </Style>
+                <Style x:Key="SettingsSectionHeaderTextBlockStyle" TargetType="TextBlock"
+                       BasedOn="{StaticResource MaterialSettingsSectionHeader}" />
             </FrameworkElement.Resources>
             <Grid>
                 <ikw:SimpleStackPanel MaxWidth="1000" HorizontalAlignment="Stretch"
@@ -39,7 +35,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchShowCursor, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.PointerHand}" />
+                            <materialDesign:PackIcon Kind="CursorPointer"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchShowCursor"
                                 helpers:SettingsBinder.PropertyPath="Canvas.IsShowCursor"
@@ -74,14 +70,14 @@
                     <controls:LabeledSettingsCard x:Name="CardEnablePressureTouchMode"
                             Header="{x:Static props:CanvasStrings.Canvas_EnablePressureTouch}"
                             Description="{x:Static props:CanvasStrings.Canvas_EnablePressureTouchHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Touch}"
+                            MaterialIcon="GestureTap"
                             SwitchName="ToggleSwitchEnablePressureTouchMode"
                             Toggled="ToggleSwitchEnablePressureTouchMode_Toggled" />
 
                     <controls:LabeledSettingsCard x:Name="CardDisablePressure"
                             Header="{x:Static props:CanvasStrings.Canvas_IgnorePressure}"
                             Description="{x:Static props:CanvasStrings.Canvas_DisablePressureHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.TouchPointer}"
+                            MaterialIcon="CursorDefaultClickOutline"
                             SwitchName="ToggleSwitchDisablePressure"
                             Toggled="ToggleSwitchDisablePressure_Toggled" />
 
@@ -89,7 +85,7 @@
                     <ui:SettingsCard Header="{x:Static props:CanvasStrings.Canvas_EraserSize}"
                             Description="{x:Static props:CanvasStrings.Canvas_EraserSizeHint}">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EraseTool}" />
+                            <materialDesign:PackIcon Kind="Eraser"  Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                         <ComboBox x:Name="ComboBoxEraserSize"
                                   SelectedIndex="1"
@@ -107,38 +103,38 @@
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_HideInkOnExit}"
                             Description="{x:Static props:CanvasStrings.Canvas_HideStrokeWhenSelectingHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Hide}"
+                            MaterialIcon="EyeOffOutline"
                             SwitchName="ToggleSwitchHideStrokeWhenSelecting"
                             helpers:SettingsBinder.PropertyPath="Canvas.HideStrokeWhenSelecting" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_ClearInkAlsoClearHistory}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Delete}"
+                            MaterialIcon="DeleteOutline"
                             SwitchName="ToggleSwitchClearCanvasAndClearTimeMachine"
                             helpers:SettingsBinder.PropertyPath="Canvas.ClearCanvasAndClearTimeMachine" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_ClearCanvasAlsoClearImages}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Photo}"
+                            MaterialIcon="ImageOutline"
                             SwitchName="ToggleSwitchClearCanvasAlsoClearImages"
                             helpers:SettingsBinder.PropertyPath="Canvas.ClearCanvasAlsoClearImages" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_CompressPicturesUploaded}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Clear}"
+                            MaterialIcon="Close"
                             SwitchName="ToggleSwitchCompressPicturesUploaded"
                             helpers:SettingsBinder.PropertyPath="Canvas.IsCompressPicturesUploaded" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_LaunchSeewoVideoShowcaseForWhiteboardBooth}"
                             Description="{x:Static props:CanvasStrings.Canvas_LaunchSeewoVideoShowcaseForWhiteboardBoothHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Video}"
+                            MaterialIcon="VideoOutline"
                             SwitchName="ToggleSwitchLaunchSeewoVideoShowcaseForWhiteboardBooth"
                             helpers:SettingsBinder.PropertyPath="Canvas.LaunchSeewoVideoShowcaseForWhiteboardBooth" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:FloatingBarStrings.Canvas_EdgeExpandHint_Settings_Enable}"
-                            Icon="{x:Static ui:SegoeFluentIcons.FullScreen}"
+                            MaterialIcon="Fullscreen"
                             SwitchName="ToggleSwitchEdgeExpandHint"
                             helpers:SettingsBinder.PropertyPath="Canvas.IsEnableEdgeExpandHint" />
 
@@ -146,7 +142,7 @@
                     <ui:SettingsCard Header="{x:Static props:CanvasStrings.Canvas_KeepAsymptote}"
                             Description="{x:Static props:CanvasStrings.Canvas_HyperbolaAsymptoteHint}">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.AreaChart}" />
+                            <materialDesign:PackIcon Kind="ChartAreaspline"  Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                         <ComboBox helpers:SettingsBinder.PropertyPath="Canvas.HyperbolaAsymptoteOption"
                                   SelectedIndex="0">
@@ -159,27 +155,27 @@
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_MergeInkSmoothingWithUndo}"
                             Description="{x:Static props:CanvasStrings.Canvas_MergeInkSmoothingWithUndoHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Undo}"
+                            MaterialIcon="Undo"
                             SwitchName="ToggleSwitchMergeInkSmoothingWithUndo"
                             helpers:SettingsBinder.PropertyPath="Canvas.MergeInkSmoothingWithUndo" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_ShowCircleCenter}"
-                            Icon="{x:Static ui:SegoeFluentIcons.CircleRing}"
+                            MaterialIcon="CircleOutline"
                             SwitchName="ToggleSwitchShowCircleCenter"
                             helpers:SettingsBinder.PropertyPath="Canvas.ShowCircleCenter" />
 
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:CanvasStrings.Canvas_ShowCoordinateUnitMarks}"
                             Description="{x:Static props:CanvasStrings.Canvas_ShowCoordinateUnitMarksHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Calculator}"
+                            MaterialIcon="Calculator"
                             SwitchName="ToggleSwitchShowCoordinateUnitMarks"
                             helpers:SettingsBinder.PropertyPath="Canvas.ShowCoordinateUnitMarks" />
 
                     <!-- 复杂下拉：映射到两个设置属性，需要 code-behind -->
                     <ui:SettingsCard Header="{x:Static props:CanvasStrings.Canvas_CurveSmoothingMode}">
                         <ui:SettingsCard.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.InkingTool}" />
+                            <materialDesign:PackIcon Kind="FountainPenTip"  Width="20"  Height="20" />
                         </ui:SettingsCard.HeaderIcon>
                         <ComboBox x:Name="ComboBoxCurveSmoothingMode"
                                   SelectedIndex="2"
@@ -197,7 +193,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchBrushAutoRestore, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Refresh}" />
+                            <materialDesign:PackIcon Kind="Refresh"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchBrushAutoRestore"
                                 helpers:SettingsBinder.PropertyPath="Canvas.EnableBrushAutoRestore" />
@@ -256,7 +252,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchEnableEraserAutoSwitchBack, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.Switch}" />
+                            <materialDesign:PackIcon Kind="SwapHorizontal"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchEnableEraserAutoSwitchBack"
                                 helpers:SettingsBinder.PropertyPath="Canvas.EnableEraserAutoSwitchBack" />
@@ -283,7 +279,7 @@
                     <controls:LabeledSettingsCard
                             Header="{x:Static props:GestureStrings.Gesture_AllowRotateScale}"
                             Description="{x:Static props:GestureStrings.Gesture_AllowRotateScaleHint}"
-                            Icon="{x:Static ui:SegoeFluentIcons.Rotate}"
+                            MaterialIcon="RotateRight"
                             SwitchName="ToggleSwitchEnableTwoFingerRotationOnSelection"
                             helpers:SettingsBinder.PropertyPath="Gesture.IsEnableTwoFingerRotationOnSelection" />
 
@@ -293,7 +289,7 @@
                             IsExpanded="{Binding IsOn, ElementName=ToggleSwitchEnablePalmEraser, Mode=OneWay}"
                             d:Visibility="Visible" d:IsExpanded="True">
                         <ui:SettingsExpander.HeaderIcon>
-                            <ui:FontIcon Icon="{x:Static ui:SegoeFluentIcons.EraseTool}" />
+                            <materialDesign:PackIcon Kind="Eraser"  Width="20"  Height="20" />
                         </ui:SettingsExpander.HeaderIcon>
                         <ui:ToggleSwitch x:Name="ToggleSwitchEnablePalmEraser"
                                 helpers:SettingsBinder.PropertyPath="Canvas.EnablePalmEraser" />

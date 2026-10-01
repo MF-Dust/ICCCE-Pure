@@ -205,7 +205,7 @@ namespace Ink_Canvas.Controls
                 _lastPressedButton.PressedBackground.Background = Brushes.Transparent;
             }
             _lastPressedButton = this;
-            PressedBackground.Background = new SolidColorBrush(Color.FromArgb(28, 24, 24, 27));
+            PressedBackground.SetResourceReference(Border.BackgroundProperty, "FloatingBarButtonPressedBrush");
             ButtonMouseDown?.Invoke(this, e);
         }
 

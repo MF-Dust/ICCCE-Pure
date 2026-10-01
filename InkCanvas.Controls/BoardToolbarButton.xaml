@@ -11,6 +11,8 @@
             MouseDown="ButtonBorder_MouseDown"
             MouseUp="ButtonBorder_MouseUp"
             Background="Transparent"
+            Cursor="Hand"
+            AutomationProperties.Name="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
             Opacity="1"
             BorderThickness="0"
             BorderBrush="Transparent">

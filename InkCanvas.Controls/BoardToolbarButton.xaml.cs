@@ -171,16 +171,16 @@ namespace Ink_Canvas.Controls
             switch (position)
             {
                 case ButtonPosition.First:
-                    ButtonBorder.CornerRadius = new CornerRadius(5, 0, 0, 5);
+                    ButtonBorder.CornerRadius = new CornerRadius(8, 0, 0, 8);
                     break;
                 case ButtonPosition.Middle:
                     ButtonBorder.CornerRadius = new CornerRadius(0);
                     break;
                 case ButtonPosition.Last:
-                    ButtonBorder.CornerRadius = new CornerRadius(0, 5, 5, 0);
+                    ButtonBorder.CornerRadius = new CornerRadius(0, 8, 8, 0);
                     break;
                 case ButtonPosition.Single:
-                    ButtonBorder.CornerRadius = new CornerRadius(5);
+                    ButtonBorder.CornerRadius = new CornerRadius(8);
                     break;
             }
         }

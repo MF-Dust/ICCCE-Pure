@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ikw="http://schemas.inkore.net/lib/ui/wpf"
-             xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:controls="clr-namespace:Ink_Canvas.Controls;assembly=InkCanvas.Controls"
              xmlns:icons="clr-namespace:Ink_Canvas"
              xmlns:c="clr-namespace:Ink_Canvas.Converter"
@@ -32,27 +32,22 @@
                     </ComboBox>
                 </ikw:SimpleStackPanel>
                 <TabControl x:Name="EraserTypeTabControl"
-                            Style="{StaticResource {x:Static ui:ThemeKeys.TabControlPivotStyleKey}}"
+                            Style="{StaticResource MaterialDesignTabControl}"
                             SelectedIndex="1">
-                    <TabControl.Resources>
-                        <sys:Double xmlns:sys="clr-namespace:System;assembly=mscorlib" x:Key="PivotHeaderItemFontSize">16</sys:Double>
-                        <Style x:Key="CompactPivotTabItem" TargetType="TabItem" BasedOn="{StaticResource TabItemPivotStyle}">
-                            <Setter Property="Height" Value="32" />
-                        </Style>
-                    </TabControl.Resources>
                     <TabControl.ItemContainerStyle>
-                        <Style TargetType="TabItem" BasedOn="{StaticResource CompactPivotTabItem}" />
+                        <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignTabItem}">
+                            <Setter Property="Height" Value="32" />
+                            <Setter Property="FontSize" Value="16" />
+                        </Style>
                     </TabControl.ItemContainerStyle>
                     <TabItem Header="{x:Static props:FloatingBarStrings.Board_EraserShape_Circle}" />
                     <TabItem Header="{x:Static props:FloatingBarStrings.Board_EraserShape_Blackboard}" />
                 </TabControl>
-                <Button x:Name="ClearInkButton" Foreground="White"
+                <Button x:Name="ClearInkButton"
+                        Background="{DynamicResource MaterialDesign.Brush.Error}"
+                        BorderBrush="{DynamicResource MaterialDesign.Brush.Error}"
+                        Foreground="White"
                         HorizontalAlignment="Center">
-                    <Button.Resources>
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundKey}" Color="#b91c1c" />
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundPointerOverKey}" Color="#b91c1c" />
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundPressedKey}" Color="#991b1b" />
-                    </Button.Resources>
                     <Button.Content>
                         <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="2">
                             <Image RenderOptions.BitmapScalingMode="HighQuality" Height="18">
@@ -73,13 +68,11 @@
                         </ikw:SimpleStackPanel>
                     </Button.Content>
                 </Button>
-                <Button x:Name="ClearInkAndHistoryButton" Foreground="White"
+                <Button x:Name="ClearInkAndHistoryButton"
+                        Background="{DynamicResource MaterialDesign.Brush.Error}"
+                        BorderBrush="{DynamicResource MaterialDesign.Brush.Error}"
+                        Foreground="White"
                         HorizontalAlignment="Center">
-                    <Button.Resources>
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundKey}" Color="#b91c1c" />
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundPointerOverKey}" Color="#b91c1c" />
-                        <SolidColorBrush x:Key="{x:Static ui:ThemeKeys.ButtonBackgroundPressedKey}" Color="#991b1b" />
-                    </Button.Resources>
                     <Button.Content>
                         <ikw:SimpleStackPanel Orientation="Horizontal">
                             <Image RenderOptions.BitmapScalingMode="HighQuality" Height="18">

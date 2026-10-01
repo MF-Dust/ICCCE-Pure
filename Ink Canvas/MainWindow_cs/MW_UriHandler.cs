@@ -440,47 +440,7 @@ namespace Ink_Canvas
 
                 window.NavigateToPage(pageTag);
 
-                // 选中对应导航项（菜单 + 子菜单 + 底部菜单）
-                var navView = window.GetNavigationView();
-                iNKORE.UI.WPF.Modern.Controls.NavigationViewItem navItem = null;
-                foreach (var item in navView.MenuItems)
-                {
-                    if (item is iNKORE.UI.WPF.Modern.Controls.NavigationViewItem ni)
-                    {
-                        if ((ni.Tag as string) == pageTag)
-                        {
-                            navItem = ni;
-                            break;
-                        }
-                        foreach (var child in ni.MenuItems)
-                        {
-                            if (child is iNKORE.UI.WPF.Modern.Controls.NavigationViewItem cni
-                                && (cni.Tag as string) == pageTag)
-                            {
-                                ni.IsExpanded = true;
-                                navItem = cni;
-                                break;
-                            }
-                        }
-                        if (navItem != null) break;
-                    }
-                }
-                if (navItem == null)
-                {
-                    foreach (var item in navView.FooterMenuItems)
-                    {
-                        if (item is iNKORE.UI.WPF.Modern.Controls.NavigationViewItem ni
-                            && (ni.Tag as string) == pageTag)
-                        {
-                            navItem = ni;
-                            break;
-                        }
-                    }
-                }
-                if (navItem != null)
-                {
-                    navView.SelectedItem = navItem;
-                }
+                // NavigateToPage also expands/selects the matching native TreeView item.
 
                 if (!string.IsNullOrEmpty(settingKey))
                 {
