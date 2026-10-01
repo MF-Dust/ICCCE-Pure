@@ -75,9 +75,6 @@
   <data name="LoadingPPT" xml:space="preserve">
     <value>PPT 装载中...</value>
   </data>
-  <data name="Enhancement" xml:space="preserve">
-    <value>PowerPoint 联动 BUFF 包</value>
-  </data>
   <data name="EnterAnnotationOnShow" xml:space="preserve">
     <value>进 PPT 放映自动切批注形态</value>
   </data>
@@ -188,27 +185,6 @@
   </data>
   <data name="SupportPowerPoint" xml:space="preserve">
     <value>PPT 联动总闸</value>
-  </data>
-  <data name="PPTArchitecture" xml:space="preserve">
-    <value>PPT 架构换装</value>
-  </data>
-  <data name="PPTComArchitecture" xml:space="preserve">
-    <value>PPT COM 架构</value>
-  </data>
-  <data name="PPTRotArchitecture" xml:space="preserve">
-    <value>ROT 架构</value>
-  </data>
-  <data name="PPTAgentArchitecture" xml:space="preserve">
-    <value>VSTO Agent 架构</value>
-  </data>
-  <data name="PPTAgentArchitectureHint" xml:space="preserve">
-    <value>让 PowerPoint 里面的小插件夺权，ICC 只走 NamedPipe 发号施令，不碰 COM/ROT</value>
-  </data>
-  <data name="PPTAgentNotConnected" xml:space="preserve">
-    <value>PPT Agent 还在摸鱼</value>
-  </data>
-  <data name="PPTAgentInstallHint" xml:space="preserve">
-    <value>先打开 PowerPoint，并确认 ICC PowerPoint Agent 插件已经上线营业</value>
   </data>
   <data name="SupportWPS" xml:space="preserve">
     <value>WPS 也算人</value>

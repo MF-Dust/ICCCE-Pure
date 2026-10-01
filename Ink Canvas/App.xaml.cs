@@ -59,6 +59,7 @@ namespace Ink_Canvas
         public static string[] StartArgs;
         public static string RootPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 
+#if DEBUG
         /// <summary>
         /// 从 DispatcherOperation 提取回调委托的可读方法名。
         /// WPF 内部把委托存在私有字段里，反射枚举拿；失败退回 Priority 类别。
@@ -84,6 +85,7 @@ namespace Ink_Canvas
                 catch { return "<error>"; }
             }
         }
+#endif
         // 新增：版本字符串（在 App_Startup 中计算赋值，形如 "1.7.18.0 (sha)"）
         public static string AppVersion = "";
 
@@ -161,7 +163,8 @@ namespace Ink_Canvas
             {
             }
 
-            // Dispatcher 长任务监控（诊断用）：
+#if DEBUG
+            // Dispatcher 长任务监控仅用于 Debug，Release 不订阅逐操作计时回调。
             // OperationStarted = 操作真正开始执行，记录执行时长（Completed-Started），
             // 排除 Background 优先级排队等待的虚高（posted→completed 含排队）。
             try
@@ -185,6 +188,7 @@ namespace Ink_Canvas
             {
                 // 监控失败不影响启动
             }
+#endif
 
             // 如果是看门狗子进程，直接进入看门狗主循环并终止主流程
             var args = Environment.GetCommandLineArgs();

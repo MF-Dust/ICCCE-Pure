@@ -16,21 +16,13 @@ dotnet build "Ink Canvas.sln" -c Debug -p:Platform=x64
 
 **默认配置为 `Debug` + `x64`，任何代码修改完成后都要跑这条命令做构建校验。**
 
-### 2. PowerPoint 加载项（VSTO，不在 sln 内）
-
-`InkCanvas.PowerPointAddIn` 是 net472 VSTO 项目，**不在 `Ink Canvas.sln` 里**，`dotnet build` 也无法编译 VSTO，必须单独用 VS 2022 自带的 MSBuild：
+### 2. 核心回归检查（Windows，无需签名证书）
 
 ```powershell
-& "<VS2022 安装目录>\MSBuild\Current\Bin\MSBuild.exe" "InkCanvas.PowerPointAddIn\InkCanvas.PowerPointAddIn.csproj" -p:Configuration=Debug
+dotnet run --project InkCanvas.Core.Tests -c Release
 ```
 
-`<VS2022 安装目录>` 形如 `C:\Program Files\Microsoft Visual Studio\2022\<Edition>`，`<Edition>` 取决于本机装的是 Community / Professional / Enterprise；不确定时用 `vswhere` 查：
-
-```powershell
-& "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\MSBuild.exe
-```
-
-> 改动涉及 PPT 联动 / ppt-agent / `InkCanvas.PptAgent.Contracts` 时，**两条命令都要跑**。
+PPT 联动仅使用主程序内的 ROT/Office COM；无需额外加载项、运行时或签名证书。涉及 PPT 时，除上述构建和核心测试外，还应实机验证 PowerPoint/WPS 放映、翻页、关闭/重连及智慧模式视频区域。
 
 ### 3. 编译单个子项目
 
@@ -41,26 +33,20 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 
 ## 项目列表
 
-### 解决方案内（7 个）
+### 解决方案内（6 个）
 
 | 项目 | csproj 路径 | 目标框架 | sln 平台映射 |
 | --- | --- | --- | --- |
 | InkCanvasForClass（主应用） | `Ink Canvas/InkCanvasForClass.csproj` | net10.0-windows10.0.19041.0 | `Debug\|x64` → `Debug\|x64`；`Release\|x64` → `Release\|Any CPU` |
 | InkCanvas.Controls | `InkCanvas.Controls/InkCanvas.Controls.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 | InkCanvas.SettingsTreeView | `InkCanvas.SettingsTreeView/InkCanvas.SettingsTreeView.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
-| InkCanvas.PptAgent.Contracts | `InkCanvas.PPTAgent.Contracts/InkCanvas.PptAgent.Contracts.csproj` | netstandard2.0 | 全部 Any CPU |
 | InkCanvas.IACoreHelper | `InkCanvas.IACoreHelper/InkCanvas.IACoreHelper.csproj` | net472 | **所有配置一律映射到 x86** |
 | InkCanvas.NativeInk.Tests | `InkCanvas.NativeInk.Tests/InkCanvas.NativeInk.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 | InkCanvas.Core.Tests | `InkCanvas.Core.Tests/InkCanvas.Core.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 
-> 注意目录名与项目名不一致：`InkCanvas.PptAgent.Contracts` 位于 `InkCanvas.PPTAgent.Contracts/`。
 > `Ink Canvas/InkCanvasForClass_*_wpftmp.csproj`、`InkCanvas.Controls/*_wpftmp.csproj` 是 WPF 编译中间产物，**不是真实项目，不要改**。
 
-### 解决方案外（1 个）
-
-| 项目 | csproj 路径 | 目标框架 | 说明 |
-| --- | --- | --- | --- |
-| InkCanvas.PowerPointAddIn | `InkCanvas.PowerPointAddIn/InkCanvas.PowerPointAddIn.csproj` | net472（VSTO） | 单独用 MSBuild 编译，见上文命令 2 |
+NativeInk 实验源代码保留但默认构建禁用，不需要 Vortice 包；IACoreHelper 保持 net472/x86。
 
 ## 主项目 MSBuild 目标（改动构建流程前必读）
 
@@ -68,7 +54,6 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 
 | Target | 时机 | 作用 |
 | --- | --- | --- |
-| `CopyVstoAgent` | AfterTargets=Build | 把 `InkCanvas.PowerPointAddIn.dll/.vsto/.dll.manifest`、`Microsoft.Office.Tools.*`、`Microsoft.VisualStudio.Tools.Applications.Runtime.dll`、`InkCanvas.PptAgent.Contracts.dll`、`Newtonsoft.Json.dll` 复制到 `$(OutputPath)ppt-agent` |
 | `CopyIACoreHelper` | AfterTargets=Build，`PublishSingleFile != true` | 复制 IACore helper exe 到主输出目录 |
 | `CopyIACoreHelperToPublishDirectory` | AfterTargets=Publish，`PublishSingleFile == true` | 单文件发布时的对应复制 |
 | `SetAssemblyInformationalVersion` | AfterTargets=GetBuildVersion | 配合 Nerdbank.GitVersioning 写版本号 |

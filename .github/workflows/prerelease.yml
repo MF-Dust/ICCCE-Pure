@@ -236,7 +236,6 @@ jobs:
           }
 
       - name: Build or publish app (Release)
-        env:
         run: |
           $runtimeIdentifier = if ("${{ matrix.architecture }}" -eq "AnyCPU") { "win-x64" } else { "win-x86" }
           $publishDir = "artifacts/publish/${{ matrix.architecture }}"
@@ -262,65 +261,6 @@ jobs:
 
             New-Item -ItemType Directory -Path $publishDir -Force
             Copy-Item "Ink Canvas\bin\Release\${{ matrix.architecture }}\net10.0-windows10.0.19041.0\*" $publishDir -Recurse -Force
-          }
-
-      - name: Install VSTO Runtime
-        shell: pwsh
-        run: |
-          $url = "https://go.microsoft.com/fwlink/?LinkId=158918"
-          $out = "$env:TEMP\VSTORuntime.exe"
-          Invoke-WebRequest -Uri $url -OutFile $out -MaximumRedirection 10
-          Start-Process -FilePath $out -ArgumentList "/quiet /norestart" -Wait -NoNewWindow
-
-      - name: Restore signing certificate
-        shell: pwsh
-        run: |
-          $ok = $false
-          if ("${{ secrets.CERT_PFX_BASE64 }}" -ne "") {
-            try {
-              $bytes = [Convert]::FromBase64String("${{ secrets.CERT_PFX_BASE64 }}")
-              [IO.File]::WriteAllBytes("clickonce.pfx", $bytes)
-              $pwd = ConvertTo-SecureString "${{ secrets.CERT_PFX_PASSWORD }}" -AsPlainText -Force
-              Import-PfxCertificate -FilePath "clickonce.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $pwd | Out-Null
-              $ok = $true
-            } catch {
-              Write-Host "Import failed, falling back to self-signed: $($_.Exception.Message)"
-            }
-          }
-          if (-not $ok) {
-            New-SelfSignedCertificate -Type CodeSigningCert -Subject "CN=ICC PowerPoint Agent Release" -CertStoreLocation "Cert:\CurrentUser\My" -KeyExportPolicy Exportable -NotAfter (Get-Date).AddYears(2) | Out-Null
-          }
-          $found = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.HasPrivateKey -and $_.Subject -like "*ICC*" } | Select-Object -First 1
-          if (-not $found) { throw "No signing certificate found" }
-          echo "SIGN_THUMBPRINT=$($found.Thumbprint)" >> $env:GITHUB_ENV
-
-      - name: Build VSTO Add-in
-        shell: pwsh
-        run: |
-          msbuild "InkCanvas.PowerPointAddIn/InkCanvas.PowerPointAddIn.csproj" `
-            /p:Configuration=Release `
-            /p:SignManifests=true `
-            /p:ManifestCertificateThumbprint=$env:SIGN_THUMBPRINT `
-            /verbosity:minimal -maxcpucount
-          $publishDir = "artifacts/publish/${{ matrix.architecture }}"
-          $pptAgentDir = "$publishDir\ppt-agent"
-          New-Item -ItemType Directory -Force -Path $pptAgentDir | Out-Null
-          Copy-Item "InkCanvas.PowerPointAddIn\bin\Release\*" $pptAgentDir -Recurse -Force
-          Copy-Item "InkCanvas.PPTAgent.Contracts\bin\Release\netstandard2.0\InkCanvas.PPTAgent.Contracts.dll" $pptAgentDir -Force
-          Get-ChildItem $pptAgentDir | Select-Object Name
-          if (-not (Test-Path "$pptAgentDir\Microsoft.Office.Tools.Common.v4.0.Utilities.dll")) {
-            Write-Error "缺少 VSTO 依赖 DLL，artifact 不完整"
-            exit 1
-          }
-
-      - name: Check VSTO DLL exists
-        run: |
-          $dllPath = "InkCanvas.PowerPointAddIn\bin\Release\InkCanvas.PowerPointAddIn.dll"
-          if (Test-Path $dllPath) {
-            Write-Host "VSTO DLL OK"
-          } else {
-            Write-Error "VSTO DLL not found"
-            exit 1
           }
 
       - name: Check if exe file is generated

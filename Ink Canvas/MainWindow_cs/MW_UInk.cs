@@ -1,4 +1,5 @@
 using Ink_Canvas.Helpers;
+using Ink_Canvas.Helpers.Persistence;
 using Ink_Canvas.Properties;
 using Ink_Canvas.UInk;
 using System;
@@ -16,103 +17,60 @@ using File = System.IO.File;
 namespace Ink_Canvas
 {
     /// <summary>
-    /// UInk 1.0 规范集成（保存/打开）。保存走两阶段提交（先 .uink.extra 后主文件）；
+    /// UInk 1.0 规范集成（保存/打开）。UI 捕获独立文档，后台两阶段提交（先 .uink.extra 后主文件）；
     /// 打开按 Workspace 类型恢复到对应模式（PPT/白板/屏幕批注），媒体资源经预算检查解压并拷贝到持久缓存目录。
     /// </summary>
     public partial class MainWindow
     {
         // ==================== 保存 ====================
 
-        /// <summary>把当前 ICC 状态保存为 .uink（多页白板/PPT 幻灯片逐页、单页批注单页）。</summary>
-        internal void SaveCurrentStateToUInk(string path, bool newNotice)
+        private SaveSnapshot CaptureUInkSnapshot(string path, SavePages captured)
         {
+            var snapshot = new SaveSnapshot
+            {
+                Path = path,
+                SuccessMessage = string.Format(MainWindowStrings.Main_Strokes_SaveUInkSuccess, path)
+            };
             try
             {
                 var devices = UInkIccMapper.BuildDisplayDevices();
-                var workspaces = new List<UInkWorkspace>();
-                var pages = new List<UInkPageInput>();
-
-                bool isPPT = IsInPPTPresentationMode && _pptManager?.IsConnected == true;
                 string wsGuid = Guid.NewGuid().ToString();
-                UInkWorkspace ws = currentMode != 0
-                    ? new UInkWorkspace { Guid = wsGuid, WorkspaceType = (int)UInkWorkspaceType.Whiteboard, Name = "白板" }
-                    : isPPT
-                        ? new UInkWorkspace { Guid = wsGuid, WorkspaceType = (int)UInkWorkspaceType.Presentation, Name = "演示" }
-                        : new UInkWorkspace { Guid = wsGuid, WorkspaceType = (int)UInkWorkspaceType.ScreenAnnotation, Name = "屏幕批注" };
-                UInkIccMapper.EnsureWorkspace(workspaces, ws);
+                var workspace = new UInkWorkspace
+                {
+                    Guid = wsGuid,
+                    WorkspaceType = currentMode != 0 ? (int)UInkWorkspaceType.Whiteboard
+                        : captured.IsPpt ? (int)UInkWorkspaceType.Presentation : (int)UInkWorkspaceType.ScreenAnnotation,
+                    Name = currentMode != 0 ? "白板" : captured.IsPpt ? "演示" : "屏幕批注"
+                };
                 string deviceGuid = devices.Count > 0 ? devices[0].Guid : "";
-
-                // 当前页媒体（图片/PDF/音视频）
-                var currentMedia = new List<(UInkMedia media, string sourceFile)>();
-                CollectMediaToUInk(currentMedia);
-
-                if (isPPT)
+                var media = new List<(UInkMedia media, string sourceFile)>();
+                CollectMediaToUInk(media);
+                foreach (var (item, source) in media)
                 {
-                    int totalSlides = _pptManager.SlidesCount;
-                    int currentSlide = _pptManager.GetCurrentSlideNumber();
-                    for (int i = 1; i <= totalSlides; i++)
-                    {
-                        var strokes = GetPptStrokesForSave(i, currentSlide);
-                        pages.Add(new UInkPageInput
-                        {
-                            Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid,
-                                Guid.NewGuid().ToString(), (uint)(i - 1), (uint)i, TryGetSlideId(i), null),
-                            Strokes = strokes ?? new StrokeCollection(),
-                            Media = i == currentSlide ? currentMedia.Select(x => x.media).ToList() : new List<UInkMedia>(),
-                        });
-                    }
+                    snapshot.PinMedia(source);
+                    snapshot.Resources.Add((item.Path, source));
                 }
-                else if (currentMode != 0 && WhiteboardTotalCount > 1)
-                {
-                    for (int i = 1; i <= WhiteboardTotalCount; i++)
-                    {
-                        var strokes = GetWhiteboardStrokesForSave(i);
-                        pages.Add(new UInkPageInput
-                        {
-                            Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid,
-                                Guid.NewGuid().ToString(), (uint)(i - 1), (uint)i, null, null),
-                            Strokes = strokes,
-                            Media = i == CurrentWhiteboardIndex ? currentMedia.Select(x => x.media).ToList() : new List<UInkMedia>(),
-                        });
-                    }
-                }
-                else
+                var pages = new List<UInkPageInput>();
+                for (int i = 0; i < captured.Strokes.Count; i++)
                 {
                     pages.Add(new UInkPageInput
                     {
-                        Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid,
-                            Guid.NewGuid().ToString(), 0, 1, null, UInkIccMapper.IdentityViewport()),
-                        Strokes = inkCanvas.Strokes.Clone(),
-                        Media = currentMedia.Select(x => x.media).ToList(),
+                        Canvas = UInkIccMapper.BuildCanvas(wsGuid, deviceGuid, Guid.NewGuid().ToString(),
+                            (uint)i, (uint)(i + 1), captured.IsPpt ? TryGetSlideId(i + 1) : null,
+                            captured.IsMultiple ? null : UInkIccMapper.IdentityViewport()),
+                        Strokes = captured.Strokes[i],
+                        Media = !captured.IsMultiple || i + 1 == captured.CurrentPage
+                            ? media.Select(x => x.media).ToList() : new List<UInkMedia>()
                     });
                 }
-
-                var doc = UInkIccMapper.BuildDocument(
-                    UInkIccMapper.NewFileGuid(), devices, workspaces, pages,
-                    (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-
-                // 资源集（entryPath, sourceFile）
-                var resources = new List<(string, string)>();
-                foreach (var (m, src) in currentMedia)
-                    resources.Add((m.Path, src));
-
-                UInkSaveService.SaveFull(doc, path, resources);
-
-                if (newNotice)
-                {
-                    Task.Delay(100).ContinueWith(t =>
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            ShowNotification(string.Format(MainWindowStrings.Main_Strokes_SaveUInkSuccess, path));
-                        });
-                    });
-                }
+                snapshot.UInkDocument = UInkIccMapper.BuildDocument(UInkIccMapper.NewFileGuid(), devices,
+                    new[] { workspace }, pages, (ulong)DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+                return snapshot;
             }
-            catch (Exception ex)
+            catch
             {
-                ShowNotification(MainWindowStrings.Main_Strokes_SaveUInkFailed);
-                LogHelper.WriteLogToFile($"UInk 保存失败 | {ex}", LogHelper.LogType.Error);
+                snapshot.Dispose();
+                throw;
             }
         }
 
@@ -124,10 +82,12 @@ namespace Ink_Canvas
             CollectCanvasElementsMetadata(elements);
 
             var used = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            // Immutable names across saves keep the previous main's media valid if its final commit fails.
+            string resourceDirectory = "media/" + Guid.NewGuid().ToString("N") + "/";
             foreach (var e in elements)
             {
                 if (string.IsNullOrEmpty(e.SourcePath) || !File.Exists(e.SourcePath)) continue;
-                var entryPath = MakeUniqueEntryPath(e.SourcePath, used);
+                var entryPath = MakeUniqueEntryPath(e.SourcePath, used, resourceDirectory);
 
                 var media = new UInkMedia
                 {
@@ -153,15 +113,15 @@ namespace Ink_Canvas
             }
         }
 
-        private static string MakeUniqueEntryPath(string sourceFile, HashSet<string> used)
+        private static string MakeUniqueEntryPath(string sourceFile, HashSet<string> used, string directory)
         {
             string name = Path.GetFileName(sourceFile);
             if (string.IsNullOrWhiteSpace(name)) name = "resource";
             foreach (var c in Path.GetInvalidFileNameChars()) name = name.Replace(c, '_');
-            string candidate = "media/" + name;
+            string candidate = directory + name;
             int n = 1;
             while (!used.Add(candidate))
-                candidate = "media/" + (n++) + "_" + name;
+                candidate = directory + (n++) + "_" + name;
             return candidate;
         }
 
@@ -170,8 +130,9 @@ namespace Ink_Canvas
         {
             try
             {
-                if (pptApplication == null) return null;
-                var presentation = pptApplication.SlideShowWindows?[1]?.Presentation;
+                dynamic application = _pptManager?.PPTApplication;
+                if (application == null) return null;
+                var presentation = application.SlideShowWindows?[1]?.Presentation;
                 if (presentation == null || slideIndex < 1 || slideIndex > presentation.Slides.Count) return null;
                 return presentation.Slides[slideIndex].SlideID;
             }

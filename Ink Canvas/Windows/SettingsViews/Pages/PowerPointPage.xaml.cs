@@ -48,14 +48,9 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             var ppt = SettingsManager.Settings.PowerPointSettings;
 
             CardSupportPowerPoint.IsOn = ppt.PowerPointSupport;
-            ComboBoxPPTArchitecture.SelectedIndex = (int)ppt.PPTLinkMode;
-            CardPowerPointEnhancement.IsOn = ppt.EnablePowerPointEnhancement;
             CardSkipAnimationsWhenGoNext.IsOn = ppt.SkipAnimationsWhenGoNext;
             CardSupportWPS.IsOn = ppt.IsSupportWPS;
             CardEnableWppProcessKill.IsOn = ppt.EnableWppProcessKill;
-            UpdatePPTArchitectureDependentCards();
-
-
 
             CardEnablePPTButtonPageClickable.IsOn = ppt.EnablePPTButtonPageClickable;
             ToggleSwitchEnablePPTButtonEnhancedPreview.IsOn = ppt.EnablePPTButtonEnhancedPreview;
@@ -83,15 +78,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
 
         #region PPT Basic
 
-        private void UpdatePPTArchitectureDependentCards()
-        {
-            bool isComArchitecture = SettingsManager.Settings.PowerPointSettings.PPTLinkMode == PPTLinkMode.Com;
-            var visibility = isComArchitecture ? Visibility.Visible : Visibility.Collapsed;
-            CardPowerPointEnhancement.Visibility = visibility;
-            CardSupportWPS.Visibility = visibility;
-            CardEnableWppProcessKill.Visibility = visibility;
-        }
-
         private void ToggleSwitchSupportPowerPoint_Toggled(object sender, RoutedEventArgs e)
         {
             if (!_isLoaded) return;
@@ -104,44 +90,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
             }
             SettingsManager.SaveSettingsToFile();
             SettingsActionHub.OnPPTSupportChanged(CardSupportPowerPoint.IsOn);
-        }
-
-        private void ToggleSwitchPowerPointEnhancement_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            var ppt = SettingsManager.Settings.PowerPointSettings;
-            ppt.EnablePowerPointEnhancement = CardPowerPointEnhancement.IsOn;
-            if (ppt.EnablePowerPointEnhancement)
-            {
-                ppt.IsSupportWPS = false;
-                CardSupportWPS.IsOn = false;
-            }
-            SettingsManager.SaveSettingsToFile();
-            SettingsActionHub.OnPPTEnhancementChanged(CardPowerPointEnhancement.IsOn);
-        }
-
-        private void ComboBoxPPTArchitecture_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!_isLoaded) return;
-            var ppt = SettingsManager.Settings.PowerPointSettings;
-            var selectedMode = (PPTLinkMode)Math.Max(0, ComboBoxPPTArchitecture.SelectedIndex);
-            if (ppt.PPTLinkMode == selectedMode) return;
-
-            ppt.PPTLinkMode = selectedMode;
-            if (ppt.PPTLinkMode != PPTLinkMode.Com)
-            {
-                ppt.EnablePowerPointEnhancement = false;
-                ppt.IsSupportWPS = false;
-                CardPowerPointEnhancement.IsOn = false;
-                CardSupportWPS.IsOn = false;
-            }
-            UpdatePPTArchitectureDependentCards();
-            SettingsManager.SaveSettingsToFile();
-            try
-            {
-                SettingsActionHub.OnPPTLinkModeChanged();
-            }
-            catch (Exception ex) { LogHelper.WriteLogToFile($"切换 PPT 联动架构失败: {ex}", LogHelper.LogType.Error); }
         }
 
         private void ToggleSwitchSkipAnimationsWhenGoNext_Toggled(object sender, RoutedEventArgs e)
@@ -163,11 +111,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
                 {
                     ppt.PowerPointSupport = true;
                     CardSupportPowerPoint.IsOn = true;
-                }
-                if (ppt.EnablePowerPointEnhancement)
-                {
-                    ppt.EnablePowerPointEnhancement = false;
-                    CardPowerPointEnhancement.IsOn = false;
                 }
             }
             SettingsManager.SaveSettingsToFile();

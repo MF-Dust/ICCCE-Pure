@@ -33,7 +33,7 @@ namespace Ink_Canvas
         #region 媒体区域坐标转换
 
         /// <summary>
-        /// 从 VSTO 获取的原始磅值 + 窗口句柄，通过 Win32 API 计算屏幕像素坐标，
+        /// 从 ROT COM 实例获取的原始磅值 + 窗口句柄，通过 Win32 API 计算屏幕像素坐标，
         /// 再转换为 WPF 窗口坐标。必须在 UI 线程调用。
         /// </summary>
         internal void BuildSmartModeRects()
@@ -45,13 +45,14 @@ namespace Ink_Canvas
                 return;
             }
 
-            // 如果 VSTO 未返回 slide 尺寸，尝试多种回退
+            // 如果 COM 查询未返回幻灯片尺寸，尝试多种回退
             if (_smartModeSlideWidth <= 0 || _smartModeSlideHeight <= 0)
             {
                 // 回退1：通过 COM 对象
                 try
                 {
-                    var pres = pptApplication?.ActivePresentation;
+                    dynamic app = _pptManager?.PPTApplication;
+                    var pres = app?.ActivePresentation;
                     if (pres != null)
                     {
                         _smartModeSlideWidth = pres.PageSetup.SlideWidth;
@@ -88,7 +89,7 @@ namespace Ink_Canvas
 
             if (_smartModeSlideShowHwnd == IntPtr.Zero)
             {
-                // 优先通过 _pptManager 获取放映窗口 HWND（适用于 COM/ROT 模式，静态字段 pptApplication 可能为 null）
+                // 通过 ROT 管理器获取放映窗口 HWND
                 try
                 {
                     var appObj = _pptManager?.PPTApplication;

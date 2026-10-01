@@ -1,6 +1,6 @@
 using Ink_Canvas.Helpers;
 using Ink_Canvas.WorkflowAutomation;
-using InkCanvasPPTAgent.Contracts;
+using Ink_Canvas.Models;
 using iNKORE.UI.WPF.Modern;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
@@ -87,33 +87,6 @@ namespace Ink_Canvas
         //private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
         #endregion
 
-        #region PPT Application Variables
-        /// <summary>
-        /// PowerPoint应用程序实例，用于与PowerPoint进行交互。
-        /// </summary>
-        public static Microsoft.Office.Interop.PowerPoint.Application pptApplication;
-
-        /// <summary>
-        /// 当前活动的PowerPoint演示文稿。
-        /// </summary>
-        public static Presentation presentation;
-
-        /// <summary>
-        /// 当前演示文稿的幻灯片集合。
-        /// </summary>
-        public static Slides slides;
-
-        /// <summary>
-        /// 当前活动的幻灯片。
-        /// </summary>
-        public static Slide slide;
-
-        /// <summary>
-        /// 当前演示文稿的幻灯片总数。
-        /// </summary>
-        public static int slidescount;
-        #endregion
-
         #region PPT State Management
         /// <summary>
         /// 幻灯片放映结束事件重入保护标志，防止重复处理放映结束事件。
@@ -145,17 +118,6 @@ namespace Ink_Canvas
         /// 长按翻页间隔（毫秒），即连续翻页的时间间隔。
         /// </summary>
         private const int LongPressInterval = 50; // 长按翻页间隔（毫秒）
-
-        // PowerPoint应用程序守护相关字段
-        /// <summary>
-        /// 用于监控PowerPoint应用程序状态的定时器。
-        /// </summary>
-        private DispatcherTimer _powerPointProcessMonitorTimer;
-
-        /// <summary>
-        /// 应用程序监控间隔（毫秒），即每隔多长时间检查一次PowerPoint应用程序状态。
-        /// </summary>
-        private const int ProcessMonitorInterval = 1000; // 应用程序监控间隔（毫秒）
 
         // 上次播放位置相关字段
         /// <summary>
@@ -216,7 +178,7 @@ namespace Ink_Canvas
         private List<SmartRegion> _smartModeRegions;
         /// <summary>缓存的视频区域对应的幻灯片页码，避免重复查询。</summary>
         private int _smartModeSlideIndex = -1;
-        /// <summary>VSTO/COM 返回的幻灯片尺寸（磅）和放映窗口句柄，用于主应用端坐标转换。</summary>
+        /// <summary>COM 返回的幻灯片尺寸（磅）和放映窗口句柄，用于主应用端坐标转换。</summary>
         private float _smartModeSlideWidth, _smartModeSlideHeight;
         private IntPtr _smartModeSlideShowHwnd;
 
@@ -253,7 +215,7 @@ namespace Ink_Canvas
         /// 初始化并配置用于 PowerPoint 集成的管理器与相关状态。
         /// </summary>
         /// <remarks>
-        /// 清理并释放现有的 PPT 管理器与 COM/Interop 状态，创建并配置新的 PPT 管理器（ROT 或 COM 实现，取决于设置）、单一的 PPT 墨迹管理器及其自动保存行为，以及 PPT UI 管理器与其显示/按钮位置选项。方法内部会订阅必要的 PPT 事件并记录初始化过程中的错误或警告。同时初始化长按页翻页定时器以支持长按翻页功能。
+        /// 清理并释放现有的 PPT 管理器，创建并配置新的 ROT PPT 管理器、单一的 PPT 墨迹管理器及其自动保存行为，以及 PPT UI 管理器与其显示/按钮位置选项。方法内部会订阅必要的 PPT 事件并记录初始化过程中的错误或警告。同时初始化长按页翻页定时器以支持长按翻页功能。
         /// </remarks>
         public void InitializePPTManagers()
         {
@@ -275,32 +237,7 @@ namespace Ink_Canvas
                     LogHelper.WriteLogToFile($"清理旧 PPT 管理器异常: {ex}", LogHelper.LogType.Warning);
                 }
 
-                try
-                {
-                    StopPowerPointProcessMonitoring();
-                    _powerPointProcessMonitorTimer = null;
-                    ClosePowerPointApplication();
-                    ClearStaticInteropState();
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.WriteLogToFile($"清理 Interop 状态异常: {ex}", LogHelper.LogType.Warning);
-                }
-
-                // 根据设置选择 COM / ROT / Agent 架构
-                switch (Settings.PowerPointSettings.PPTLinkMode)
-                {
-                    case PPTLinkMode.Rot:
-                        _pptManager = new ROTPPTManager();
-                        break;
-                    case PPTLinkMode.Agent:
-                        VstoRegistrationHelper.EnsureRegistered();
-                        _pptManager = new PPTAgentLinkManager();
-                        break;
-                    default:
-                        _pptManager = new ComPPTLinkManager();
-                        break;
-                }
+                _pptManager = new ROTPPTManager();
 
                 _pptManager.IsSupportWPS = Settings.PowerPointSettings.IsSupportWPS;
                 _pptManager.SkipAnimationsWhenNavigating = Settings.PowerPointSettings.SkipAnimationsWhenGoNext;
@@ -373,340 +310,11 @@ namespace Ink_Canvas
             LogHelper.WriteLogToFile("PPT监控已停止", LogHelper.LogType.Event);
         }
 
-        #region PowerPoint Application Management
-        /// <summary>
-        /// 启动PowerPoint应用程序守护
-        /// </summary>
-        /// <remarks>
-        /// 启动对本地 PowerPoint 应用实例的守护监控并在需要时创建应用程序实例。
-        /// 仅在 PowerPoint 增强功能已启用且未使用 ROT 链接时生效；方法将创建 PowerPoint 应用（若不存在）并启动用于定期检查应用状态的定时器。
-        /// </remarks>
-        public void StartPowerPointProcessMonitoring()
-        {
-            try
-            {
-                if (!Settings.PowerPointSettings.EnablePowerPointEnhancement) return;
-                if (Settings.PowerPointSettings.PPTLinkMode != PPTLinkMode.Com) return;
-
-                // 创建PowerPoint应用程序实例
-                CreatePowerPointApplication();
-
-                // 启动应用程序监控定时器
-                if (_powerPointProcessMonitorTimer == null)
-                {
-                    _powerPointProcessMonitorTimer = new DispatcherTimer();
-                    _powerPointProcessMonitorTimer.Interval = TimeSpan.FromMilliseconds(ProcessMonitorInterval);
-                    _powerPointProcessMonitorTimer.Tick += OnPowerPointApplicationMonitorTick;
-                }
-                _powerPointProcessMonitorTimer.Start();
-
-                LogHelper.WriteLogToFile("PowerPoint应用程序守护已启动", LogHelper.LogType.Event);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"启动PowerPoint应用程序守护失败: {ex}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 停止PowerPoint应用程序守护
-        /// </summary>
-        public void StopPowerPointProcessMonitoring(bool isShutdown = false)
-        {
-            try
-            {
-                // 停止应用程序监控定时器
-                _powerPointProcessMonitorTimer?.Stop();
-
-                // 关闭PowerPoint应用程序（包括关机时）
-                ClosePowerPointApplication(isShutdown);
-
-                LogHelper.WriteLogToFile("PowerPoint应用程序守护已停止", LogHelper.LogType.Event);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"停止PowerPoint应用程序守护失败: {ex}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 创建PowerPoint应用程序实例
-        /// <summary>
-        /// 创建并初始化一个隐藏的 PowerPoint 应用程序 COM 实例，并在可用时将该实例注入到当前的 PPT 管理器中。
-        /// </summary>
-        /// <remarks>
-        /// 如果配置为使用 ROT 链接或已有有效的 PowerPoint 实例，则不会创建新实例。创建的实例会被设置为不可见并最小化；在实例准备就绪后会通过延迟调用将其设置到 PPT 管理器（SetPPTManagerApplication）。任何创建或注入失败的情况会被记录日志，但不会抛出异常给调用者。
-        /// </remarks>
-        private void CreatePowerPointApplication()
-        {
-            try
-            {
-                if (Settings.PowerPointSettings.PPTLinkMode != PPTLinkMode.Com) return;
-                // 如果应用程序已存在且有效，则不重复创建
-                if (pptApplication != null && IsPowerPointApplicationValid())
-                {
-                    return;
-                }
-
-                // 创建新的PowerPoint应用程序实例
-                pptApplication = new Microsoft.Office.Interop.PowerPoint.Application();
-
-                // 设置为不可见，作为后台进程
-                pptApplication.Visible = MsoTriState.msoFalse;
-
-                // 设置应用程序属性
-                pptApplication.WindowState = PpWindowState.ppWindowMinimized;
-
-                // 直接设置PPTManager的PPTApplication属性，绕过COM注册问题
-                Task.Delay(1000).ContinueWith(_ =>
-                {
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        try
-                        {
-                            // 直接设置PPTManager的PowerPoint应用程序实例
-                            if (_pptManager != null)
-                            {
-                                // 使用反射或直接访问来设置PPTManager的PPTApplication
-                                SetPPTManagerApplication(pptApplication);
-                                LogHelper.WriteLogToFile("已直接设置PPTManager的PowerPoint应用程序实例", LogHelper.LogType.Event);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogHelper.WriteLogToFile($"设置PPTManager的PowerPoint应用程序实例失败: {ex}", LogHelper.LogType.Error);
-                        }
-                    });
-                });
-
-                LogHelper.WriteLogToFile("PowerPoint应用程序实例已创建", LogHelper.LogType.Event);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"创建PowerPoint应用程序实例失败: {ex}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 设置PPTManager的PowerPoint应用程序实例
-        /// </summary>
-        /// <remarks>
-        /// 将给定的 PowerPoint 应用实例注入到当前的 PPT 管理器中，若管理器为 null 或启用 ROT 链接则不做任何操作。
-        /// 尝试使用非公开的 `ConnectToPPT` 方法进行绑定，若不可用则回退到写入公共 `PPTApplication` 属性；操作结果和异常通过日志记录。
-        /// </remarks>
-        /// <param name="app">要注入的 PowerPoint 应用实例（Microsoft.Office.Interop.PowerPoint.Application）。</param>
-        private void SetPPTManagerApplication(Microsoft.Office.Interop.PowerPoint.Application app)
-        {
-            try
-            {
-                if (_pptManager == null) return;
-                if (Settings.PowerPointSettings.PPTLinkMode != PPTLinkMode.Com) return;
-
-                // 使用反射调用PPTManager的ConnectToPPT方法
-                var pptManagerType = _pptManager.GetType();
-                var connectMethod = pptManagerType.GetMethod("ConnectToPPT",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-                if (connectMethod != null)
-                {
-                    connectMethod.Invoke(_pptManager, new object[] { app });
-                    LogHelper.WriteLogToFile("通过ConnectToPPT方法设置PowerPoint应用程序实例", LogHelper.LogType.Event);
-                }
-                else
-                {
-                    // 如果无法通过反射调用，尝试直接设置属性
-                    var pptApplicationProperty = pptManagerType.GetProperty("PPTApplication",
-                        System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
-                    if (pptApplicationProperty != null && pptApplicationProperty.CanWrite)
-                    {
-                        pptApplicationProperty.SetValue(_pptManager, app);
-                        LogHelper.WriteLogToFile("通过属性设置PPTManager的PowerPoint应用程序实例", LogHelper.LogType.Event);
-                    }
-                    else
-                    {
-                        LogHelper.WriteLogToFile("无法设置PPTManager的PowerPoint应用程序实例", LogHelper.LogType.Warning);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"设置PPTManager的PowerPoint应用程序实例失败: {ex}", LogHelper.LogType.Error);
-            }
-        }
-
-        /// <summary>
-        /// 检查PowerPoint应用程序是否有效
-        /// </summary>
-        private bool IsPowerPointApplicationValid()
-        {
-            try
-            {
-                if (pptApplication == null) return false;
-                if (!Marshal.IsComObject(pptApplication)) return false;
-
-                // 尝试访问一个简单的属性来验证连接是否有效
-                var _ = pptApplication.Name;
-                return true;
-            }
-            catch (COMException comEx)
-            {
-                var hr = (uint)comEx.HResult;
-                // 如果COM对象已失效，返回false
-                if (hr == 0x8001010E || hr == 0x80004005 || hr == 0x800706B5)
-                {
-                    return false;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 关闭PowerPoint应用程序
-        /// </summary>
-        /// <remarks>
-        /// 关闭当前的 PowerPoint 应用程序及其所有打开的演示文稿，释放相关 COM 资源并清理静态互操作状态。</summary>
-        /// 会尝试关闭所有打开的演示文稿、退出 PowerPoint 进程、释放 COM 对象引用，并将内部 PowerPoint 互操作状态重置为初始值；操作结果会被记录到日志，发生异常时会记录错误并仍然尝试清理互操作状态。
-        /// </remarks>
-        private void ClosePowerPointApplication(bool isShutdown = false)
-        {
-            try
-            {
-                if (pptApplication != null)
-                {
-                    // 关闭所有打开的演示文稿
-                    try
-                    {
-                        if (pptApplication.Presentations.Count > 0)
-                        {
-                            for (int i = pptApplication.Presentations.Count; i >= 1; i--)
-                            {
-                                try
-                                {
-                                    pptApplication.Presentations[i].Close();
-                                }
-                                catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-                            }
-                        }
-                    }
-                    catch (COMException comEx)
-                    {
-                        // 关机时 COM 对象可能已失效，记录但继续清理
-                        LogHelper.WriteLogToFile($"关闭演示文稿时 COM 异常 (HResult: 0x{comEx.HResult:X}): {comEx.Message}",
-                            isShutdown ? LogHelper.LogType.Warning : LogHelper.LogType.Error);
-                    }
-
-                    // 退出PowerPoint应用程序
-                    try
-                    {
-                        pptApplication.Quit();
-                    }
-                    catch (COMException comEx)
-                    {
-                        // 关机时 COM 对象可能已失效，记录但继续清理
-                        LogHelper.WriteLogToFile($"退出 PowerPoint 时 COM 异常 (HResult: 0x{comEx.HResult:X}): {comEx.Message}",
-                            isShutdown ? LogHelper.LogType.Warning : LogHelper.LogType.Error);
-                    }
-
-                    // 释放COM对象
-                    try
-                    {
-                        if (Marshal.IsComObject(pptApplication))
-                        {
-                            Marshal.ReleaseComObject(pptApplication);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.WriteLogToFile($"释放 PowerPoint COM 对象异常: {ex.Message}", LogHelper.LogType.Warning);
-                    }
-
-                    pptApplication = null;
-                }
-
-                ClearStaticInteropState();
-                LogHelper.WriteLogToFile("PowerPoint应用程序已关闭", LogHelper.LogType.Event);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"关闭PowerPoint应用程序失败: {ex}", LogHelper.LogType.Error);
-                ClearStaticInteropState();
-            }
-        }
-
-        /// <summary>
-        /// 释放并清理与 PowerPoint COM 互操作相关的引用（演示文稿、Slides、当前幻灯片），并将幻灯片计数重置为 0。
-        /// </summary>
-        /// <remarks>
-        /// 在释放过程中若发生异常会被捕获并以警告级别记录日志，不会抛出异常到调用者。
-        /// </remarks>
-        private void ClearStaticInteropState()
-        {
-            try
-            {
-                if (presentation != null)
-                {
-                    try { if (Marshal.IsComObject(presentation)) Marshal.ReleaseComObject(presentation); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-                    presentation = null;
-                }
-                if (slides != null)
-                {
-                    try { if (Marshal.IsComObject(slides)) Marshal.ReleaseComObject(slides); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-                    slides = null;
-                }
-                if (slide != null)
-                {
-                    try { if (Marshal.IsComObject(slide)) Marshal.ReleaseComObject(slide); } catch (Exception ex) { System.Diagnostics.Debug.WriteLine(ex); }
-                    slide = null;
-                }
-                slidescount = 0;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"ClearStaticInteropState 异常: {ex}", LogHelper.LogType.Warning);
-            }
-        }
-
-        /// <summary>
-        /// PowerPoint应用程序监控定时器事件
-        /// </summary>
-        /// <remarks>
-        /// 周期性监控嵌入的 PowerPoint 应用实例的可用性，并在检测到失效时尝试重建实例；当增强功能被禁用时停止监控，并在使用 ROT 链接时不进行检查。
-        /// </remarks>
-        private void OnPowerPointApplicationMonitorTick(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!Settings.PowerPointSettings.EnablePowerPointEnhancement)
-                {
-                    StopPowerPointProcessMonitoring();
-                    return;
-                }
-                if (Settings.PowerPointSettings.PPTLinkMode != PPTLinkMode.Com) return;
-
-                // 检查应用程序是否还在运行
-                if (!IsPowerPointApplicationValid())
-                {
-                    LogHelper.WriteLogToFile("检测到PowerPoint应用程序已失效，重新创建", LogHelper.LogType.Event);
-                    CreatePowerPointApplication();
-                }
-            }
-            catch (Exception ex)
-            {
-                LogHelper.WriteLogToFile($"PowerPoint应用程序监控异常: {ex}", LogHelper.LogType.Error);
-            }
-        }
-        #endregion
-
         /// <summary>
         /// 释放并停止所有与 PowerPoint 集成相关的管理器与资源，恢复和清理应用的 PPT 相关运行状态。
         /// </summary>
         /// <remarks>
-        /// 操作包括停止并释放 PPT 管理器、墨迹管理器和长按计时器，停止 PowerPoint 进程监控，关闭 PowerPoint 应用并清除静态 COM/互操作状态；所有异常会被捕获并记录为错误日志。
+        /// 操作包括停止并释放 PPT 管理器、墨迹管理器和长按计时器，所有异常会被捕获并记录为错误日志。
         /// </remarks>
         private void DisposePPTManagers(bool isShutdown = false)
         {
@@ -727,11 +335,6 @@ namespace Ink_Canvas
 
                 _pptUIManager = null;
 
-                StopPowerPointProcessMonitoring(isShutdown);
-                _powerPointProcessMonitorTimer = null;
-
-                ClearStaticInteropState();
-
                 StopPPTOnlyVisibilityProbeTimer();
 
                 LogHelper.WriteLogToFile("PPT管理器已释放", LogHelper.LogType.Event);
@@ -749,7 +352,6 @@ namespace Ink_Canvas
                 try
                 {
                     _longPressTimer?.Stop();
-                    _powerPointProcessMonitorTimer?.Stop();
                     StopPPTOnlyVisibilityProbeTimer();
                     LogHelper.WriteLogToFile("关机时已停止所有 PPT 相关定时器", LogHelper.LogType.Event);
                 }
@@ -996,7 +598,6 @@ namespace Ink_Canvas
         private void OnPPTPresentationOpen(object payload)
         {
             var pres = payload as Presentation;
-            var agentState = payload as PPTState;
             try
             {
                 Application.Current.Dispatcher.InvokeAsync(() =>
@@ -1018,25 +619,25 @@ namespace Ink_Canvas
                     }
 
                     // 处理跳转到首页或上次播放页的逻辑
-                    HandlePresentationOpenNavigation(pres, agentState);
+                    HandlePresentationOpenNavigation(pres);
 
                     // 检查隐藏幻灯片
                     if (Settings.PowerPointSettings.IsNotifyHiddenPage)
                     {
-                        CheckAndNotifyHiddenSlides(pres, agentState);
+                        CheckAndNotifyHiddenSlides(pres);
                     }
 
                     // 检查自动播放设置
                     if (Settings.PowerPointSettings.IsNotifyAutoPlayPresentation)
                     {
-                        CheckAndNotifyAutoPlaySettings(pres, agentState);
+                        CheckAndNotifyAutoPlaySettings(pres);
                     }
 
                     _pptUIManager?.UpdateConnectionStatus(true);
 
                     SchedulePPTEnhancedPreviewPreload();
 
-                    LogHelper.WriteLogToFile($"已打开新演示文稿: {pres?.Name ?? agentState?.PresentationName ?? _pptManager?.GetPresentationName()}，墨迹状态已清理", LogHelper.LogType.Event);
+                    LogHelper.WriteLogToFile($"已打开新演示文稿: {pres?.Name ?? _pptManager?.GetPresentationName()}，墨迹状态已清理", LogHelper.LogType.Event);
                 });
             }
             catch (Exception ex)
@@ -1166,7 +767,6 @@ namespace Ink_Canvas
         private async void OnPPTSlideShowBegin(object payload)
         {
             var wn = payload as SlideShowWindow;
-            var agentState = payload as PPTState;
             try
             {
                 if (Settings.Automation.IsAutoFoldInPPTSlideShow)
@@ -1222,25 +822,11 @@ namespace Ink_Canvas
 
                 if (activePresentation == null)
                 {
-                    if (agentState == null && _pptManager is PPTAgentLinkManager agentManager)
-                    {
-                        agentState = agentManager.CurrentState;
-                    }
-
-                    if (agentState != null)
-                    {
-                        currentSlide = agentState.SlideIndex;
-                        totalSlides = agentState.TotalSlides;
-                        presentationName = agentState.PresentationName;
-                        presentationFullName = agentState.PresentationFullName;
-                    }
-                    else
-                    {
-                        activePresentation = _pptManager?.GetCurrentActivePresentation() as Presentation;
-                        currentSlide = _pptManager?.GetCurrentSlideNumber() ?? 0;
-                        totalSlides = _pptManager?.SlidesCount ?? 0;
-                        presentationName = _pptManager?.GetPresentationName() ?? activePresentation?.Name;
-                    }
+                    activePresentation = _pptManager?.GetCurrentActivePresentation() as Presentation;
+                    currentSlide = _pptManager?.GetCurrentSlideNumber() ?? 0;
+                    totalSlides = _pptManager?.SlidesCount ?? 0;
+                    presentationName = _pptManager?.GetPresentationName() ?? activePresentation?.Name;
+                    presentationFullName = _pptManager?.GetPresentationPath();
                 }
 
                 _currentSlideShowPosition = currentSlide;
@@ -1425,7 +1011,6 @@ namespace Ink_Canvas
         private void OnPPTSlideShowNextSlide(object payload)
         {
             var wn = payload as SlideShowWindow;
-            var agentState = payload as PPTState;
             try
             {
                 int currentSlide = 0;
@@ -1459,10 +1044,10 @@ namespace Ink_Canvas
 
                 if (currentSlide <= 0)
                 {
-                    currentSlide = agentState?.SlideIndex ?? _pptManager?.GetCurrentSlideNumber() ?? 0;
+                    currentSlide = _pptManager?.GetCurrentSlideNumber() ?? 0;
                 }
 
-                totalSlides = agentState?.TotalSlides ?? _pptManager?.SlidesCount ?? 0;
+                totalSlides = _pptManager?.SlidesCount ?? 0;
 
                 if (currentSlide == _previousSlideID) return;
 
@@ -1547,7 +1132,7 @@ namespace Ink_Canvas
         #region 智慧模式：视频控件区域刷新与坐标转换
 
         /// <summary>
-        /// 从 PPT Agent / COM 获取当前幻灯片的视频控件区域，缓存后用于鼠标进入/离开判断。
+        /// 从 ROT 连接的 COM 实例获取当前幻灯片的视频控件区域，缓存后用于鼠标进入/离开判断。
         /// </summary>
         private void RefreshSmartModeRegions()
         {
@@ -1561,35 +1146,10 @@ namespace Ink_Canvas
                     return;
                 }
 
-                if (_pptManager is PPTAgentLinkManager agentManager)
-                {
-                    var response = agentManager.GetSmartRegions();
-                    if (response?.Regions != null && response.Regions.Count > 0)
-                    {
-                        _smartModeRegions = response.Regions;
-                        _smartModeSlideIndex = response.SlideIndex;
-                        _smartModeSlideWidth = response.SlideWidth;
-                        _smartModeSlideHeight = response.SlideHeight;
-                        _smartModeSlideShowHwnd = new IntPtr(response.SlideShowWindowHandle);
-                        LogHelper.WriteLogToFile($"[SmartMode] Agent 加载了 {_smartModeRegions.Count} 个区域, 第 {_smartModeSlideIndex} 页, Slide={_smartModeSlideWidth}x{_smartModeSlideHeight}磅", LogHelper.LogType.Info);
-                    }
-                    else
-                    {
-                        LogHelper.WriteLogToFile("[SmartMode] Agent 返回空区域列表，回退 COM 直接获取（VSTO 未加载/无加载项）", LogHelper.LogType.Info);
-                        _smartModeRegions = GetVideoRegionsViaCom();
-                        _smartModeSlideIndex = _currentSlideShowPosition;
-                        if (_smartModeRegions != null)
-                            LogHelper.WriteLogToFile($"[SmartMode] COM 回退获取到 {_smartModeRegions.Count} 个区域", LogHelper.LogType.Info);
-                    }
-                }
-                else
-                {
-                    // COM/ROT 模式：直接获取视频区域
-                    _smartModeRegions = GetVideoRegionsViaCom();
-                    _smartModeSlideIndex = _currentSlideShowPosition;
-                    if (_smartModeRegions != null && _smartModeRegions.Count > 0)
-                        LogHelper.WriteLogToFile($"[SmartMode] COM 获取到 {_smartModeRegions.Count} 个区域", LogHelper.LogType.Info);
-                }
+                _smartModeRegions = GetVideoRegionsViaCom();
+                _smartModeSlideIndex = _currentSlideShowPosition;
+                if (_smartModeRegions != null && _smartModeRegions.Count > 0)
+                    LogHelper.WriteLogToFile($"[SmartMode] COM 获取到 {_smartModeRegions.Count} 个区域", LogHelper.LogType.Info);
             }
             catch (Exception ex)
             {
@@ -1612,15 +1172,15 @@ namespace Ink_Canvas
         /// 通过 COM interop 直接从 PowerPoint 获取当前幻灯片的视频控件区域（适用于 COM/ROT 模式）。
         /// </summary>
         /// <remarks>
-        /// 优先通过 _pptManager.PPTApplication 获取应用实例（ROT 模式下静态字段 pptApplication 为 null），
+        /// 通过 _pptManager.PPTApplication 获取应用实例，
         /// 再通过活动演示文稿的 SlideShowWindow 定位当前幻灯片，避免依赖静态状态。
         /// </remarks>
         private List<SmartRegion> GetVideoRegionsViaCom()
         {
             try
             {
-                // 优先使用管理器持有的 COM 实例（ROT 模式下静态字段 pptApplication 为 null）。
-                object appObj = _pptManager?.PPTApplication ?? pptApplication;
+                // 使用 ROT 管理器持有的 COM 实例。
+                object appObj = _pptManager?.PPTApplication;
                 if (appObj == null)
                 {
                     LogHelper.WriteLogToFile("[SmartMode] COM 获取失败: 未找到 PowerPoint 应用程序实例", LogHelper.LogType.Warning);
@@ -1795,7 +1355,6 @@ namespace Ink_Canvas
         private async void OnPPTSlideShowEnd(object payload)
         {
             var pres = payload as Presentation;
-            var agentState = payload as PPTState;
             try
             {
                 await Application.Current.Dispatcher.InvokeAsync(() => CollapseAllPPTNavBarPreviews());
@@ -1863,9 +1422,9 @@ namespace Ink_Canvas
                     }
                 });
 
-                string presentationNameForSave = agentState?.PresentationName ?? _pptManager?.GetPresentationName() ?? (pres != null ? pres.Name : null);
-                string presentationFullNameForSave = agentState?.PresentationFullName;
-                int totalSlidesForSave = agentState?.TotalSlides ?? _pptManager?.SlidesCount ?? 0;
+                string presentationNameForSave = _pptManager?.GetPresentationName() ?? (pres != null ? pres.Name : null);
+                string presentationFullNameForSave = _pptManager?.GetPresentationPath();
+                int totalSlidesForSave = _pptManager?.SlidesCount ?? 0;
                 if (totalSlidesForSave <= 0 && pres != null)
                 {
                     try
@@ -2066,7 +1625,7 @@ namespace Ink_Canvas
         /// 2. 否则，如果设置了显示上次播放页通知，则显示上次播放页通知
         /// 异常会被捕获并记录为错误日志，确保方法执行不会中断。
         /// </remarks>
-        private void HandlePresentationOpenNavigation(Presentation pres, PPTState agentState = null)
+        private void HandlePresentationOpenNavigation(Presentation pres)
         {
             try
             {
@@ -2077,7 +1636,7 @@ namespace Ink_Canvas
                 }
                 else if (Settings.PowerPointSettings.IsNotifyPreviousPage)
                 {
-                    ShowPreviousPageNotification(pres, agentState);
+                    ShowPreviousPageNotification(pres);
                 }
             }
             catch (Exception ex)
@@ -2196,13 +1755,13 @@ namespace Ink_Canvas
             _inlineDialogTcs?.TrySetResult(false);
         }
 
-        private async void ShowPreviousPageNotification(Presentation pres, PPTState agentState = null)
+        private async void ShowPreviousPageNotification(Presentation pres)
         {
             try
             {
-                var presentationName = agentState?.PresentationName ?? pres?.Name ?? _pptManager?.GetPresentationName();
-                var presentationFullName = agentState?.PresentationFullName;
-                var totalSlides = agentState?.TotalSlides ?? _pptManager?.SlidesCount ?? 0;
+                var presentationName = pres?.Name ?? _pptManager?.GetPresentationName();
+                var presentationFullName = _pptManager?.GetPresentationPath();
+                var totalSlides = _pptManager?.SlidesCount ?? 0;
                 if (pres != null && totalSlides <= 0)
                     totalSlides = pres.Slides.Count;
                 if (string.IsNullOrEmpty(presentationName) || totalSlides <= 0) return;
@@ -2251,12 +1810,12 @@ namespace Ink_Canvas
         /// 5. 无论用户选择如何，都会重置IsShowingRestoreHiddenSlidesWindow标志
         /// 异常会被捕获并记录为错误日志，确保方法执行不会中断。
         /// </remarks>
-        private async void CheckAndNotifyHiddenSlides(Presentation pres, PPTState agentState = null)
+        private async void CheckAndNotifyHiddenSlides(Presentation pres)
         {
             try
             {
-                bool hasHiddenSlides = agentState?.HasHiddenSlides == true;
-                if (!hasHiddenSlides && pres?.Slides != null)
+                bool hasHiddenSlides = false;
+                if (pres?.Slides != null)
                 {
                     foreach (Slide slide in pres.Slides)
                     {
@@ -2283,10 +1842,6 @@ namespace Ink_Canvas
                                     if (slide.SlideShowTransition.Hidden == MsoTriState.msoTrue)
                                         slide.SlideShowTransition.Hidden = MsoTriState.msoFalse;
                                 }
-                            }
-                            else if (_pptManager is PPTAgentLinkManager agentManager)
-                            {
-                                agentManager.TryUnhideHiddenSlides();
                             }
                         }
                         catch (Exception ex)
@@ -2325,14 +1880,14 @@ namespace Ink_Canvas
         /// 6. 无论用户选择如何，都会重置IsShowingAutoplaySlidesWindow标志
         /// 异常会被捕获并记录为错误日志，确保方法执行不会中断。
         /// </remarks>
-        private async void CheckAndNotifyAutoPlaySettings(Presentation pres, PPTState agentState = null)
+        private async void CheckAndNotifyAutoPlaySettings(Presentation pres)
         {
             try
             {
                 if (IsInPPTPresentationMode) return;
 
-                bool hasSlideTimings = agentState?.HasAutoPlayTimings == true;
-                if (!hasSlideTimings && pres?.Slides != null)
+                bool hasSlideTimings = false;
+                if (pres?.Slides != null)
                 {
                     foreach (Slide slide in pres.Slides)
                     {
@@ -2356,10 +1911,6 @@ namespace Ink_Canvas
                             if (pres != null)
                             {
                                 pres.SlideShowSettings.AdvanceMode = PpSlideShowAdvanceMode.ppSlideShowManualAdvance;
-                            }
-                            else if (_pptManager is PPTAgentLinkManager agentManager)
-                            {
-                                agentManager.TryDisableAutoPlayTimings();
                             }
                         }
                         catch (Exception ex)
@@ -2498,50 +2049,6 @@ namespace Ink_Canvas
         #endregion
 
         /// <summary>
-        /// 处理PowerPoint增强功能开关的切换事件
-        /// </summary>
-        /// <param name="sender">事件的来源对象</param>
-        /// <param name="e">路由事件参数</param>
-        /// <remarks>
-        /// 当PowerPoint增强功能被启用时：
-        /// 1. 禁用WPS支持
-        /// 2. 更新PPT管理器的WPS支持设置
-        /// 3. 启动PowerPoint进程守护
-        /// 当PowerPoint增强功能被禁用时：
-        /// 1. 停止PowerPoint进程守护
-        /// 无论开关状态如何变化，都会保存设置到文件
-        /// </remarks>
-        private void ToggleSwitchPowerPointEnhancement_Toggled(object sender, RoutedEventArgs e)
-        {
-            if (!isLoaded) return;
-
-            var toggle = sender as iNKORE.UI.WPF.Modern.Controls.ToggleSwitch;
-            if (toggle != null)
-                Settings.PowerPointSettings.EnablePowerPointEnhancement = toggle.IsOn;
-
-            if (Settings.PowerPointSettings.EnablePowerPointEnhancement)
-            {
-                Settings.PowerPointSettings.IsSupportWPS = false;
-
-                if (_pptManager != null)
-                {
-                    _pptManager.IsSupportWPS = false;
-                }
-            }
-
-            SaveSettingsToFile();
-
-            if (Settings.PowerPointSettings.EnablePowerPointEnhancement)
-            {
-                StartPowerPointProcessMonitoring();
-            }
-            else
-            {
-                StopPowerPointProcessMonitoring();
-            }
-        }
-
-        /// <summary>
         /// 处理WPS支持开关的切换事件
         /// </summary>
         /// <param name="sender">事件的来源对象</param>
@@ -2550,7 +2057,6 @@ namespace Ink_Canvas
         /// 当WPS支持被启用时：
         /// 1. 如果PowerPoint支持未启用，则启用PowerPoint支持
         /// 2. 启动PPT监控
-        /// 3. 如果PowerPoint增强功能已启用，则禁用它并停止PowerPoint进程守护
         /// 无论开关状态如何变化，都会：
         /// 1. 更新PPT管理器的WPS支持设置
         /// 2. 保存设置到文件
@@ -2574,12 +2080,6 @@ namespace Ink_Canvas
                         InitializePPTManagers();
                     }
                     StartPPTMonitoring();
-                }
-
-                if (Settings.PowerPointSettings.EnablePowerPointEnhancement)
-                {
-                    Settings.PowerPointSettings.EnablePowerPointEnhancement = false;
-                    StopPowerPointProcessMonitoring();
                 }
             }
 

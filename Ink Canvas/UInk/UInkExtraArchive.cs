@@ -53,7 +53,8 @@ namespace Ink_Canvas.UInk
             var seen = new HashSet<string>(StringComparer.Ordinal);
             foreach (var (entryPath, sourceFile) in resources)
             {
-                if (string.IsNullOrEmpty(sourceFile) || !File.Exists(sourceFile)) continue;
+                if (string.IsNullOrEmpty(sourceFile) || !File.Exists(sourceFile))
+                    throw new FileNotFoundException("UInk media source is missing.", sourceFile);
                 var safe = NormalizeEntryPath(entryPath);
                 if (safe == null || !seen.Add(safe)) continue;
                 archive.CreateEntryFromFile(sourceFile, safe, CompressionLevel.Optimal);

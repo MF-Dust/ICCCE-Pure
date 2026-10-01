@@ -25,6 +25,11 @@ internal static class Program
             WindowSmoke.Run();
             return;
         }
+        if (args.Contains("--save-benchmark"))
+        {
+            PersistenceChecks.Benchmark();
+            return;
+        }
         RunCoreChecks();
     }
 
@@ -77,7 +82,31 @@ internal static class Program
         CheckLegacyToolsLayouts();
         CheckRemovedFeatureSettings();
         CheckRemovedLiquidGlass();
+        CheckPptLinkMode();
+        PersistenceChecks.Run(window, canvas);
         Console.WriteLine("Core save/autosave/layout/settings regression checks passed.");
+    }
+
+    private static void CheckPptLinkMode()
+    {
+        Check(new PowerPointSettings().PPTLinkMode == PPTLinkMode.Rot &&
+            new Settings().PowerPointSettings.PPTLinkMode == PPTLinkMode.Rot, "默认 PPT 架构必须固定 ROT");
+        foreach (var legacyMode in new[] { "0", "1", "2", "\"Com\"", "\"Rot\"", "\"Agent\"" })
+        {
+            var original = JObject.Parse("{\"pptLinkMode\":" + legacyMode +
+                ",\"isSupportWPS\":true,\"enableSmartMode\":true,\"skipAnimationsWhenGoNext\":true," +
+                "\"enablePowerPointEnhancement\":true,\"powerPointSupport\":false,\"showPPTButton\":false}");
+            var root = new JObject { ["behavior"] = original };
+            var settings = root.ToObject<Settings>();
+            Check(settings.PowerPointSettings.PPTLinkMode == PPTLinkMode.Rot, "旧 PPT 架构值必须归一 ROT：" + legacyMode);
+            var saved = JObject.FromObject(settings)["behavior"];
+            Check((int)saved["pptLinkMode"] == (int)PPTLinkMode.Rot &&
+                saved.ToObject<PowerPointSettings>().PPTLinkMode == PPTLinkMode.Rot,
+                "PPT 设置序列化往返必须固定 ROT：" + legacyMode);
+            foreach (var property in original.Properties().Where(x => x.Name != "pptLinkMode"))
+                Check(JToken.DeepEquals(property.Value, saved[property.Name]),
+                    "PPT 模式迁移不能丢失其他配置：" + property.Name);
+        }
     }
 
     private static void CheckRemovedLiquidGlass()

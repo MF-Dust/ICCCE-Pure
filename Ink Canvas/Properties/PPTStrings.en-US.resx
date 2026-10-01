@@ -75,9 +75,6 @@
   <data name="LoadingPPT" xml:space="preserve">
     <value>Loading PPT...</value>
   </data>
-  <data name="Enhancement" xml:space="preserve">
-    <value>PowerPoint enhancement</value>
-  </data>
   <data name="EnterAnnotationOnShow" xml:space="preserve">
     <value>Enter annotation mode when starting PPT slide show</value>
   </data>
@@ -188,27 +185,6 @@
   </data>
   <data name="SupportPowerPoint" xml:space="preserve">
     <value>PPT integration master switch</value>
-  </data>
-  <data name="PPTArchitecture" xml:space="preserve">
-    <value>PPT architecture</value>
-  </data>
-  <data name="PPTComArchitecture" xml:space="preserve">
-    <value>PPT COM architecture</value>
-  </data>
-  <data name="PPTRotArchitecture" xml:space="preserve">
-    <value>ROT architecture</value>
-  </data>
-  <data name="PPTAgentArchitecture" xml:space="preserve">
-    <value>VSTO Agent architecture</value>
-  </data>
-  <data name="PPTAgentArchitectureHint" xml:space="preserve">
-    <value>Use an in-process PowerPoint VSTO add-in and NamedPipe integration, without COM/ROT control in the ICC process.</value>
-  </data>
-  <data name="PPTAgentNotConnected" xml:space="preserve">
-    <value>PPT Agent is not connected</value>
-  </data>
-  <data name="PPTAgentInstallHint" xml:space="preserve">
-    <value>Open PowerPoint and make sure the ICC PowerPoint Agent add-in is loaded.</value>
   </data>
   <data name="SupportWPS" xml:space="preserve">
     <value>WPS support</value>

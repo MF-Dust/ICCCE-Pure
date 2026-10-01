@@ -28,7 +28,7 @@ The final stance of stubbornness based on the `InkCanvas` control...
 - **Ink Writing**: WPF InkCanvas-based touch, stylus and pressure-sensitive writing.
 - **Blackboard / Whiteboard Mode**: Multi-finger zoom, rotate, pan, and rapid blackboard/whiteboard switching for classroom teaching.
 - **Screen Annotation**: Freely annotate and draw anywhere on the screen with quick clear and sidebar-collapse support.
-- **PowerPoint Slideshow Integration**: Deep integration via ROT or VSTO modes; automatically enters annotation mode and syncs strokes with slide transitions.
+- **PowerPoint Slideshow Integration**: Connects to running PowerPoint through ROT (with optional WPS support); automatically enters annotation mode and syncs strokes with slide transitions.
 - **Smart Shape Recognition**: Recognizes circles, ellipses, polygons, and coordinate axes into clean vector shapes.
 - **Stroke & Screenshot Saving**: Quick screen capture and automatic per-slide stroke preservation.
 
@@ -38,20 +38,20 @@ The final stance of stubbornness based on the `InkCanvas` control...
 - **Runtime Requirement**: **.NET Desktop Runtime 10** (exact major version 10.x; non-desktop runtimes or other major versions are not supported).
 - **Architecture Exceptions & Constraints**:
   - `InkCanvas.IACoreHelper`: Retained on **.NET Framework 4.7.2 (win-x86)** due to binary constraints with legacy 32-bit Microsoft Ink Analysis (IACore COM) components.
-  - `InkCanvas.PowerPointAddIn`: Retained on **.NET Framework 4.7.2** due to Microsoft PowerPoint VSTO COM add-in host constraints.
+- **PPT Integration**: ROT only, retaining Office COM interop and smart-mode video region queries. No add-in, additional runtime, or signing certificate is required. Legacy COM/ROT/Agent settings load as ROT without changing other settings.
 
 ## Build & Verification
 
 - **Build Core Application**:
   ```bash
-  dotnet build "Ink Canvas/InkCanvasForClass.csproj" -c Debug
+  dotnet build "Ink Canvas.sln" -c Debug -p:Platform=x64
   ```
 - **Run Save/Autosave Regression Checks**:
   ```bash
   dotnet run --project InkCanvas.Core.Tests -c Release
   ```
 - Raffle, roll call, classroom timers, quote tips and the plugin system have been removed. Back up settings and ink files before upgrading.
-- `InkCanvas.NativeInk.Tests` covers the disabled experimental ink pipeline. Its existing `PredictionHorizonStaysWithinAdaptiveBounds` check fails on both .NET 6 and .NET 10; it is not a test of the active annotation pipeline.
+- NativeInk experimental sources remain, but are disabled in the default build and do not require Vortice packages. `InkCanvas.NativeInk.Tests` covers the disabled experimental ink pipeline. Its existing `PredictionHorizonStaysWithinAdaptiveBounds` check fails on both .NET 6 and .NET 10; it is not a test of the active annotation pipeline.
 
 
 ## 💫 Software Disclaimer
@@ -84,6 +84,8 @@ Before using and distributing this software, please make sure you understand the
 Please [activate Microsoft Office](https://www.coolhub.top/archives/14).
 
 ### The canvas application does not switch to PPT mode after starting the slideshow
+
+PPT integration uses ROT only. Enable PPT integration and open a presentation; for WPS, also enable WPS support.
 
 1. PowerPoint is running in Protected View (Read-Only). Please exit Protected View by doing the following:
    1. Open PowerPoint and click "File" in the top-left corner.

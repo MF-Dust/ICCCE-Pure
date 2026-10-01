@@ -461,64 +461,11 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
             }
         }
 
-        public static void OnPPTEnhancementChanged(bool isOn)
-        {
-            var mw = GetMainWindow();
-            if (mw == null) return;
-            var ppt = SettingsManager.Settings.PowerPointSettings;
-            if (isOn)
-            {
-                ppt.IsSupportWPS = false;
-                if (mw.PPTManager != null) mw.PPTManager.IsSupportWPS = false;
-                mw.StartPowerPointProcessMonitoring();
-            }
-            else
-            {
-                mw.StopPowerPointProcessMonitoring();
-            }
-        }
-
         public static void OnSkipAnimationsWhenGoNextChanged(bool isOn)
         {
             var mw = GetMainWindow();
             if (mw?.PPTManager != null)
                 mw.PPTManager.SkipAnimationsWhenNavigating = isOn;
-        }
-
-        public static void OnPPTLinkModeChanged()
-        {
-            var mw = GetMainWindow();
-            if (mw == null) return;
-            var ppt = SettingsManager.Settings.PowerPointSettings;
-            try
-            {
-                mw.StopPPTMonitoring();
-                if (ppt.PPTLinkMode != PPTLinkMode.Com && ppt.EnablePowerPointEnhancement)
-                {
-                    ppt.EnablePowerPointEnhancement = false;
-                    mw.StopPowerPointProcessMonitoring();
-                    SettingsManager.SaveSettingsToFile();
-                }
-                if (ppt.PPTLinkMode != PPTLinkMode.Com && ppt.IsSupportWPS)
-                {
-                    ppt.IsSupportWPS = false;
-                    SettingsManager.SaveSettingsToFile();
-                }
-
-                // 切换到 Agent 模式时，自动注册 VSTO 插件
-                if (ppt.PPTLinkMode == PPTLinkMode.Agent)
-                {
-                    if (!VstoRegistrationHelper.EnsureRegistered())
-                    {
-                        LogHelper.WriteLogToFile("VSTO 插件注册失败，Agent 模式可能无法正常工作", LogHelper.LogType.Warning);
-                    }
-                }
-
-                mw.InitializePPTManagers();
-                if (ppt.PowerPointSupport) mw.StartPPTMonitoring();
-                LogHelper.WriteLogToFile($"已切换 PPT 联动架构为 {ppt.PPTLinkMode}", LogHelper.LogType.Event);
-            }
-            catch (Exception ex) { LogHelper.WriteLogToFile($"切换 PPT 联动架构失败: {ex}", LogHelper.LogType.Error); }
         }
 
         public static void OnSupportWPSChanged()
@@ -533,11 +480,6 @@ namespace Ink_Canvas.Windows.SettingsViews.Helpers
                     ppt.PowerPointSupport = true;
                     if (mw.PPTManager == null) mw.InitializePPTManagers();
                     mw.StartPPTMonitoring();
-                }
-                if (ppt.EnablePowerPointEnhancement)
-                {
-                    ppt.EnablePowerPointEnhancement = false;
-                    mw.StopPowerPointProcessMonitoring();
                 }
             }
             if (mw.PPTManager != null)

@@ -1,4 +1,6 @@
+using Ink_Canvas.Controls;
 using Ink_Canvas.Helpers;
+using Ink_Canvas.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Ink;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -16,6 +20,7 @@ using Application = System.Windows.Application;
 using Color = System.Drawing.Color;
 using Cursors = System.Windows.Input.Cursors;
 using Image = System.Windows.Controls.Image;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 using Point = System.Windows.Point;
 using Size = System.Drawing.Size;
@@ -1141,5 +1146,234 @@ namespace Ink_Canvas
             }
             return 1.0; // 默认DPI
         }
+
+        private void InsertImageOptions_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (TryBlockFrozenPageMutation(FloatingBarStrings.Board_InsertImage)) return;
+            // Check if the image options panel is currently visible
+            bool isImagePanelVisible = BoardImageOptionsPanel.IsOpen;
+
+            // Toggle the image options panel
+            if (isImagePanelVisible)
+            {
+                // Panel was visible, so hide it with animation
+                AnimationsHelper.HidePopupWithSlideAndFade(BoardImageOptionsPanel);
+            }
+            else
+            {
+                // Panel was hidden, so hide other panels and show this one
+                HideSubPanels();
+                AnimationsHelper.ShowPopupWithSlideAndFade(BoardImageOptionsPanel);
+                _popupManager?.BringToFront(BoardImageOptionsPanel);
+            }
+        }
+
+        private void CloseImageOptionsPanel_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            AnimationsHelper.HidePopupWithSlideAndFade(BoardImageOptionsPanel);
+        }
+
+        private async void ImageOptionScreenshot_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (TryBlockFrozenPageMutation("插入截图")) return;
+            // Hide the options panel
+            AnimationsHelper.HidePopupWithSlideAndFade(BoardImageOptionsPanel);
+
+            // Wait a bit for the panel to hide
+            await Task.Delay(100);
+
+            // Capture screenshot and insert to canvas
+            await CaptureScreenshotAndInsert();
+        }
+
+        private async void ImageOptionSelectFile_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (TryBlockFrozenPageMutation(FloatingBarStrings.Board_InsertImage)) return;
+            // Hide the options panel
+            AnimationsHelper.HideWithSlideAndFade(BoardImageOptionsPanel);
+
+            // Open file dialog to select image
+            var dialog = new OpenFileDialog
+            {
+                Filter = MainWindowStrings.Main_FileInsert_OpenDialogFilter
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                string filePath = dialog.FileName;
+                string extension = System.IO.Path.GetExtension(filePath);
+                FrameworkElement element = IsSupportedMediaExtension(extension)
+                    ? await CreateMediaElementAsync(filePath)
+                    : await CreateAndCompressImageAsync(filePath);
+                if (element != null)
+                {
+                    string timestamp = IsCanvasMediaElement(element)
+                        ? "media_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff")
+                        : "img_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff");
+                    if (string.IsNullOrEmpty(element.Name)) element.Name = timestamp;
+
+                    // 初始化TransformGroup
+                    var transformGroup = new TransformGroup();
+                    transformGroup.Children.Add(new ScaleTransform(1, 1));
+                    transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    transformGroup.Children.Add(new RotateTransform(0));
+                    element.RenderTransform = transformGroup;
+
+                    CenterAndScaleElement(element);
+
+                    // 设置图片属性，避免被InkCanvas选择系统处理
+                    element.IsHitTestVisible = true;
+                    element.Focusable = false;
+
+                    // 初始化InkCanvas选择设置
+                    if (inkCanvas != null)
+                    {
+                        // 清除当前选择，避免显示控制点
+                        inkCanvas.Select(new StrokeCollection());
+                        // 同时通过图片的IsHitTestVisible和Focusable属性来避免InkCanvas选择系统的干扰
+                        inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    }
+
+                    inkCanvas.Children.Add(element);
+
+                    // 绑定事件处理器
+                    BindElementEvents(element);
+
+                    timeMachine.CommitElementInsertHistory(element);
+
+                    // 插入图片后切换到选择模式并刷新浮动栏高光显示
+                    SetCurrentToolMode(InkCanvasEditingMode.Select);
+                    UpdateCurrentToolMode("select");
+                    HideSubPanels("select");
+                    if (element is PdfEmbeddedView)
+                        _pdfSidebarNextPositionUseHostTransform = true;
+                    SyncPdfPageSidebarWithCanvas();
+                }
+            }
+        }
+
+        // 插入图片方法
+        private async void InsertImage_MouseUp_New(object sender, MouseButtonEventArgs e)
+        {
+            if (TryBlockFrozenPageMutation("插入图片")) return;
+            var dialog = new OpenFileDialog
+            {
+                Filter = MainWindowStrings.Main_FileInsert_OpenDialogFilter
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                string filePath = dialog.FileName;
+                string extension = System.IO.Path.GetExtension(filePath);
+                FrameworkElement element = IsSupportedMediaExtension(extension)
+                    ? await CreateMediaElementAsync(filePath)
+                    : await CreateAndCompressImageAsync(filePath);
+                if (element != null)
+                {
+                    string timestamp = IsCanvasMediaElement(element)
+                        ? "media_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff")
+                        : "img_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff");
+                    if (string.IsNullOrEmpty(element.Name)) element.Name = timestamp;
+
+                    // 初始化TransformGroup
+                    var transformGroup = new TransformGroup();
+                    transformGroup.Children.Add(new ScaleTransform(1, 1));
+                    transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    transformGroup.Children.Add(new RotateTransform(0));
+                    element.RenderTransform = transformGroup;
+
+                    CenterAndScaleElement(element);
+
+                    // 设置图片属性，避免被InkCanvas选择系统处理
+                    element.IsHitTestVisible = true;
+                    element.Focusable = false;
+
+                    // 初始化InkCanvas选择设置
+                    if (inkCanvas != null)
+                    {
+                        // 清除当前选择，避免显示控制点
+                        inkCanvas.Select(new StrokeCollection());
+                        // 设置编辑模式为非选择模式
+                        inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    }
+
+                    inkCanvas.Children.Add(element);
+
+                    // 绑定事件处理器
+                    BindElementEvents(element);
+
+                    timeMachine.CommitElementInsertHistory(element);
+
+                    // 插入图片后切换到选择模式并刷新浮动栏高光显示
+                    SetCurrentToolMode(InkCanvasEditingMode.Select);
+                    UpdateCurrentToolMode("select");
+                    HideSubPanels("select");
+                    if (element is PdfEmbeddedView)
+                        _pdfSidebarNextPositionUseHostTransform = true;
+                    SyncPdfPageSidebarWithCanvas();
+                }
+            }
+        }
+
+        // Keep the old method for backward compatibility
+        private async void InsertImage_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (TryBlockFrozenPageMutation(FloatingBarStrings.Board_InsertImage)) return;
+            var dialog = new OpenFileDialog
+            {
+                Filter = MainWindowStrings.Main_FileInsert_OpenDialogFilter
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                string filePath = dialog.FileName;
+                string extension = System.IO.Path.GetExtension(filePath);
+                FrameworkElement element = IsSupportedMediaExtension(extension)
+                    ? await CreateMediaElementAsync(filePath)
+                    : await CreateAndCompressImageAsync(filePath);
+                if (element != null)
+                {
+                    string timestamp = IsCanvasMediaElement(element)
+                        ? "media_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff")
+                        : "img_" + DateTime.Now.ToString("yyyyMMdd_HH_mm_ss_fff");
+                    if (string.IsNullOrEmpty(element.Name)) element.Name = timestamp;
+
+                    // 初始化TransformGroup
+                    var transformGroup = new TransformGroup();
+                    transformGroup.Children.Add(new ScaleTransform(1, 1));
+                    transformGroup.Children.Add(new TranslateTransform(0, 0));
+                    transformGroup.Children.Add(new RotateTransform(0));
+                    element.RenderTransform = transformGroup;
+
+                    CenterAndScaleElement(element);
+
+                    // 设置图片属性，避免被InkCanvas选择系统处理
+                    element.IsHitTestVisible = true;
+                    element.Focusable = false;
+
+                    // 初始化InkCanvas选择设置
+                    if (inkCanvas != null)
+                    {
+                        // 清除当前选择，避免显示控制点
+                        inkCanvas.Select(new StrokeCollection());
+                        // 设置编辑模式为非选择模式
+                        inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                    }
+
+                    inkCanvas.Children.Add(element);
+
+                    // 绑定事件处理器
+                    BindElementEvents(element);
+
+                    timeMachine.CommitElementInsertHistory(element);
+
+                    // 插入图片后切换到选择模式并刷新浮动栏高光显示
+                    SetCurrentToolMode(InkCanvasEditingMode.Select);
+                    UpdateCurrentToolMode("select");
+                    HideSubPanels("select");
+                    if (element is PdfEmbeddedView)
+                        _pdfSidebarNextPositionUseHostTransform = true;
+                    SyncPdfPageSidebarWithCanvas();
+                }
+            }
+        }
+
     }
 }

@@ -89,8 +89,8 @@ namespace Ink_Canvas.UInk
             // 防止主文件替换前资源包已被换掉导致旧主引用断裂。workDir 由调用方在 WriteArchive 后清理。
             if (File.Exists(mainPath) && File.Exists(extraPath))
             {
-                UInkDocument oldDoc = null;
-                try { oldDoc = UInkReader.Load(mainPath); } catch { oldDoc = null; }
+                var oldDoc = UInkReader.Load(mainPath)
+                    ?? throw new InvalidDataException("Cannot preserve resources from an invalid UInk document.");
                 if (oldDoc != null)
                 {
                     var oldPaths = new HashSet<string>(StringComparer.Ordinal);
@@ -100,22 +100,16 @@ namespace Ink_Canvas.UInk
                                 oldPaths.Add(m.Path);
                     if (oldPaths.Count > 0)
                     {
-                        try
+                        var map = UInkExtraArchive.ExtractWithBudget(extraPath, workDir)
+                            ?? throw new InvalidDataException("Cannot preserve the old UInk resource archive.");
+                        foreach (var p in oldPaths)
                         {
-                            var map = UInkExtraArchive.ExtractWithBudget(extraPath, workDir);
-                            if (map != null)
-                            {
-                                foreach (var p in oldPaths)
-                                {
-                                    if (!seen.Contains(p) && map.TryGetValue(p, out var file) && File.Exists(file))
-                                    {
-                                        result.Add((p, file));
-                                        seen.Add(p);
-                                    }
-                                }
-                            }
+                            if (seen.Contains(p)) continue;
+                            if (!map.TryGetValue(p, out var file) || !File.Exists(file))
+                                throw new FileNotFoundException("Old UInk media resource is missing.", p);
+                            result.Add((p, file));
+                            seen.Add(p);
                         }
-                        catch { }
                     }
                 }
             }

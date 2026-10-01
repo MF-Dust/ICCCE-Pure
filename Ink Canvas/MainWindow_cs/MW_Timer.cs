@@ -295,7 +295,7 @@ namespace Ink_Canvas
         /// 当定时器触发时，检查画布是否可见且有墨迹
         /// 如果满足条件，则调用SaveInkCanvasStrokes方法进行静默保存
         /// </remarks>
-        private void AutoSaveStrokesTimer_Tick(object sender, EventArgs e)
+        private async void AutoSaveStrokesTimer_Tick(object sender, EventArgs e)
         {
             try
             {
@@ -303,7 +303,7 @@ namespace Ink_Canvas
                 if (inkCanvas.Visibility == Visibility.Visible && inkCanvas.Strokes.Count > 0)
                 {
                     // 静默保存
-                    SaveInkCanvasStrokes(false, false);
+                    await SaveInkCanvasStrokesAsync(false, false, automatic: true);
                 }
             }
             catch (Exception)
@@ -1344,9 +1344,42 @@ namespace Ink_Canvas
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            // Stop timers and handlers to avoid background callbacks invoking Dispatcher after shutdown
-            StopAllTimersAndHandlers();
+            if (_saveClosePending)
+            {
+                e.Cancel = true;
+                return;
+            }
             base.OnClosing(e);
+            if (e.Cancel) return; // A cancelled close must not stop normal autosaving.
+            if (_saveCloseReady)
+            {
+                StopAllTimersAndHandlers();
+                return;
+            }
+
+            var drain = Saves.StopAndDrainAsync();
+            autoSaveStrokesTimer?.Stop();
+            if (drain.IsCompleted)
+            {
+                _saveCloseReady = true;
+                StopAllTimersAndHandlers();
+                return;
+            }
+            e.Cancel = true;
+            _saveClosePending = true;
+            _ = CloseAfterAcceptedSavesAsync(drain);
+        }
+
+        private async Task CloseAfterAcceptedSavesAsync(Task drain)
+        {
+            try { await drain; }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLogToFile("关闭等待保存失败 | " + ex, LogHelper.LogType.Error);
+            }
+            _saveClosePending = false;
+            _saveCloseReady = true;
+            Close();
         }
 
         /// <summary>

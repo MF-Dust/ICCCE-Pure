@@ -1208,5 +1208,246 @@ namespace Ink_Canvas
             var b = (byte)"0123456789ABCDEF".IndexOf(c);
             return b;
         }
+
+        /// <summary>
+        /// 将当前绘笔颜色设置为白色并安排在短时间后自动恢复到之前的笔刷。
+        /// </summary>
+        private void QuickColorWhite_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Colors.White);
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将快速颜色设置为橙色，并安排稍后自动恢复到先前的画笔颜色。
+        /// </summary>
+        private void QuickColorOrange_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Color.FromRgb(251, 150, 80)); // 橙色
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将画笔颜色切换为黄色并安排自动恢复为先前的画笔设置。
+        /// </summary>
+        private void QuickColorYellow_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Colors.Yellow);
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将快速颜色设置为黑色并安排在稍后自动恢复为先前的画笔颜色。
+        /// </summary>
+        private void QuickColorBlack_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Colors.Black);
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将当前画笔颜色设置为蓝色并安排在一段时间后自动恢复到之前的画笔颜色。
+        /// </summary>
+        private void QuickColorBlue_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Color.FromRgb(37, 99, 235)); // 蓝色
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将快速颜色切换为红色，并安排稍后自动恢复为先前的画笔颜色。
+        /// </summary>
+        private void QuickColorRed_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Colors.Red);
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将快速颜色切换为绿色并安排在一段时间后自动恢复先前画笔颜色。
+        /// </summary>
+        private void QuickColorGreen_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Color.FromRgb(22, 163, 74));
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 将当前画笔颜色切换为紫色快捷色并安排自动恢复先前画笔设置。
+        /// </summary>
+        private void QuickColorPurple_Click(object sender, RoutedEventArgs e)
+        {
+            SetQuickColor(Color.FromRgb(147, 51, 234));
+            ScheduleBrushAutoRestore();
+        }
+
+        internal void ApplyQuickColorByName(string colorName)
+        {
+            var color = colorName switch
+            {
+                "Black" => Colors.Black,
+                "White" => Colors.White,
+                "Red" => Colors.Red,
+                "Orange" => Color.FromRgb(251, 150, 80),
+                "Yellow" => Colors.Yellow,
+                "Green" => Color.FromRgb(22, 163, 74),
+                "Blue" => Color.FromRgb(37, 99, 235),
+                "Purple" => Color.FromRgb(147, 51, 234),
+                _ => Colors.Black
+            };
+            SetQuickColor(color);
+            ScheduleBrushAutoRestore();
+        }
+
+        /// <summary>
+        /// 设置并应用快速颜色到当前画笔与相关状态，包括必要时切换到批注模式、更新荧光笔属性与颜色索引、记录桌面/白板的最近颜色，以及刷新调色盘指示器和颜色显示。
+        /// </summary>
+        /// <param name="color">要应用的颜色。</param>
+        /// <remarks>
+        /// 此方法会：
+        /// - 在非批注模式时切换到绘制（Ink）模式；
+        /// - 将指定颜色应用到绘图属性和 InkCanvas 的默认绘图属性；
+        /// - 在荧光笔模式下更新荧光笔的内部颜色索引与绘图属性（宽度、笔尖形状、IsHighlighter 等）；
+        /// - 根据当前模式（桌面或白板）记录最近使用的颜色索引；
+        /// - 更新快速调色盘的选中指示器并刷新颜色显示状态。
+        /// </remarks>
+        private void SetQuickColor(Color color)
+        {
+            // 确保当前处于批注模式
+            if (inkCanvas.EditingMode != InkCanvasEditingMode.Ink)
+            {
+                PenIcon_Click(null, null);
+            }
+
+            // 设置画笔颜色
+            drawingAttributes.Color = color;
+            inkCanvas.DefaultDrawingAttributes.Color = color;
+
+            // 如果当前是荧光笔模式，同时更新荧光笔颜色和属性
+            if (penType == 1)
+            {
+                // 根据颜色设置对应的荧光笔颜色索引
+                if (color == Colors.White || IsColorSimilar(color, Color.FromRgb(250, 250, 250), 10))
+                {
+                    highlighterColor = 101; // 白色荧光笔
+                }
+                else if (color == Colors.Black)
+                {
+                    highlighterColor = 100; // 黑色荧光笔
+                }
+                else if (color == Colors.Yellow || IsColorSimilar(color, Color.FromRgb(234, 179, 8)) ||
+                         IsColorSimilar(color, Color.FromRgb(250, 204, 21)) ||
+                         IsColorSimilar(color, Color.FromRgb(253, 224, 71)))
+                {
+                    highlighterColor = 103; // 黄色荧光笔
+                }
+                else if (color == Color.FromRgb(255, 165, 0) || color == Color.FromRgb(251, 150, 80) || IsColorSimilar(color, Color.FromRgb(249, 115, 22), 20) ||
+                         IsColorSimilar(color, Color.FromRgb(234, 88, 12), 20) ||
+                         IsColorSimilar(color, Color.FromRgb(251, 146, 60), 20) ||
+                         IsColorSimilar(color, Color.FromRgb(253, 126, 20), 20))
+                {
+                    highlighterColor = 109; // 橙色荧光笔
+                }
+                else if (color == Color.FromRgb(37, 99, 235))
+                {
+                    highlighterColor = 106; // 蓝色荧光笔
+                }
+                else if (color == Colors.Red || IsColorSimilar(color, Color.FromRgb(220, 38, 38)) ||
+                         IsColorSimilar(color, Color.FromRgb(239, 68, 68)))
+                {
+                    highlighterColor = 102; // 红色荧光笔
+                }
+                else if (color == Colors.Green || IsColorSimilar(color, Color.FromRgb(22, 163, 74)))
+                {
+                    highlighterColor = 104; // 绿色荧光笔
+                }
+                else if (color == Color.FromRgb(147, 51, 234))
+                {
+                    highlighterColor = 107; // 紫色荧光笔
+                }
+
+                // 确保荧光笔属性正确设置
+                drawingAttributes.Width = Settings.Canvas.HighlighterWidth / 2;
+                drawingAttributes.Height = Settings.Canvas.HighlighterWidth;
+                drawingAttributes.StylusTip = StylusTip.Rectangle;
+                drawingAttributes.IsHighlighter = !Settings.Canvas.HighlighterOverlapEnabled;
+
+                inkCanvas.DefaultDrawingAttributes.Width = Settings.Canvas.HighlighterWidth / 2;
+                inkCanvas.DefaultDrawingAttributes.Height = Settings.Canvas.HighlighterWidth;
+                inkCanvas.DefaultDrawingAttributes.StylusTip = StylusTip.Rectangle;
+                inkCanvas.DefaultDrawingAttributes.IsHighlighter = !Settings.Canvas.HighlighterOverlapEnabled;
+
+                // 确保荧光笔颜色索引正确更新
+                inkCanvas.DefaultDrawingAttributes.Color = drawingAttributes.Color;
+            }
+
+            // 更新颜色状态
+            if (currentMode == 0)
+            {
+                // 桌面模式
+                if (color == Colors.White) lastDesktopInkColor = 5;
+                else if (color == Color.FromRgb(251, 150, 80)) lastDesktopInkColor = 8; // 橙色
+                else if (color == Colors.Yellow) lastDesktopInkColor = 4;
+                else if (color == Colors.Black) lastDesktopInkColor = 0;
+                else if (color == Color.FromRgb(37, 99, 235)) lastDesktopInkColor = 3; // 蓝色
+                else if (color == Colors.Red) lastDesktopInkColor = 1;
+                else if (color == Colors.Green || color == Color.FromRgb(22, 163, 74)) lastDesktopInkColor = 2;
+                else if (color == Color.FromRgb(147, 51, 234)) lastDesktopInkColor = 6; // 紫色
+            }
+            else
+            {
+                // 白板模式
+                if (color == Colors.White) lastBoardInkColor = 5;
+                else if (color == Color.FromRgb(251, 150, 80)) lastBoardInkColor = 8; // 橙色
+                else if (color == Colors.Yellow) lastBoardInkColor = 4;
+                else if (color == Colors.Black) lastBoardInkColor = 0;
+                else if (color == Color.FromRgb(37, 99, 235)) lastBoardInkColor = 3; // 蓝色
+                else if (color == Colors.Red) lastBoardInkColor = 1;
+                else if (color == Colors.Green || color == Color.FromRgb(22, 163, 74)) lastBoardInkColor = 2;
+                else if (color == Color.FromRgb(147, 51, 234)) lastBoardInkColor = 6; // 紫色
+            }
+
+            // 更新快捷调色盘选择指示器
+            UpdateQuickColorPaletteIndicator(color);
+
+            // 更新颜色显示
+            ColorSwitchCheck();
+
+            // 如果当前是荧光笔模式，调用ColorSwitchCheck确保颜色索引正确更新
+            if (penType == 1)
+            {
+                ColorSwitchCheck();
+            }
+        }
+
+        /// <summary>
+        /// 更新快速调色盘的选中指示器，根据当前选中的颜色显示对应的勾选图标
+        /// </summary>
+        /// <param name="selectedColor">当前选中的颜色</param>
+        private void UpdateQuickColorPaletteIndicator(Color selectedColor)
+        {
+            var qcp = QuickColorPalette;
+            if (qcp == null)
+            {
+                return;
+            }
+
+            int tolerance = (penType == 1) ? 25 : 15;
+            qcp.ClearAllChecked();
+            qcp.SetCheckedByColor(selectedColor, tolerance);
+        }
+
+        /// <summary>
+        /// 检查两个颜色是否相似（允许一定的误差范围）
+        /// </summary>
+        private bool IsColorSimilar(Color color1, Color color2, int tolerance = 15)
+        {
+            int rDiff = Math.Abs(color1.R - color2.R);
+            int gDiff = Math.Abs(color1.G - color2.G);
+            int bDiff = Math.Abs(color1.B - color2.B);
+
+            return rDiff <= tolerance && gDiff <= tolerance && bDiff <= tolerance;
+        }
+
     }
 }

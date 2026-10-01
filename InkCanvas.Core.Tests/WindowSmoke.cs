@@ -295,10 +295,9 @@ internal static class WindowSmoke
                         Activator.CreateInstance(pages[page]);
                     await CheckMaterialSettingsWindow(settingsWindow, window, root);
                     settingsWindow.Close();
+                    await WindowPersistenceChecks.CheckSaveApisAsync(window);
                     checkedWindow = true;
-                    // 白板模式的第一次关闭仅退回批注模式；第二次走真实关闭流程。
-                    window.Close();
-                    if (window.IsLoaded) window.Close();
+                    WindowPersistenceChecks.CheckCloseWait(window, ex => failure = ex);
                 }
                 catch (Exception ex)
                 {

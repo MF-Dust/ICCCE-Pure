@@ -1697,6 +1697,8 @@ namespace Ink_Canvas
         /// <param name="e">关闭事件参数；方法会在需要中止关闭时将 <c>e.Cancel</c> 设为 <c>true</c>。</param>
         private async void Window_Closing(object sender, CancelEventArgs e)
         {
+            // Closing was already approved before asynchronously draining accepted saves.
+            if (_saveCloseReady) return;
             try
             {
                 if (_isReloadingForLanguageChange)
@@ -2504,11 +2506,6 @@ namespace Ink_Canvas
             catch (Exception ex)
             {
                 LogHelper.WriteLogToFile($"初始化窗口概览模型失败: {ex.Message}", LogHelper.LogType.Error);
-            }
-
-            if (Settings.PowerPointSettings.EnablePowerPointEnhancement)
-            {
-                StartPowerPointProcessMonitoring();
             }
 
         }

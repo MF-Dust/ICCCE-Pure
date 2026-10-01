@@ -161,48 +161,6 @@
         "resolved": "4.1.0",
         "contentHash": "SenUSY0CRDAz8ncuyJadTKs+m7gbHj8hq6t+sHmNcgp50ibIqKWXf3xOLB2HjC55CoLo42Qy+IgUXfTNAlk13A=="
       },
-      "Vortice.Direct2D1": {
-        "type": "Direct",
-        "requested": "[3.8.3, )",
-        "resolved": "3.8.3",
-        "contentHash": "SDHEmNUT3A4P8yj+g7q3AnRZ9fvqOOe/EoWjsgkHlQ3C9Tkc51rTeZXC9bQPySli+/lFTui8vMs9tpWZqf+AwQ==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta",
-          "Vortice.DXGI": "3.8.3"
-        }
-      },
-      "Vortice.Direct3D11": {
-        "type": "Direct",
-        "requested": "[3.8.3, )",
-        "resolved": "3.8.3",
-        "contentHash": "JgFUswu2mgrSwcd0KRF2AnfeE5VbMEgcicmxPD1g2yXyomPIHbnX3wldBNHPOzzD0URC1WJ/pO1ymfi3imZwvg==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta",
-          "Vortice.DXGI": "3.8.3"
-        }
-      },
-      "Vortice.DirectComposition": {
-        "type": "Direct",
-        "requested": "[3.8.3, )",
-        "resolved": "3.8.3",
-        "contentHash": "2/QD9K9UC7z/2FgK8/gVyySfMppwOz006+9eMtrcEbsTwYNxBxJGCeY09oM8Mr7CLOVY581sg89lIES+2URd6A==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta",
-          "Vortice.DXGI": "3.8.3",
-          "Vortice.Direct2D1": "3.8.3",
-          "Vortice.DirectX": "3.8.3"
-        }
-      },
-      "Vortice.DXGI": {
-        "type": "Direct",
-        "requested": "[3.8.3, )",
-        "resolved": "3.8.3",
-        "contentHash": "MbAUnTeQ6WD99ctAdrj5CQO2I7oaax0Kt2eVdWSUj0bYP9Ed0726+s7dIHe4+tqhpmINW/dcPt0mNtc72o+E0w==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta",
-          "Vortice.DirectX": "3.8.3"
-        }
-      },
       "AForge": {
         "type": "Transitive",
         "resolved": "2.2.5",
@@ -284,34 +242,6 @@
         "resolved": "4.0.0",
         "contentHash": "5HKzttVKWeKoDQKJd3+J7Dy1MW6gbNNYfftkVufe2ddFQD0kXjnT1IN3ZJBfF6QVEQmHpQSp+/PT7Jo2YyHFcw=="
       },
-      "SharpGen.Runtime": {
-        "type": "Transitive",
-        "resolved": "2.4.2-beta",
-        "contentHash": "niTtWAUov1F7wZGAlVeEvW+Tnqvg5yTmhI7rxmYu2Utoyu2TbC9tWWpUpMs0PQg5lu5svoYpCAztNjxCqMFP/w=="
-      },
-      "SharpGen.Runtime.COM": {
-        "type": "Transitive",
-        "resolved": "2.4.2-beta",
-        "contentHash": "9lxDFMiepqo3lJQzMSjECCIONeCc2f3Drokgj6HtrTLZcJSftNgcLbD6/iXYj2iphkwgrZb1oLsDOZxoFZkawQ==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta"
-        }
-      },
-      "Vortice.DirectX": {
-        "type": "Transitive",
-        "resolved": "3.8.3",
-        "contentHash": "nKwSavv0w5rDF7prSefqAVPDcTyqrfZxKFMVfttiXPfm62VdA/1d+b3PhCZpW4xO7jXczXDwjQdWgD1zGsvM8w==",
-        "dependencies": {
-          "SharpGen.Runtime": "2.4.2-beta",
-          "SharpGen.Runtime.COM": "2.4.2-beta",
-          "Vortice.Mathematics": "2.1.0"
-        }
-      },
-      "Vortice.Mathematics": {
-        "type": "Transitive",
-        "resolved": "2.1.0",
-        "contentHash": "KK+SjNSuKdP+zbavekubi+vaeb1Jo4k87ZF6CMkVWjr6RjJwc8peVtmgzXXDIMy4ZC3ZISyk3llY3q65ISOkBQ=="
-      },
       "inkcanvas.controls": {
         "type": "Project",
         "dependencies": {
@@ -319,9 +249,6 @@
           "iNKORE.UI.WPF": "[1.2.8, )",
           "iNKORE.UI.WPF.Modern": "[0.10.2.1, )"
         }
-      },
-      "inkcanvas.pptagent.contracts": {
-        "type": "Project"
       }
     },
     "net10.0-windows10.0.19041/win-arm64": {},

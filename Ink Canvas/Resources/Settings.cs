@@ -583,6 +583,7 @@ namespace Ink_Canvas
 
     }
 
+    // 仅供旧配置反序列化使用；所有旧架构值都归一到 ROT。
     public enum PPTLinkMode
     {
         Com = 0,
@@ -862,7 +863,11 @@ namespace Ink_Canvas
         [JsonProperty("skipAnimationsWhenGoNext")]
         public bool SkipAnimationsWhenGoNext { get; set; } = false;
         [JsonProperty("pptLinkMode")]
-        public PPTLinkMode PPTLinkMode { get; set; } = PPTLinkMode.Com;
+        public PPTLinkMode PPTLinkMode
+        {
+            get => PPTLinkMode.Rot;
+            set { } // Json.NET 兼容旧数值 0/1/2 与字符串 Com/Rot/Agent，不改变其它配置。
+        }
         [JsonProperty("showPPTSidebarByDefault")]
         public bool ShowPPTSidebarByDefault { get; set; } = false;
         [JsonProperty("showPPTModePrompt")]

@@ -179,7 +179,7 @@ namespace Ink_Canvas.Windows
             settings.PowerPointSettings.PowerPointSupport = true;
             settings.PowerPointSettings.IsAutoSaveStrokesInPowerPoint = true;
             settings.PowerPointSettings.IsAutoSaveScreenShotInPowerPoint = true;
-            settings.PowerPointSettings.PPTLinkMode = PPTLinkMode.Agent;
+            settings.PowerPointSettings.PPTLinkMode = PPTLinkMode.Rot;
             settings.PowerPointSettings.ShowPPTButton = true;
             settings.PowerPointSettings.PPTButtonsDisplayOption = 2222;
             settings.PowerPointSettings.EnablePPTButtonPageClickable = true;

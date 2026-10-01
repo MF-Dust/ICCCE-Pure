@@ -33,24 +33,6 @@
                             MaterialIcon="PresentationPlay"
                             Toggled="ToggleSwitchSupportPowerPoint_Toggled"/>
 
-                    <ui:SettingsCard x:Name="CardPPTArchitecture"
-                            Header="{x:Static props:PPTStrings.PPTArchitecture}">
-                        <ui:SettingsCard.HeaderIcon>
-                            <materialDesign:PackIcon Kind="LinkVariant"  Width="20"  Height="20" />
-                        </ui:SettingsCard.HeaderIcon>
-                        <ComboBox x:Name="ComboBoxPPTArchitecture"
-                                  SelectionChanged="ComboBoxPPTArchitecture_SelectionChanged">
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.PPTComArchitecture}" />
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.PPTRotArchitecture}" />
-                            <ComboBoxItem Content="{x:Static props:PPTStrings.PPTAgentArchitecture}" />
-                        </ComboBox>
-                    </ui:SettingsCard>
-
-                    <controls:LabeledSettingsCard x:Name="CardPowerPointEnhancement"
-                            Header="{x:Static props:PPTStrings.Enhancement}"
-                            MaterialIcon="PuzzleOutline"
-                            Toggled="ToggleSwitchPowerPointEnhancement_Toggled"/>
-
                     <controls:LabeledSettingsCard x:Name="CardSkipAnimationsWhenGoNext"
                             Header="{x:Static props:PPTStrings.SkipAnimations}"
                             MaterialIcon="FastForward"

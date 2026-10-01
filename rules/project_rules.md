@@ -9,11 +9,11 @@
 | `Ink Canvas/` | 主应用（WPF，net10.0-windows10.0.19041.0，Debug x64） |
 | `InkCanvas.Controls/` | 自定义控件库（LabeledSettingsCard 等，net10.0-windows10.0.19041.0） |
 | `InkCanvas.SettingsTreeView/` | 设置目录树查看器（独立 WPF 应用，net10.0-windows10.0.19041.0） |
-| `InkCanvas.PptAgent.Contracts/` | PPT agent 契约（netstandard2.0，注意目录名是 PPTAgent） |
 | `InkCanvas.IACoreHelper/` | IACore 辅助（net472，x86） |
 | `InkCanvas.NativeInk.Tests/` | 原生墨迹手动验证程序（net10.0-windows10.0.19041.0） |
 | `InkCanvas.Core.Tests/` | 核心单元测试（net10.0-windows10.0.19041.0） |
-| `InkCanvas.PowerPointAddIn/` | PowerPoint VSTO 加载项（net472，**不在 sln 内**，单独 MSBuild） |
+
+PPT 联动统一使用主程序内的 ROT/Office COM；智慧模式区域类型位于 `Ink Canvas/Models/SmartRegion.cs`。旧 `pptLinkMode` 数值与字符串仅作为兼容反序列化入口，运行时统一为 ROT。IACore 保持 net472/x86，NativeInk 实验源默认禁用且不需要 Vortice 包。
 
 ## 规则目录
 
@@ -24,7 +24,7 @@
 | [popups_menus.md](./popups_menus.md) | 弹出菜单/工具栏规范 |
 | [toolbar.md](./toolbar.md) | 浮动工具栏开发规范 |
 | [chat_log_board_toolbar.md](./chat_log_board_toolbar.md) | 聊天记录/白板工具栏规范 |
-| [build.md](./build.md) | 编译规范（Debug x64、PowerPointAddIn、Copy target） |
+| [build.md](./build.md) | 编译规范（Debug x64、Core.Tests、IACore Copy target） |
 | [general.md](./general.md) | 通用开发规范 |
 | [消息去重说明.md](./消息去重说明.md) | NotificationCenterService 滑动窗口去重策略 |
 | [Ink Canvas 设置完整目录.md](./Ink%20Canvas%20设置完整目录.md) | 设置页面完整目录树 |

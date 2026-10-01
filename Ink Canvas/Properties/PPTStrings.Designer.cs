@@ -62,8 +62,6 @@ namespace Ink_Canvas.Properties
 
         public static string LoadingPPT => ResourceManager.GetString(nameof(LoadingPPT), _resourceCulture);
 
-        public static string Enhancement => ResourceManager.GetString(nameof(Enhancement), _resourceCulture);
-
         public static string EnterAnnotationOnShow => ResourceManager.GetString(nameof(EnterAnnotationOnShow), _resourceCulture);
 
         public static string FingerGestureSlide => ResourceManager.GetString(nameof(FingerGestureSlide), _resourceCulture);
@@ -103,20 +101,6 @@ namespace Ink_Canvas.Properties
         public static string PageButtonClickable => ResourceManager.GetString(nameof(PageButtonClickable), _resourceCulture);
 
         public static string PageButtonClickableHint => ResourceManager.GetString(nameof(PageButtonClickableHint), _resourceCulture);
-
-        public static string PPTArchitecture => ResourceManager.GetString(nameof(PPTArchitecture), _resourceCulture);
-
-        public static string PPTComArchitecture => ResourceManager.GetString(nameof(PPTComArchitecture), _resourceCulture);
-
-        public static string PPTRotArchitecture => ResourceManager.GetString(nameof(PPTRotArchitecture), _resourceCulture);
-
-        public static string PPTAgentArchitecture => ResourceManager.GetString(nameof(PPTAgentArchitecture), _resourceCulture);
-
-        public static string PPTAgentArchitectureHint => ResourceManager.GetString(nameof(PPTAgentArchitectureHint), _resourceCulture);
-
-        public static string PPTAgentNotConnected => ResourceManager.GetString(nameof(PPTAgentNotConnected), _resourceCulture);
-
-        public static string PPTAgentInstallHint => ResourceManager.GetString(nameof(PPTAgentInstallHint), _resourceCulture);
 
         public static string Position_Left => ResourceManager.GetString(nameof(Position_Left), _resourceCulture);
 

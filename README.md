@@ -28,7 +28,7 @@
 - **墨迹书写**：基于 WPF InkCanvas 的触控、手写笔书写与压感。
 - **黑板 / 白板教学模式**：多指缩放、旋转、移动、多指漫游与黑白板快速切换。
 - **屏幕画笔批注**：随时在屏幕任意内容上画线、圈点与批注，支持快速清屏与侧边栏隐藏。
-- **PowerPoint 放映深度联动**：支持 ROT 与 VSTO 双模式联动，PPT 放映时自动进入批注模式并与幻灯片翻页同步墨迹。
+- **PowerPoint 放映深度联动**：通过 ROT 连接已运行的 PowerPoint（可选 WPS 支持），PPT 放映时自动进入批注模式并与幻灯片翻页同步墨迹。
 - **智能墨迹图形识别**：支持识别标准圆、椭圆、多边形、直角坐标系等多种几何图形并自动规范化。
 - **笔迹与截图保存**：支持一键截屏与板书笔迹结构化保存。
 
@@ -38,20 +38,20 @@
 - **运行环境**：**必须安装 .NET Desktop Runtime 10**（确切为 10.x 主版本，不支持控制台运行时或其它主版本）。
 - **特例组件与约束说明**：
   - `InkCanvas.IACoreHelper`：由于依赖 32 位底层原生微软墨迹分析 COM 组件（IACore），受二进制接口约束保持在 **.NET Framework 4.7.2 (win-x86)**。
-  - `InkCanvas.PowerPointAddIn`：作为直接注入 Microsoft PowerPoint 的 VSTO COM 外接程序，受宿主 Office 进程机制约束保持在 **.NET Framework 4.7.2**。
+- **PPT 联动**：仅使用 ROT，保留 Office COM 互操作及智慧模式的视频区域查询；无需加载项、额外运行时或签名证书。旧配置中的 COM/ROT/Agent 选项统一按 ROT 加载，其它配置保持不变。
 
 ## 构建与验证 (Build & Verification)
 
 - **编译核心主项目**：
   ```bash
-  dotnet build "Ink Canvas/InkCanvasForClass.csproj" -c Debug
+  dotnet build "Ink Canvas.sln" -c Debug -p:Platform=x64
   ```
 - **运行保存与自动保存回归检查**：
   ```bash
   dotnet run --project InkCanvas.Core.Tests -c Release
   ```
 - 抽选、点名、课堂计时器、鸡汤提示及插件系统已移除；升级前建议备份配置和墨迹文件。
-- `InkCanvas.NativeInk.Tests` 测试的是未启用的实验墨迹管线。现有 `PredictionHorizonStaysWithinAdaptiveBounds` 检查在 .NET 6 和 .NET 10 下均失败，不代表主程序批注管线的测试结果。
+- NativeInk 实验源代码保留但默认构建不启用，也不依赖 Vortice 包。`InkCanvas.NativeInk.Tests` 测试的是未启用的实验墨迹管线。现有 `PredictionHorizonStaysWithinAdaptiveBounds` 检查在 .NET 6 和 .NET 10 下均失败，不代表主程序批注管线的测试结果。
 
 
 ## 💫 软件说明
@@ -86,7 +86,7 @@
 ### 放映后画板程序不会切换到 PPT 模式
 
 >[!note]
-> 请尝试将PPT联动架构调整为`ROT`或者`VSTO`，如果这不能解决你的问题请参考以下教程。
+> PPT 联动统一使用 ROT。请确认设置中已启用 PPT 联动、演示文稿已打开；使用 WPS 时需启用 WPS 支持，再参考以下排查步骤。
 
 1. PowerPoint 处在保护模式下（只读），请退出保护模式，方法如下：
    1. 打开 PowerPoint，点击左上角的「文件」选项；

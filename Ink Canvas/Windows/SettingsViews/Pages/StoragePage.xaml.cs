@@ -16,7 +16,7 @@ namespace Ink_Canvas.Windows.SettingsViews.Pages
         private static readonly string[] InkDirs = { "Saves" };
         private static readonly string[] BackupDirs = { "Backups" };
         private static readonly string[] CustomDirs = { "icons", "backgrounds" };
-        // 视为核心文件的目录（配置 / ppt-agent 联动组件 / 自动化工作流 / .NET 运行时等）
+        // 视为核心文件的目录；保留旧版本 ppt-agent 目录保护，避免清理功能删除遗留用户文件。
         private static readonly string[] ConfigDirs = { "Configs", "ppt-agent", "Automations", "runtimes" };
 
         // 视为核心文件的扩展名(位于应用根目录下)

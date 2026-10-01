@@ -163,7 +163,6 @@
 ├── PPT联动
 │   ├── TextBlock "PPT联动"
 │   │   ├── LabeledSettingsCard: 支持 PowerPoint → ToggleSwitch
-│   │   ├── LabeledSettingsCard: PPT增强 → ToggleSwitch
 │   │   ├── LabeledSettingsCard: 跳过动画 → ToggleSwitch
 │   │   ├── LabeledSettingsCard: 使用 Rot PPT 链接 → ToggleSwitch
 │   │   ├── LabeledSettingsCard: 支持 WPS → ToggleSwitch

@@ -3,12 +3,18 @@
 ## 构建环境 / Build environment
 
 - 主程序及 WPF 库使用 .NET 10 SDK，运行需要 Windows 10 19041+ 和 .NET Desktop Runtime 10。
-- IACoreHelper 和 PowerPoint VSTO 外接程序保留 .NET Framework 4.7.2；PPT 通信契约保留 netstandard2.0。
+- IACoreHelper 保持 .NET Framework 4.7.2 / x86。PPT 联动仅使用主程序内的 ROT/Office COM，无需加载项构建、注册或签名证书；智慧模式及 WPS 支持需实机回归。
+- NativeInk 实验源代码保留但默认构建禁用，无需 Vortice 默认包。
 - 构建与保存/自动保存回归检查：
   ```bash
-  dotnet build "Ink Canvas.sln" -c Release
+  dotnet build "Ink Canvas.sln" -c Debug -p:Platform=x64
   dotnet run --project InkCanvas.Core.Tests -c Release
   ```
+- 可重复的保存性能采样（单页 1000 笔、20 页 × 200 笔；一次预热、五次中位数）：
+  ```bash
+  dotnet run --project InkCanvas.Core.Tests -c Release -- --save-benchmark
+  ```
+  分别报告 UI 快照/序列化、后台写入时间、UI 分配与输出字节数；这是当前版本的采样，不是跨版本提速百分比，Office/媒体实机场景另行验证。
 - 在交互式 Windows 桌面验证窗口加载、配置重载与正常关闭：
   ```bash
   dotnet run --project InkCanvas.Core.Tests -c Release -- --window-smoke
