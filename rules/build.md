@@ -41,7 +41,7 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 
 ## 项目列表
 
-### 解决方案内（8 个）
+### 解决方案内（7 个）
 
 | 项目 | csproj 路径 | 目标框架 | sln 平台映射 |
 | --- | --- | --- | --- |
@@ -50,7 +50,6 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 | InkCanvas.SettingsTreeView | `InkCanvas.SettingsTreeView/InkCanvas.SettingsTreeView.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 | InkCanvas.PptAgent.Contracts | `InkCanvas.PPTAgent.Contracts/InkCanvas.PptAgent.Contracts.csproj` | netstandard2.0 | 全部 Any CPU |
 | InkCanvas.IACoreHelper | `InkCanvas.IACoreHelper/InkCanvas.IACoreHelper.csproj` | net472 | **所有配置一律映射到 x86** |
-| InkCanvas.LiquidGlassMagHost | `InkCanvas.LiquidGlassMagHost/InkCanvas.LiquidGlassMagHost.csproj` | net10.0-windows10.0.19041.0 | 真·多平台：AnyCPU/ARM→x64，ARM64→ARM64，x86→x86 |
 | InkCanvas.NativeInk.Tests | `InkCanvas.NativeInk.Tests/InkCanvas.NativeInk.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 | InkCanvas.Core.Tests | `InkCanvas.Core.Tests/InkCanvas.Core.Tests.csproj` | net10.0-windows10.0.19041.0 | 全部 Any CPU |
 
@@ -71,15 +70,8 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 | --- | --- | --- |
 | `CopyVstoAgent` | AfterTargets=Build | 把 `InkCanvas.PowerPointAddIn.dll/.vsto/.dll.manifest`、`Microsoft.Office.Tools.*`、`Microsoft.VisualStudio.Tools.Applications.Runtime.dll`、`InkCanvas.PptAgent.Contracts.dll`、`Newtonsoft.Json.dll` 复制到 `$(OutputPath)ppt-agent` |
 | `CopyIACoreHelper` | AfterTargets=Build，`PublishSingleFile != true` | 复制 IACore helper exe 到主输出目录 |
-| `CopyLiquidGlassMagHost` | AfterTargets=Build | 复制 MagHost exe 到主输出目录 |
-| `CopyIACoreHelperToPublishDirectory` / `CopyLiquidGlassMagHostToPublishDirectory` | AfterTargets=Publish，`PublishSingleFile == true` | 单文件发布时的对应复制 |
+| `CopyIACoreHelperToPublishDirectory` | AfterTargets=Publish，`PublishSingleFile == true` | 单文件发布时的对应复制 |
 | `SetAssemblyInformationalVersion` | AfterTargets=GetBuildVersion | 配合 Nerdbank.GitVersioning 写版本号 |
-
-**Copy target 的平台陷阱**（csproj 内原注释）：
-
-> MagHost 是 SDK 项目，SDK 会按平台给输出目录加前缀：x86/x64 平台输出到 `bin\$(Platform)\$(Configuration)\$(TargetFramework)\`，AnyCPU 输出到 `bin\$(Configuration)\$(TargetFramework)\`。这里在 Build / Publish 后把 exe 复制到主程序输出目录，与 IACoreHelper 的 Copy target 模式一致。
-
-所以：**不要用主项目的 `$(TargetDir)` 去拼 helper 输出路径**，必须按 `$(Platform)` 走带前缀的路径并保留无前缀 fallback。
 
 ## 编译前检查
 
@@ -98,5 +90,5 @@ dotnet build "InkCanvas.SettingsTreeView\InkCanvas.SettingsTreeView.csproj"
 | CS0103 找不到名称 | 未引用正确命名空间 | 检查是否需要 `using iNKORE.UI.WPF.Modern.Controls;` |
 | CS0102 重复定义 | resx Designer.cs 中重复添加属性 | 删除重复的属性声明 |
 | XAML 解析错误 | XML 格式错误 | 检查标签闭合、属性引号等 |
-| MSB3027 / MSB3021 无法复制，文件被占用 | 上次运行残留的 `InkCanvas.IACoreHelper.exe` / `InkCanvas.LiquidGlassMagHost.exe` 仍在跑，锁住了输出文件 | 先结束残留 helper 进程再重新编译 |
-| 找不到 MagHost / IACoreHelper exe | Copy target 按 `$(Platform)` 找目录，平台传错 | 确认用的是 `-p:Platform=x64`，并检查 `bin\$(Platform)\$(Configuration)\$(TargetFramework)\` 是否有产物 |
+| MSB3027 / MSB3021 无法复制，文件被占用 | 上次运行残留的 `InkCanvas.IACoreHelper.exe` 仍在跑，锁住了输出文件 | 先结束残留 helper 进程再重新编译 |
+| 找不到 IACoreHelper exe | 辅助项目未生成或 Copy target 路径不匹配 | 检查 `InkCanvas.IACoreHelper/bin/$(Configuration)/` 下的产物及 `CopyIACoreHelper` 目标 |

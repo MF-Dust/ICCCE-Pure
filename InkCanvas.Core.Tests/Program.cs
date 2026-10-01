@@ -73,9 +73,60 @@ internal static class Program
         MainWindow.Settings.Automation.IsEnableAutoSaveStrokes = false;
         window.UpdateAutoSaveStrokesTimer();
         Check(!timer.IsEnabled, "关闭自动保存必须停止定时器");
+        CheckSaveFileNames();
         CheckLegacyToolsLayouts();
         CheckRemovedFeatureSettings();
+        CheckRemovedLiquidGlass();
         Console.WriteLine("Core save/autosave/layout/settings regression checks passed.");
+    }
+
+    private static void CheckRemovedLiquidGlass()
+    {
+        const string json = """
+            {"theme":1,"enableLiquidGlassBar":true,"liquidGlassBarOpacity":0.8,"liquidGlassBarPositionX":100,"liquidGlassBarPositionY":200}
+            """;
+        var appearance = JsonConvert.DeserializeObject<Appearance>(json);
+        Check(appearance.Theme == 1, "移除液态玻璃不能影响普通主题");
+        var original = JObject.Parse(json);
+        var saved = JObject.FromObject(appearance);
+        var defaults = JObject.FromObject(new Appearance());
+        foreach (var property in new[] { "EnableLiquidGlassBar", "LiquidGlassBarOpacity", "LiquidGlassBarPositionX", "LiquidGlassBarPositionY" })
+        {
+            var key = char.ToLowerInvariant(property[0]) + property.Substring(1);
+            Check(typeof(Appearance).GetProperty(property) == null && defaults[key] == null,
+                "液态玻璃设置不能参与运行或生成默认值：" + property);
+            Check(JToken.DeepEquals(original[key], saved[key]), "旧配置仅作为扩展数据保留：" + key);
+        }
+        foreach (var name in new[] { "Ink_Canvas.LiquidGlassBarWindow", "Ink_Canvas.Helpers.LiquidGlassCapture",
+            "Ink_Canvas.Helpers.LiquidGlassMagnifier", "Ink_Canvas.Shaders.LiquidGlassEffect" })
+            Check(typeof(App).Assembly.GetType(name) == null, "液态玻璃实现必须移除：" + name);
+        Check(!typeof(MainWindow).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
+            .Any(method => method.Name.Contains("LiquidGlass")), "液态玻璃宿主入口必须移除");
+    }
+
+    private static void CheckSaveFileNames()
+    {
+        var context = new SaveFileNameContext
+        {
+            Time = new DateTime(2026, 1, 2, 3, 4, 5, 6),
+            Mode = "BlackBoard", Type = "Auto", Page = 2, Count = 3
+        };
+        foreach (var template in new[] { null, "", "   ", "...", " -_ " })
+            Check(SaveFileNameHelper.Render(template, context) == "2026-01-02 03-04-05-006",
+                "无效模板必须回退到时间戳");
+        Check(SaveFileNameHelper.Render("{date}_{time}_{mode}_{type}_{page}_{count}", context) ==
+            "2026-01-02_03-04-05_BlackBoard_Auto_2_3", "文件名占位符必须保持兼容");
+        Check(SaveFileNameHelper.Render(" a<b>c: . ", context) == "a_b_c_", "非法字符和末尾点号必须清理");
+        foreach (var name in new[] { "CON", "nul.txt", "CON.foo.bar", "LPT1.backup.png", "COM¹.txt", "LPT²", "COM³", "CON .txt" })
+            Check(SaveFileNameHelper.Render(name, context) == "_" + name, "必须规避 Windows 保留名：" + name);
+        foreach (var name in new[] { "COM10", "console.txt", "report.v1.png" })
+            Check(SaveFileNameHelper.Render(name, context) == name, "普通文件名不能被误改：" + name);
+
+        var sanitize = typeof(MainWindow).GetMethod("SanitizeScreenshotRelativePath", BindingFlags.Static | BindingFlags.NonPublic);
+        Check((string)sanitize.Invoke(null, new object[] { @"课件/CON.foo.bar/第1页" }) ==
+            Path.Combine("课件", "_CON.foo.bar", "第1页"), "截图子目录也必须规避保留名");
+        Check((string)sanitize.Invoke(null, new object[] { @"../课件/../../第1页" }) ==
+            Path.Combine("课件", "第1页"), "截图路径不能穿越目标目录");
     }
 
     private static void CheckRemovedFeatureSettings()

@@ -11,7 +11,6 @@
 | `InkCanvas.SettingsTreeView/` | 设置目录树查看器（独立 WPF 应用，net10.0-windows10.0.19041.0） |
 | `InkCanvas.PptAgent.Contracts/` | PPT agent 契约（netstandard2.0，注意目录名是 PPTAgent） |
 | `InkCanvas.IACoreHelper/` | IACore 辅助（net472，x86） |
-| `InkCanvas.LiquidGlassMagHost/` | 液态玻璃 MagHost（net10.0-windows10.0.19041.0，真·多平台） |
 | `InkCanvas.NativeInk.Tests/` | 原生墨迹手动验证程序（net10.0-windows10.0.19041.0） |
 | `InkCanvas.Core.Tests/` | 核心单元测试（net10.0-windows10.0.19041.0） |
 | `InkCanvas.PowerPointAddIn/` | PowerPoint VSTO 加载项（net472，**不在 sln 内**，单独 MSBuild） |

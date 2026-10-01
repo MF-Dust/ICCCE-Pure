@@ -19,6 +19,7 @@ namespace Ink_Canvas.Helpers
             "CON", "PRN", "AUX", "NUL",
             "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
             "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+            "COM¹", "COM²", "COM³", "LPT¹", "LPT²", "LPT³",
         };
 
         public static string Render(string template, SaveFileNameContext ctx)
@@ -53,7 +54,7 @@ namespace Ink_Canvas.Helpers
             }
         }
 
-        private static string SanitizeFileName(string name)
+        internal static string SanitizeFileName(string name)
         {
             if (string.IsNullOrEmpty(name)) return name;
             foreach (var c in Path.GetInvalidFileNameChars())
@@ -66,9 +67,10 @@ namespace Ink_Canvas.Helpers
 
             if (string.IsNullOrEmpty(name)) return name;
 
-            // 保留设备名：比较时忽略扩展名，命中则加下划线前缀以规避。
-            var stem = Path.GetFileNameWithoutExtension(name);
-            if (!string.IsNullOrEmpty(stem) && ReservedNames.Contains(stem))
+            // Windows 从第一个点号起忽略后缀，设备名后的空格也不能绕过限制。
+            var dot = name.IndexOf('.');
+            var stem = (dot < 0 ? name : name.Substring(0, dot)).TrimEnd(' ');
+            if (ReservedNames.Contains(stem))
             {
                 name = "_" + name;
             }

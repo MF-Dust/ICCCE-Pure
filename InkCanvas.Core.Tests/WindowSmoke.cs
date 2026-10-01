@@ -77,6 +77,21 @@ internal static class WindowSmoke
                         if (!ReferenceEquals(app.TryFindResource("FloatingBarBackgroundBrush"), app.TryFindResource("FloatBarBackground")))
                             throw new Exception("内置工具栏外观未跟随深浅色主题");
                     }
+                    // 真实抓屏入口：只写临时 PNG，验证后立即删除，不写用户桌面。
+                    var screenshotPath = Path.Combine(root, "Saves", "smoke.png");
+                    try
+                    {
+                        typeof(MainWindow).GetMethod("CaptureAndSaveScreenshot", BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(window, new object[] { screenshotPath, true });
+                        using var screenshot = System.Drawing.Image.FromFile(screenshotPath);
+                        if (screenshot.RawFormat.Guid != System.Drawing.Imaging.ImageFormat.Png.Guid ||
+                            screenshot.Size != System.Windows.Forms.SystemInformation.VirtualScreen.Size)
+                            throw new Exception("桌面截图必须保留 PNG 格式与虚拟屏幕原始尺寸");
+                    }
+                    finally
+                    {
+                        File.Delete(screenshotPath);
+                    }
                     var settingsWindow = new SettingsWindow();
                     var pages = (Dictionary<string, Type>)typeof(SettingsWindow)
                         .GetField("_pageTypes", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(settingsWindow);
@@ -87,7 +102,7 @@ internal static class WindowSmoke
                         "ToolbarPage", "BoardToolbarPage", "PowerPointPage", "AboutPage", "SecurityPage" })
                         if (!pages.ContainsKey(retained)) throw new Exception("应保留的设置页丢失：" + retained);
                     // 直接构造本次涉及的页面，校验 XAML 与资源引用；不触发其他页面的预加载副作用。
-                    foreach (var page in new[] { "HomePage", "NotificationPage", "StoragePage", "BackupPage", "AboutPage" })
+                    foreach (var page in new[] { "HomePage", "NotificationPage", "StoragePage", "BackupPage", "AboutPage", "ToolbarAppearancePage" })
                         Activator.CreateInstance(pages[page]);
                     settingsWindow.Close();
                     checkedWindow = true;

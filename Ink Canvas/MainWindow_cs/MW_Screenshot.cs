@@ -84,7 +84,7 @@ namespace Ink_Canvas
                         if (!Directory.Exists(directory))
                             Directory.CreateDirectory(directory);
                         Helpers.ScreenshotImageSaveHelper.Save(bitmapToSave, path);
-                        bitmapToSave.Dispose();
+
                     }
 
                     if (strokesToSave != null && !string.IsNullOrEmpty(strokeSavePath))
@@ -119,6 +119,9 @@ namespace Ink_Canvas
                 catch (Exception ex)
                 {
                     LogHelper.WriteLogToFile($"后台保存截图/墨迹失败: {ex}", LogHelper.LogType.Error);
+                }
+                finally
+                {
                     bitmapToSave?.Dispose();
                 }
             });
@@ -131,38 +134,23 @@ namespace Ink_Canvas
         {
             var rc = SystemInformation.VirtualScreen;
             var bitmap = new System.Drawing.Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb);
-            using (var memoryGraphics = Graphics.FromImage(bitmap))
+            try
             {
-                memoryGraphics.CompositingQuality = CompositingQuality.HighQuality;
-                memoryGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                memoryGraphics.SmoothingMode = SmoothingMode.HighQuality;
-                memoryGraphics.CompositingMode = CompositingMode.SourceOver;
-                memoryGraphics.CopyFromScreen(rc.X, rc.Y, 0, 0, rc.Size, CopyPixelOperation.SourceCopy);
+                using (var memoryGraphics = Graphics.FromImage(bitmap))
+                {
+                    memoryGraphics.CompositingQuality = CompositingQuality.HighQuality;
+                    memoryGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    memoryGraphics.SmoothingMode = SmoothingMode.HighQuality;
+                    memoryGraphics.CompositingMode = CompositingMode.SourceOver;
+                    memoryGraphics.CopyFromScreen(rc.X, rc.Y, 0, 0, rc.Size, CopyPixelOperation.SourceCopy);
+                }
+                return bitmap;
             }
-            return bitmap;
-        }
-
-        /// <summary>
-        /// 保存截图
-        /// </summary>
-        /// <param name="isHideNotification">是否隐藏通知</param>
-        /// <param name="fileName">文件名</param>
-        /// <remarks>
-        /// 该方法会：
-        /// 1. 根据设置确定保存路径
-        /// 2. 调用CaptureAndSaveScreenshot方法捕获并保存截图
-        /// 3. 如果设置了自动保存墨迹，调用SaveInkCanvasStrokes方法保存墨迹
-        /// </remarks>
-        private void SaveScreenShot(bool isHideNotification, string fileName = null)
-        {
-            var savePath = Settings.Automation.IsSaveScreenshotsInDateFolders
-                ? GetDateFolderPath(fileName)
-                : GetDefaultFolderPath();
-
-            CaptureAndSaveScreenshot(savePath, isHideNotification);
-
-            if (Settings.Automation.IsAutoSaveStrokesAtScreenshot)
-                SaveInkCanvasStrokes(false);
+            catch
+            {
+                bitmap.Dispose();
+                throw;
+            }
         }
 
         /// <summary>
@@ -403,19 +391,8 @@ namespace Ink_Canvas
         /// </remarks>
         private void CaptureAndSaveScreenshot(string savePath, bool isHideNotification)
         {
-            var rc = SystemInformation.VirtualScreen;
-
-            using (var bitmap = new Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb))
-            using (var memoryGraphics = Graphics.FromImage(bitmap))
+            using (var bitmap = CaptureScreenshotToBitmap())
             {
-                // 设置高质量渲染
-                memoryGraphics.CompositingQuality = CompositingQuality.HighQuality;
-                memoryGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                memoryGraphics.SmoothingMode = SmoothingMode.HighQuality;
-                memoryGraphics.CompositingMode = CompositingMode.SourceOver;
-
-                memoryGraphics.CopyFromScreen(rc.X, rc.Y, 0, 0, rc.Size, CopyPixelOperation.SourceCopy);
-
                 // 确保目录存在
                 var directory = Path.GetDirectoryName(savePath);
                 if (!Directory.Exists(directory))
@@ -478,19 +455,11 @@ namespace Ink_Canvas
             var separators = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
             var parts = relativePath
                 .Split(separators, StringSplitOptions.RemoveEmptyEntries)
-                .Select(SanitizePathPart)
+                .Select(SaveFileNameHelper.SanitizeFileName)
                 .Where(part => !string.IsNullOrWhiteSpace(part));
 
             var sanitized = Path.Combine(parts.ToArray());
             return string.IsNullOrWhiteSpace(sanitized) ? DateTime.Now.ToString("HH-mm-ss") : sanitized;
-        }
-
-        private static string SanitizePathPart(string pathPart)
-        {
-            var invalidChars = Path.GetInvalidFileNameChars();
-            var chars = pathPart.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray();
-            var sanitized = new string(chars).Trim().TrimEnd('.', ' ');
-            return sanitized == "." || sanitized == ".." ? "_" : sanitized;
         }
 
         /// <summary>

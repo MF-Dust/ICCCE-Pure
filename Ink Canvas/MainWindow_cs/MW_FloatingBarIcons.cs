@@ -3943,7 +3943,6 @@ namespace Ink_Canvas
             };
             SetQuickColor(color);
             ScheduleBrushAutoRestore();
-            RefreshLiquidGlassBarActiveState();
         }
 
         /// <summary>
@@ -5901,9 +5900,6 @@ namespace Ink_Canvas
 
             // Issue #285 更小批注栏：根据当前工具模式刷新迷你栏显示状态
             RefreshIdleMiniBarState();
-
-            // 液态玻璃浮动栏：同步选中态高亮
-            RefreshLiquidGlassBarActiveState();
 
             // 通知自动化系统：逻辑工具模式已变化。原生笔路径下物理 EditingMode 不变，
             // 触发器无法靠 EditingModeChanged 感知进/出批注，必须在此显式通知。

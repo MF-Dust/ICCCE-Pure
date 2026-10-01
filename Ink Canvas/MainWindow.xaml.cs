@@ -1547,9 +1547,6 @@ namespace Ink_Canvas
                 UnFoldFloatingBar_MouseUp(new object(), null);
             }
 
-            // 液态玻璃浮动栏：延迟到首帧之后再起，避免启动瞬间截到自己的窗口
-            Dispatcher.BeginInvoke(new Action(RestoreLiquidGlassBarOnStartup), DispatcherPriority.ContextIdle);
-
             // 如果当前不是黑板模式，则切换到黑板模式
             if (currentMode == 0)
             {
@@ -1850,8 +1847,6 @@ namespace Ink_Canvas
             SystemEvents.DisplaySettingsChanged -= SystemEventsOnDisplaySettingsChanged;
             SystemEvents.UserPreferenceChanged -= SystemEvents_UserPreferenceChanged;
             _systemThemeRetryTimer?.Stop();
-            // 玻璃浮动栏刻意不设 Owner，必须显式关闭，否则残留窗口会挡住进程退出
-            HideLiquidGlassBar();
 
             try
             {
